@@ -1,0 +1,27 @@
+{
+	"name": "mina-js",
+	"scripts": {
+		"build": "tsup",
+		"test": "bun test",
+		"lint": "bunx biome check .",
+		"format": "bunx biome check . --write",
+		"format:unsafe": "bunx biome check . --write --unsafe"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "1.8.3",
+		"@tsconfig/bun": "1.0.7",
+		"@types/bun": "1.1.6",
+		"tsup": "8.2.3"
+	},
+	"dependencies": {
+		"@noble/curves": "1.4.2",
+		"@noble/hashes": "1.4.0",
+		"@scure/bip32": "1.4.0",
+		"@scure/bip39": "1.3.0",
+		"mina-signer": "3.0.7",
+		"zod": "3.23.8"
+	},
+	"peerDependencies": {
+		"typescript": "^5.0.0"
+	}
+}
