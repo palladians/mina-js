@@ -1,5 +1,6 @@
 {
 	"name": "mina-js",
+	"version": "0.0.1",
 	"scripts": {
 		"build": "tsup",
 		"test": "bun test",
@@ -23,5 +24,17 @@
 	},
 	"peerDependencies": {
 		"typescript": "^5.0.0"
+	},
+	"exports": {
+		"./accounts": {
+			"types": "./dist/accounts/index.d.ts",
+			"import": "./dist/accounts/index.mjs",
+			"default": "./dist/accounts/index.js"
+		},
+		"./providers": {
+			"types": "./dist/providers/index.d.ts",
+			"import": "./dist/providers/index.mjs",
+			"default": "./dist/providers/index.js"
+		}
 	}
 }
