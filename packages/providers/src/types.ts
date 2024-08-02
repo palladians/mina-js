@@ -1,4 +1,11 @@
 import type {
+	Nullifier,
+	PublicKey,
+	SignedFields,
+	SignedMessage,
+	TransactionReceipt,
+} from "@mina-js/shared";
+import type {
 	AddChainData,
 	CreateNullifierData,
 	SendTransactionData,
@@ -10,8 +17,6 @@ import type {
 
 // biome-ignore lint/suspicious/noExplicitAny: Deal with it.
 type TODO = any;
-
-export type Address = `b62${string}`;
 
 export type MinaProviderDetail = {
 	info: MinaProviderInfo;
@@ -50,26 +55,10 @@ export type ProviderRpcEvent =
 	| "accountsChanged"
 	| "mina_message";
 
-// Return types
-type SignedMessage = {
-	publicKey: string;
-	data: string;
-	signature: {
-		field: string;
-		scalar: string;
-	};
-};
-
-type SignedFieldsData = {
-	data: (string | number)[];
-	publicKey: string;
-	signature: string;
-};
-
 // Request variants
 export type AccountsRequest = (args: {
 	method: "mina_accounts";
-}) => Promise<Address[]>;
+}) => Promise<PublicKey[]>;
 
 export type ChainIdRequest = (args: {
 	method: "mina_chainId";
@@ -91,7 +80,7 @@ export type SignRequest = (args: {
 export type SignFieldsRequest = (args: {
 	method: "mina_signFields";
 	params: SignFieldsData;
-}) => Promise<SignedFieldsData>;
+}) => Promise<SignedFields>;
 
 export type SignTransactionRequest = (args: {
 	method: "mina_signTransaction";
@@ -101,12 +90,12 @@ export type SignTransactionRequest = (args: {
 export type SendTransactionRequest = (args: {
 	method: "mina_sendTransaction";
 	params: SendTransactionData;
-}) => Promise<TODO>;
+}) => Promise<TransactionReceipt>;
 
 export type CreateNullifierRequest = (args: {
 	method: "mina_createNullifier";
 	params: CreateNullifierData;
-}) => Promise<TODO>;
+}) => Promise<Nullifier>;
 
 export type SwitchChainRequest = (args: {
 	method: "mina_switchChain";
@@ -148,7 +137,7 @@ export type ChainChangedListener = (
 
 export type AccountsChangedListener = (
 	event: "accountsChanged",
-	callback: (params: { accounts: Address[] }) => void,
+	callback: (params: { accounts: PublicKey[] }) => void,
 ) => void;
 
 export type MessageListener = (

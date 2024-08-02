@@ -1,0 +1,24 @@
+{
+	"name": "@mina-js/shared",
+	"version": "0.0.1",
+	"type": "module",
+	"module": "dist/index.js",
+	"types": "dist/index.d.ts",
+	"exports": {
+		".": {
+			"types": "./dist/index.d.ts",
+			"default": "./dist/index.cjs",
+			"import": "./dist/index.js"
+		}
+	},
+	"scripts": {
+		"build": "tsup",
+		"test": "bun test"
+	},
+	"dependencies": {
+		"zod": "3.23.8"
+	},
+	"peerDependencies": {
+		"typescript": "^5.0.0"
+	}
+}
