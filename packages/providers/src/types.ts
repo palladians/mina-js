@@ -30,7 +30,7 @@ export interface MinaAnnounceProviderEvent
 	type: "mina:announceProvider";
 }
 
-export interface EIP6963RequestProviderEvent extends Event {
+export interface MinaRequestProviderEvent extends Event {
 	type: "mina:requestProvider";
 }
 
