@@ -1,7 +1,5 @@
 
-[2K[1G[1myarn run v1.22.19[22m
-[2K[1G[33mwarning[39m package.json: No license field
-[2K[1G[2m$ tsup[22m
+[0m[2m[35m$[0m [2m[1mtsup[0m
 [34mCLI[39m Building entry: src/index.ts
 [34mCLI[39m Using tsconfig: ../../tsconfig.json
 [34mCLI[39m tsup v8.2.3
@@ -10,14 +8,13 @@
 [34mCLI[39m Cleaning output folder
 [34mESM[39m Build start
 [34mCJS[39m Build start
-[32mCJS[39m [1mdist/index.js     [22m[32m2.25 KB[39m
-[32mCJS[39m [1mdist/index.js.map [22m[32m1.44 KB[39m
-[32mCJS[39m ⚡️ Build success in 8ms
 [32mESM[39m [1mdist/index.mjs     [22m[32m575.00 B[39m
 [32mESM[39m [1mdist/index.mjs.map [22m[32m1.35 KB[39m
-[32mESM[39m ⚡️ Build success in 9ms
+[32mESM[39m ⚡️ Build success in 6ms
+[32mCJS[39m [1mdist/index.js     [22m[32m2.25 KB[39m
+[32mCJS[39m [1mdist/index.js.map [22m[32m1.44 KB[39m
+[32mCJS[39m ⚡️ Build success in 6ms
 [34mDTS[39m Build start
-[32mDTS[39m ⚡️ Build success in 608ms
+[32mDTS[39m ⚡️ Build success in 483ms
 [32mDTS[39m [1mdist/index.d.mts [22m[32m631.00 B[39m
 [32mDTS[39m [1mdist/index.d.ts  [22m[32m631.00 B[39m
-[2K[1G✨  Done in 1.39s.

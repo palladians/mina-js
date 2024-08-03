@@ -13,9 +13,11 @@
 	},
 	"scripts": {
 		"build": "tsup",
-		"test": "bun test"
+		"test": "bun test",
+		"cleanup": "rimraf dist .turbo"
 	},
 	"dependencies": {
+		"@mina-js/shared": "workspace:*",
 		"zod": "3.23.8"
 	},
 	"peerDependencies": {

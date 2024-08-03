@@ -12,7 +12,8 @@
 	},
 	"scripts": {
 		"build": "tsup",
-		"test": "bun test"
+		"test": "bun test",
+		"cleanup": "rimraf dist .turbo"
 	},
 	"dependencies": {
 		"@mina-js/providers": "workspace:*",

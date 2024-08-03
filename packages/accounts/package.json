@@ -12,9 +12,11 @@
 	},
 	"scripts": {
 		"build": "tsup",
-		"test": "bun test"
+		"test": "bun test",
+		"cleanup": "rimraf dist .turbo"
 	},
 	"dependencies": {
+		"@mina-js/providers": "workspace:*",
 		"@noble/curves": "1.4.2",
 		"@noble/hashes": "1.4.0",
 		"@scure/bip32": "1.4.0",

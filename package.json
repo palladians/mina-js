@@ -4,6 +4,7 @@
 	"scripts": {
 		"build": "turbo build",
 		"test": "bun run --filter '*' test",
+		"cleanup": "bun run --filter '*' cleanup",
 		"lint": "bunx biome check .",
 		"format": "bunx biome check . --write",
 		"format:unsafe": "bunx biome check . --write --unsafe"
@@ -13,10 +14,11 @@
 		"@happy-dom/global-registrator": "^14.12.3",
 		"@tsconfig/bun": "1.0.7",
 		"@types/bun": "1.1.6",
+		"rimraf": "^6.0.1",
 		"tsup": "8.2.3",
 		"turbo": "^2.0.11",
 		"typescript": "5.5.4"
 	},
 	"workspaces": ["packages/*"],
-	"packageManager": "yarn@1.1.21"
+	"packageManager": "bun@1.1.21"
 }
