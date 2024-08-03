@@ -2,7 +2,7 @@
 	"name": "mina-js",
 	"private": true,
 	"scripts": {
-		"build": "bun run --filter '*' build",
+		"build": "turbo build",
 		"test": "bun run --filter '*' test",
 		"lint": "bunx biome check .",
 		"format": "bunx biome check . --write",
@@ -14,7 +14,9 @@
 		"@tsconfig/bun": "1.0.7",
 		"@types/bun": "1.1.6",
 		"tsup": "8.2.3",
+		"turbo": "^2.0.11",
 		"typescript": "5.5.4"
 	},
-	"workspaces": ["packages/*"]
+	"workspaces": ["packages/*"],
+	"packageManager": "yarn@1.1.21"
 }
