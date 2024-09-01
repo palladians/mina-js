@@ -154,6 +154,6 @@ export type ProviderListener =
 
 export type MinaProviderClient = {
 	request: ProviderRequest;
-	addListener: ProviderListener;
+	on: ProviderListener;
 	removeListener: ProviderListener;
 };

@@ -6,8 +6,7 @@
 		"test": "bun run --filter '*' test",
 		"cleanup": "bun run --filter '*' cleanup",
 		"lint": "bunx biome check .",
-		"format": "bunx biome check . --write",
-		"format:unsafe": "bunx biome check . --write --unsafe"
+		"format": "bunx biome check . --write --unsafe"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "1.8.3",
@@ -19,6 +18,6 @@
 		"turbo": "^2.0.11",
 		"typescript": "5.5.4"
 	},
-	"workspaces": ["packages/*"],
+	"workspaces": ["packages/*", "apps/*"],
 	"packageManager": "bun@1.1.21"
 }
