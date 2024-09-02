@@ -7,6 +7,7 @@
 		"start": "bun dist/index.js"
 	},
 	"dependencies": {
+		"@mina-js/shared": "workspace:*",
 		"@hono/zod-openapi": "^0.16.0",
 		"@scalar/hono-api-reference": "^0.5.143",
 		"@urql/core": "^5.0.6",

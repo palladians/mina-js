@@ -1,6 +1,6 @@
+import { PublicKeySchema } from "@mina-js/shared";
 import { z } from "zod";
 
-export const PublicKeySchema = z.string().length(55);
 export const PublicKeyParamsSchema = z.array(PublicKeySchema).length(1);
 export const EmptyParamsSchema = z.array(z.string()).length(0).optional();
 export const SendTransactionSchema = z.array(z.any(), z.string()).length(2);

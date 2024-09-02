@@ -5,6 +5,7 @@ import { match } from "ts-pattern";
 import { mina } from "./methods/mina";
 import { RpcMethodSchema, RpcResponseSchema } from "./schema";
 import { buildResponse } from "./utils/build-response";
+import { PublicKeySchema } from "@mina-js/shared";
 
 const api = new OpenAPIHono();
 
@@ -41,12 +42,12 @@ api.openapi(rpcRoute, async ({ req, json }) => {
 	return match(body)
 		.with({ method: "mina_getTransactionCount" }, async ({ params }) => {
 			const [publicKey] = params;
-			const result = await mina.getTransactionCount({ publicKey });
+			const result = await mina.getTransactionCount({ publicKey: PublicKeySchema.parse(publicKey) });
 			return json(buildResponse(result), 200);
 		})
 		.with({ method: "mina_getBalance" }, async ({ params }) => {
 			const [publicKey] = params;
-			const result = await mina.getBalance({ publicKey });
+			const result = await mina.getBalance({ publicKey: PublicKeySchema.parse(publicKey) });
 			return json(buildResponse(result), 200);
 		})
 		.with({ method: "mina_blockHash" }, async () => {
