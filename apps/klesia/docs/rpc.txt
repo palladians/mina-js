@@ -1,7 +1,3 @@
-# Klesia RPC
-
-Klesia RPC is a JSON-RPC 2.0 wrapper over common Mina Protocol tools and services. The intention is to provide an outstanding Developer Experience for Mina Protocol's zkApp Developers.
-
 ## Methods
 
 ### mina_getTransactionCount

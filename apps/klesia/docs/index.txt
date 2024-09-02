@@ -1,0 +1,5 @@
+Klesia RPC is a JSON-RPC 2.0 wrapper over common Mina Protocol tools and services. The intention is to provide an outstanding Developer Experience for Mina Protocol's zkApp Developers.
+
+## TypeScript SDK
+
+There is a TypeScript SDK available for Klesia RPC. It is available on npm as `@mina-js/klesia-sdk`.

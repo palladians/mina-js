@@ -1,0 +1,29 @@
+{
+	"name": "@mina-js/klesia-sdk",
+	"type": "module",
+	"module": "dist/index.js",
+	"types": "dist/index.d.ts",
+	"exports": {
+		".": {
+			"types": "./dist/index.d.ts",
+			"default": "./dist/index.cjs",
+			"import": "./dist/index.js"
+		}
+	},
+	"scripts": {
+		"build": "tsup",
+		"test": "bun test",
+		"cleanup": "rimraf dist .turbo"
+	},
+	"devDependencies": {
+		"@mina-js/klesia": "workspace:*"
+	},
+	"peerDependencies": {
+		"typescript": "^5.0.0"
+	},
+	"dependencies": {
+		"hono": "^4.5.10",
+		"ts-pattern": "^5.3.1",
+		"zod": "^3.23.8"
+	}
+}

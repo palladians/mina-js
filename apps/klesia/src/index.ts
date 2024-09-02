@@ -1,12 +1,15 @@
+import "dotenv/config";
+import { serve } from "@hono/node-server";
+import { getConnInfo } from "@hono/node-server/conninfo";
 import { OpenAPIHono, createRoute } from "@hono/zod-openapi";
 import { PublicKeySchema } from "@mina-js/shared";
 import { apiReference } from "@scalar/hono-api-reference";
 import { rateLimiter } from "hono-rate-limiter";
-import { getConnInfo } from "hono/bun";
 import { logger } from "hono/logger";
 import { nanoid } from "nanoid";
 import { match } from "ts-pattern";
-import rpcDocs from "./docs.md" with { type: "text" };
+import mainDocs from "../docs/index.txt";
+import rpcDocs from "../docs/rpc.txt";
 import { mina } from "./methods/mina";
 import { RpcMethodSchema, RpcResponseSchema } from "./schema";
 import { buildResponse } from "./utils/build-response";
@@ -25,7 +28,8 @@ api.doc("/api/openapi", {
 	openapi: "3.0.0",
 	info: {
 		version: "1.0.0",
-		title: "Klesia API",
+		title: "Klesia RPC",
+		description: mainDocs,
 	},
 });
 
@@ -50,7 +54,7 @@ const rpcRoute = createRoute({
 
 api.get("/", ({ redirect }) => redirect("/api", 301));
 
-api.openapi(rpcRoute, async ({ req, json }) => {
+const klesiaRpcRoute = api.openapi(rpcRoute, async ({ req, json }) => {
 	const body = req.valid("json");
 	return match(body)
 		.with({ method: "mina_getTransactionCount" }, async ({ params }) => {
@@ -93,4 +97,6 @@ api.get(
 	}),
 );
 
-export default api;
+serve(api);
+
+export type KlesiaRpc = typeof klesiaRpcRoute;
