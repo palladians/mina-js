@@ -1,7 +1,7 @@
+import { SignedTransactionSchema } from "@mina-js/shared";
 import { gql } from "@urql/core";
 import { match } from "ts-pattern";
 import { getNodeClient } from "../utils/node";
-import { SignedTransactionSchema } from "@mina-js/shared";
 
 const getTransactionCount = async ({ publicKey }: { publicKey: string }) => {
 	const client = getNodeClient();
@@ -76,7 +76,8 @@ const sendTransaction = async ({
 	const client = getNodeClient();
 	return match(type)
 		.with("payment", async () => {
-		  const { signature, data: input } = SignedTransactionSchema.parse(signedTransaction)
+			const { signature, data: input } =
+				SignedTransactionSchema.parse(signedTransaction);
 			const { data } = await client.mutation(
 				gql`
           mutation {
@@ -92,7 +93,8 @@ const sendTransaction = async ({
 			return data.sendPayment.payment.hash;
 		})
 		.with("delegation", async () => {
-      const { signature, data: input } = SignedTransactionSchema.parse(signedTransaction)
+			const { signature, data: input } =
+				SignedTransactionSchema.parse(signedTransaction);
 			const { data } = await client.mutation(
 				gql`
           mutation {
