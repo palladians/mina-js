@@ -1,11 +1,14 @@
 import { OpenAPIHono, createRoute } from "@hono/zod-openapi";
 import { apiReference } from "@scalar/hono-api-reference";
+import { logger } from "hono/logger";
 import { match } from "ts-pattern";
 import { mina } from "./methods/mina";
 import { RpcMethodSchema, RpcResponseSchema } from "./schema";
 import { buildResponse } from "./utils/build-response";
 
 const api = new OpenAPIHono();
+
+api.use(logger());
 
 api.doc("/api/openapi", {
 	openapi: "3.0.0",

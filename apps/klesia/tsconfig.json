@@ -1,7 +1,9 @@
 {
+	"extends": "@tsconfig/bun/tsconfig.json",
 	"compilerOptions": {
 		"strict": true,
 		"jsx": "react-jsx",
-		"jsxImportSource": "hono/jsx"
+		"jsxImportSource": "hono/jsx",
+		"noPropertyAccessFromIndexSignature": false
 	}
 }
