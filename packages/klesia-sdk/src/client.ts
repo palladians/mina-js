@@ -9,9 +9,7 @@ export const createClient = ({
 	network,
 }: { network: "mainnet" | "devnet" }) => {
 	return match(NetworkMatcher.parse(network))
-		.with("devnet", () =>
-			hc<KlesiaRpc>("https://devnet.klesia.palladians.xyz"),
-		)
+		.with("devnet", () => hc<KlesiaRpc>("https://devnet.klesia.palladians.xyz"))
 		.with("mainnet", () =>
 			hc<KlesiaRpc>("https://mainnet.klesia.palladians.xyz"),
 		)

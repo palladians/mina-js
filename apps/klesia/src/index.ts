@@ -5,7 +5,7 @@ import { OpenAPIHono, createRoute } from "@hono/zod-openapi";
 import { PublicKeySchema } from "@mina-js/shared";
 import { apiReference } from "@scalar/hono-api-reference";
 import { rateLimiter } from "hono-rate-limiter";
-import { cors } from 'hono/cors'
+import { cors } from "hono/cors";
 import { logger } from "hono/logger";
 import { nanoid } from "nanoid";
 import { match } from "ts-pattern";
@@ -28,7 +28,7 @@ api.use(
 		limit: 10,
 	}),
 );
-api.use('/api', cors({ origin: '*' }))
+api.use("/api", cors({ origin: "*" }));
 
 api.doc("/api/openapi", {
 	openapi: "3.0.0",
