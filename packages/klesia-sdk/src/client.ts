@@ -10,10 +10,10 @@ export const createClient = ({
 }: { network: "mainnet" | "devnet" }) => {
 	return match(NetworkMatcher.parse(network))
 		.with("devnet", () =>
-			hc<KlesiaRpc>("https://devnet.klesia.palladians.xyz/api"),
+			hc<KlesiaRpc>("https://devnet.klesia.palladians.xyz"),
 		)
 		.with("mainnet", () =>
-			hc<KlesiaRpc>("https://mainnet.klesia.palladians.xyz/api"),
+			hc<KlesiaRpc>("https://mainnet.klesia.palladians.xyz"),
 		)
 		.exhaustive();
 };
