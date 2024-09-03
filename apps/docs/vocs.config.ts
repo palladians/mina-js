@@ -4,6 +4,9 @@ export default defineConfig({
 	title: "MinaJS",
 	description: "The TypeScript interface for Mina Protocol.",
 	logoUrl: "/logo.svg",
+	font: {
+		google: "DM Sans",
+	},
 	theme: {
 		accentColor: {
 			light: "#907aa9",
