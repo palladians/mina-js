@@ -41,6 +41,7 @@ export default defineConfig({
 		{ icon: "github", link: "https://github.com/palladians/mina-js" },
 		{ icon: "discord", link: "https://get.pallad.co/discord" },
 	],
+	topNav: [{ text: "Pallad", link: "https://get.pallad.co/website" }],
 	sidebar: [
 		{
 			text: "Getting Started",

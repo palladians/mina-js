@@ -13,5 +13,8 @@
 		"react-dom": "latest",
 		"typescript": "latest",
 		"vocs": "latest"
+	},
+	"devDependencies": {
+		"daisyui": "^4.12.10"
 	}
 }
