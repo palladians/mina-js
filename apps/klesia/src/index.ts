@@ -19,7 +19,11 @@ const api = new OpenAPIHono();
 api.use(logger());
 api.use(
 	rateLimiter({
-		keyGenerator: (c) => getConnInfo(c).remote.address ?? nanoid(),
+		skip: (c) => c.req.path !== "/api" || c.req.method !== "POST",
+		keyGenerator: (c) =>
+			c.req.header("x-forwarded-for") ??
+			getConnInfo(c).remote.address ??
+			nanoid(),
 		limit: 10,
 	}),
 );
