@@ -16,10 +16,12 @@ jobs:
       - uses: oven-sh/setup-bun@v2
       - run: bun i --no-save
       - run: bun run build
-      - uses: actions/upload-artifact@v4
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
         with:
-          name: docs
-          path: apps/docs/docs/dist
+          path: apps/docs/docs/dist/
   deploy:
     needs: build
     runs-on: ubuntu-latest
