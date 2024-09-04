@@ -2,7 +2,7 @@ name: Promote Docker image to latest
 on:
   workflow_dispatch:
 jobs:
-  dockerize_and_push:
+  promote_image:
     name: Tag latest and push to GHCR
     runs-on: ubuntu-latest
     permissions:
