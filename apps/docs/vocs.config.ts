@@ -48,8 +48,16 @@ export default defineConfig({
 	topNav: [{ text: "Pallad", link: "https://get.pallad.co/website" }],
 	sidebar: [
 		{
+			text: "About MinaJS",
+			link: "/about",
+		},
+		{
 			text: "Getting Started",
 			link: "/getting-started",
+		},
+		{
+			text: "FAQ",
+			link: "/faq",
 		},
 		{
 			text: "MinaJS Connect",
