@@ -41,11 +41,24 @@ export default defineConfig({
 			},
 		},
 	},
+	markdown: {
+		code: {
+			themes: {
+				light: "rose-pine-dawn",
+				dark: "rose-pine",
+			},
+		},
+	},
 	socials: [
 		{ icon: "github", link: "https://github.com/palladians/mina-js" },
 		{ icon: "discord", link: "https://get.pallad.co/discord" },
 	],
-	topNav: [{ text: "Pallad", link: "https://get.pallad.co/website" }],
+	topNav: [
+		{
+			text: "Pallad - Mina Protocol wallet",
+			link: "https://get.pallad.co/website",
+		},
+	],
 	sidebar: [
 		{
 			text: "About MinaJS",

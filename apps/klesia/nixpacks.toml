@@ -1,0 +1,2 @@
+[start]
+cmd = "cd apps/klesia && npm run start"

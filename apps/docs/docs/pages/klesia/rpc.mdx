@@ -1,0 +1,73 @@
+# Klesia JSON-RPC
+
+Klesia is accessible via HTTP JSON-RPC. You can use any HTTP client to interact with it, but if you're building o1js zkApps, we recommend using the [Klesia SDK](/klesia/sdk).
+
+## Endpoints
+
+There are two Klesia instances available. One for Mina Mainnet and the other for Mina Devnet.
+
+### Mina Mainnet
+
+```
+https://mainnet.klesia.palladians.xyz/api
+```
+
+### Mina Devnet
+
+```
+https://devnet.klesia.palladians.xyz/api
+```
+
+## RPC Methods
+
+Below you can find the complete list of RPC methods available on Klesia.
+
+---
+
+### mina_getTransactionCount
+
+Returns the number of transactions sent from an address. Usually you may want to use this number to determine the nonce for the next transaction.
+
+#### Parameters
+
+Array of strings:
+- `publicKey` - Address to check for transaction count.
+
+---
+
+### mina_getBalance
+
+Returns the balance of the account of given address.
+
+#### Parameters
+
+Array of strings:
+- `publicKey` - Address to check for transaction count.
+
+---
+
+### mina_blockHash
+
+Returns the hash of the most recent block.
+
+---
+
+### mina_chainId
+
+Returns the currently configured chain ID.
+
+---
+
+### mina_sendTransaction
+
+Broadcasts a signed transaction to the network.
+
+#### Parameters
+
+Array of strings:
+- `input` - Signed transaction or zkApp input.
+- `type` - Transaction type. Can be `payment`, `delegation`, or `zkapp`.
+
+## Self-hosting
+
+The application is open-source and available on GitHub. You can self-host it by following the instructions in the repository.

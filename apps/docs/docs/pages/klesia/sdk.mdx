@@ -1,0 +1,26 @@
+# Klesia TypeScript SDK
+
+Klesia has a TypeScript SDK to interact with the JSON-RPC API. The SDK provides type-safe interfaces and properties auto-completion.
+
+## Installation
+
+```bash
+$ npm install @mina-js/klesia-sdk
+```
+
+## Usage
+
+```typescript
+import { createClient } from '@mina-js/klesia-sdk'
+
+const client = createClient({ network: 'devnet' })
+
+const { result } = await client.request({
+  method: 'mina_getTransactionCount',
+  params: ['B62qkYa1o6Mj6uTTjDQCob7FYZspuhkm4RRQhgJg9j4koEBWiSrTQrS']
+})
+```
+
+## Methods
+
+Refer to the [RPC Methods](/klesia/rpc#rpc-methods) page for a complete list of methods available on Klesia.
