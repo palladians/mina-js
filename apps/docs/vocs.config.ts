@@ -7,6 +7,7 @@ export default defineConfig({
 		light: "/logo-inverted.svg",
 		dark: "/logo.svg",
 	},
+	iconUrl: "/logo-round.svg",
 	font: {
 		google: "DM Sans",
 	},
