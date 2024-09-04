@@ -3,26 +3,29 @@ layout: landing
 ---
 
 import { HomePage } from 'vocs/components'
+import { GithubIcon } from 'lucide-react'
 
 <div className="flex flex-col mt-16 gap-16">
   <header className="flex flex-col gap-8">
-    <img src="/logo.svg" className="w-16 lg:w-24 hidden dark:flex" />
-    <img src="/logo.svg" className="w-16 lg:w-24 flex dark:hidden" />
-    <h1 className="font-bold text-3xl lg:text-6xl leading-[3rem] lg:leading-[5rem]">The TypeScript interface for Mina Protocol.</h1>
+    <img src="/logo.svg" className="w-16 lg:w-24 invert dark:invert-0" />
+    <h1 className="font-bold text-3xl lg:text-6xl leading-[3rem] lg:leading-[5rem]">The TypeScript interface for <span className="bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 to-fuchsia-400 dark:from-indigo-300 dark:to-fuchsia-200">Mina Protocol</span>.</h1>
     <p className="text-lg lg:text-xl">MinaJS is the missing piece for your smooth zkApp development on Mina.</p>
     <div className="flex gap-2">
       <a href="/getting-started" className="btn lg:btn-lg btn-primary rounded-full">Get Started</a>
-      <a href="https://github.com/palladians/mina-js" target="_blank" rel="noopener noreferrer" className="btn lg:btn-lg btn-outline rounded-full">GitHub</a>
+      <a href="https://github.com/palladians/mina-js" target="_blank" rel="noopener noreferrer" className="btn lg:btn-lg btn-outline border-neutral text-neutral dark:border-primary dark:text-primary rounded-full">
+        <GithubIcon />
+        <span>GitHub</span>
+      </a>
     </div>
   </header>
   <section>
     <iframe src="https://stackblitz.com/edit/minajs?embed=1&file=index.ts&hideExplorer=1&theme=dark&view=editor" className="w-full h-[500px] border-0 rounded-lg overflow-hidden" />
   </section>
-  <section className="card bg-neutral">
+  <section className="card dark:bg-neutral bg-primary">
     <div className="card-body gap-8">
       <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-semibold">Sponsors</h2>
-        <a target="_blank" href="https://github.com/sponsors/palladians" rel="noopener noreferrer" className="btn btn-outline rounded-full">Become a sponsor</a>
+        <h2 className="text-2xl font-semibold text-white">Sponsors</h2>
+        <a target="_blank" href="https://github.com/sponsors/palladians" rel="noopener noreferrer" className="btn btn-outline rounded-full border-white text-white">Become a sponsor</a>
       </div>
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
         <a href="https://palladians.xyz" target="_blank" rel="noopener noreferrer">

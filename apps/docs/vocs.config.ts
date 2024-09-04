@@ -3,7 +3,10 @@ import { defineConfig } from "vocs";
 export default defineConfig({
 	title: "MinaJS",
 	description: "The TypeScript interface for Mina Protocol.",
-	logoUrl: "/logo.svg",
+	logoUrl: {
+		light: "/logo-inverted.svg",
+		dark: "/logo.svg",
+	},
 	font: {
 		google: "DM Sans",
 	},
