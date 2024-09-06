@@ -1,3 +1,4 @@
+import { remarkMermaid } from "@theguild/remark-mermaid";
 import { defineConfig } from "vocs";
 
 export default defineConfig({
@@ -48,6 +49,7 @@ export default defineConfig({
 				dark: "rose-pine",
 			},
 		},
+		remarkPlugins: [remarkMermaid as never],
 	},
 	socials: [
 		{ icon: "github", link: "https://github.com/palladians/mina-js" },
@@ -75,7 +77,10 @@ export default defineConfig({
 		{
 			text: "MinaJS Connect",
 			link: "/connect",
-			items: [{ text: "Introduction", link: "/connect" }],
+			items: [
+				{ text: "Introduction", link: "/connect" },
+				{ text: "Getting Started", link: "/connect/getting-started" },
+			],
 		},
 		{
 			text: "MinaJS Accounts",

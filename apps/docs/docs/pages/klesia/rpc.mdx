@@ -1,8 +1,6 @@
-import { Callout } from 'vocs/components'
-
 # Klesia JSON-RPC
 
-Klesia is accessible via HTTP JSON-RPC. You can use any HTTP client to interact with it, but if you're building o1js zkApps, we recommend using the [Klesia SDK](/klesia/sdk).
+Klesia is accessible via HTTP JSON-RPC. You can use any HTTP client to interact with it, but if you're building o1js zkApps, we recommend using the [Klesia SDK](/klesia/sdk). You can either use the version hosted by us, or follow [this guide](/klesia/rpc#self-hosting) to host your own instance.
 
 ## Endpoints
 
@@ -82,4 +80,6 @@ There are `amd64` and `arm64` Docker images available for self-hosting.
 docker pull ghcr.io/palladians/klesia:latest
 ```
 
-<Callout type="info">Make sure you map port 3000 and expose it.</Callout>
+:::info
+Make sure you map port 3000 and expose it.
+:::

@@ -1,8 +1,8 @@
-import { Callout } from 'vocs/components'
-
 # About MinaJS [Learn about MinaJS and Klesia.]
 
-<Callout type="warning">As of September 2024, MinaJS is in early development. Don't use for production just yet.</Callout>
+:::warning
+As of September 2024, MinaJS is in early development. Don't use for production just yet.
+:::
 
 MinaJS is a TypeScript interface for Mina Protocol. It provides a set of TypeScript types and utilities to interact with Mina Protocol. MinaJS is the missing piece for your smooth zkApp development on Mina.
 It aims to remove the complexities, and allow developers to focus on building innovative zkApps on Mina.
@@ -16,6 +16,44 @@ MinaJS provides a set of services to interact with Mina Protocol. The services a
 - **MinaJS Provider** - A set of Zod-based schemas and TypeScript types for Mina wallets to comply with the latest specs and MinaJS Connect standard.
 - **Klesia** - A JSON-RPC wrapper over Mina Node's GraphQL API, similar to APIs like Alchemy and Infura. It's self hostable, so you can bring your own infrastructure.
 - **Klesia SDK** - A TypeScript SDK to interact with Klesia JSON-RPC API with type-safe interfaces and properties auto-completion.
+
+## Services and interaction breakdown
+
+```mermaid
+graph TD
+  A[End user] -- uses --> B[zkApp]
+  B[zkApp] -- provides feedback to --> A[End user]
+
+  B[zkApp] -- integrated with --> C[MinaJS Connect]
+  C[MinaJS Connect] -- provides responses to --> B[zkApp]
+
+  C[MinaJS Connect] -- interacts with --> D[MinaJS Provider]
+  D[MinaJS Provider] -- provides responses to --> C[MinaJS Connect]
+
+  D[MinaJS Provider] -- interacts with --> E[Mina Wallet]
+  E[Mina Wallet] -- sends data to --> D[MinaJS Provider]
+
+  E[Mina Wallet] -- implements --> F[MinaJS Account]
+  F[MinaJS Account] -- handles accounts and signing for --> E[Mina Wallet]
+
+  E[Mina Wallet] -- interacts with --> I[Klesia SDK]
+  I[Klesia SDK] -- provides data to --> E[Mina Wallet]
+
+  G[Klesia] -- interacts with --> H[Mina Node]
+  H[Mina Node] -- provides data to --> G[Klesia]
+
+  B[zkApp] -- uses --> I[Klesia SDK]
+  I[Klesia SDK] -- provides data to --> B[zkApp]
+
+  I[Klesia SDK] -- interacts with --> G[Klesia]
+  G[Klesia] -- provides data to --> I[Klesia SDK]
+
+  A[End user] -- uses --> E[Mina Wallet]
+  E[Mina Wallet] -- provides data to --> A[End user]
+
+  G[Klesia] -- interacts with --> J[Fallback Mina Node]
+  J[Fallback Mina Node] -- provides data to --> G[Klesia]
+```
 
 ## Supported Chains
 
