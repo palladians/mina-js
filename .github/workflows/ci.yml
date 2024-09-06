@@ -3,21 +3,13 @@ on:
   push:
     branches: [main]
 jobs:
-  test:
-    name: Test
+  test_and_release:
+    name: Test and release
     runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: oven-sh/setup-bun@v2
-      - run: bun i --no-save
-      - run: bun run test
-  release:
-    name: Release
-    runs-on: ubuntu-latest
-    needs: test
     steps:
       - uses: actions/checkout@v4
       - uses: oven-sh/setup-bun@v2
       - run: bun i --no-save
       - run: bun run build
+      - run: bun run test
       - run: bunx pkg-pr-new publish './packages/klesia-sdk'
