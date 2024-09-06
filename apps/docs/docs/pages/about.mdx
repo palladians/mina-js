@@ -13,7 +13,7 @@ MinaJS provides a set of services to interact with Mina Protocol. The services a
 
 - **MinaJS Connect** - A connector library to discover Mina Protocol wallets like Pallad, and interact with them in a seamless way.
 - **MinaJS Accounts** - A Viem-like library to manage accounts and execute operations such as signing transactions.
-- **MinaJS Provider** - A set of Zod-based schemas and TypeScript types for Mina wallets to comply with the latest specs and MinaJS Connect standard.
+- **MinaJS Provider** - A set of Zod-based schemas and TypeScript types for Wallet UIs to comply with the latest specs and MinaJS Connect standard.
 - **Klesia** - A JSON-RPC wrapper over Mina Node's GraphQL API, similar to APIs like Alchemy and Infura. It's self hostable, so you can bring your own infrastructure.
 - **Klesia SDK** - A TypeScript SDK to interact with Klesia JSON-RPC API with type-safe interfaces and properties auto-completion.
 
@@ -21,38 +21,38 @@ MinaJS provides a set of services to interact with Mina Protocol. The services a
 
 ```mermaid
 graph TD
-  A[End user] -- uses --> B[zkApp]
-  B[zkApp] -- provides feedback to --> A[End user]
+  classDef UI fill:#C4A7E7,color:#000000
+  A[End user] -- uses --> B[zkApp UI]
+  B[zkApp UI]:::UI -- provides feedback to --> A[End user]
+  A[End user] -- uses --> E[Wallet UI]
+  E[Wallet UI]:::UI -- provides data to --> A[End user]
 
-  B[zkApp] -- integrated with --> C[MinaJS Connect]
-  C[MinaJS Connect] -- provides responses to --> B[zkApp]
+  subgraph zkApp
+  B[zkApp UI] -- integrated with --> C[MinaJS Connect]
+  C[MinaJS Connect] -- provides responses to --> B[zkApp UI]
+  end
 
+  subgraph Mina Wallet
   C[MinaJS Connect] -- interacts with --> D[MinaJS Provider]
   D[MinaJS Provider] -- provides responses to --> C[MinaJS Connect]
+  D[MinaJS Provider] -- interacts with --> E[Wallet UI]
+  E[Wallet UI] -- sends data to --> D[MinaJS Provider]
+  E[Wallet UI] -- implements --> F[MinaJS Account]
+  F[MinaJS Account] -- handles accounts and signing for --> E[Wallet UI]
+  E[Wallet UI] -- interacts with --> I[Klesia SDK]
+  end
 
-  D[MinaJS Provider] -- interacts with --> E[Mina Wallet]
-  E[Mina Wallet] -- sends data to --> D[MinaJS Provider]
-
-  E[Mina Wallet] -- implements --> F[MinaJS Account]
-  F[MinaJS Account] -- handles accounts and signing for --> E[Mina Wallet]
-
-  E[Mina Wallet] -- interacts with --> I[Klesia SDK]
-  I[Klesia SDK] -- provides data to --> E[Mina Wallet]
-
-  G[Klesia] -- interacts with --> H[Mina Node]
-  H[Mina Node] -- provides data to --> G[Klesia]
-
-  B[zkApp] -- uses --> I[Klesia SDK]
-  I[Klesia SDK] -- provides data to --> B[zkApp]
-
-  I[Klesia SDK] -- interacts with --> G[Klesia]
-  G[Klesia] -- provides data to --> I[Klesia SDK]
-
-  A[End user] -- uses --> E[Mina Wallet]
-  E[Mina Wallet] -- provides data to --> A[End user]
-
-  G[Klesia] -- interacts with --> J[Fallback Mina Node]
-  J[Fallback Mina Node] -- provides data to --> G[Klesia]
+  subgraph Klesia
+  I[Klesia SDK] -- provides data to --> E[Wallet UI]
+  G[Klesia RPC] -- interacts with --> H[Mina Node]
+  H[Mina Node] -- provides data to --> G[Klesia RPC]
+  B[zkApp UI] -- uses --> I[Klesia SDK]
+  I[Klesia SDK] -- provides data to --> B[zkApp UI]
+  I[Klesia SDK] -- interacts with --> G[Klesia RPC]
+  G[Klesia RPC] -- provides data to --> I[Klesia SDK]
+  G[Klesia RPC] -- interacts with --> J[Fallback Mina Node]
+  J[Fallback Mina Node] -- provides data to --> G[Klesia RPC]
+  end
 ```
 
 ## Supported Chains
