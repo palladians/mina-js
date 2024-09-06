@@ -21,37 +21,35 @@ MinaJS provides a set of services to interact with Mina Protocol. The services a
 
 ```mermaid
 graph TD
-  classDef UI fill:#C4A7E7,color:#000000
-  A[End user] -- uses --> B[zkApp UI]
-  B[zkApp UI]:::UI -- provides feedback to --> A[End user]
-  A[End user] -- uses --> E[Wallet UI]
-  E[Wallet UI]:::UI -- provides data to --> A[End user]
+  classDef MinaJS fill:#C4A7E7,color:#000000
+
+  subgraph Klesia
+  G[Klesia RPC]:::MinaJS --> H[Mina Node]
+  H[Mina Node] --> G[Klesia RPC]
+  G[Klesia RPC]:::MinaJS --> J[Fallback Mina Node]
+  J[Fallback Mina Node] --> G[Klesia RPC]
+  end
 
   subgraph zkApp
-  B[zkApp UI] -- integrated with --> C[MinaJS Connect]
-  C[MinaJS Connect] -- provides responses to --> B[zkApp UI]
+  B[zkApp UI] --> C[MinaJS Connect]
+  C[MinaJS Connect]:::MinaJS --> B[zkApp UI]
+  B[zkApp UI] --> I1[Klesia SDK - zkApp]
+  I1[Klesia SDK - zkApp]:::MinaJS --> G[Klesia RPC]
+  I1[Klesia SDK - zkApp]:::MinaJS --> B[zkApp UI]
+  G[Klesia RPC]:::MinaJS --> I1[Klesia SDK - zkApp]
   end
 
   subgraph Mina Wallet
-  C[MinaJS Connect] -- interacts with --> D[MinaJS Provider]
-  D[MinaJS Provider] -- provides responses to --> C[MinaJS Connect]
-  D[MinaJS Provider] -- interacts with --> E[Wallet UI]
-  E[Wallet UI] -- sends data to --> D[MinaJS Provider]
-  E[Wallet UI] -- implements --> F[MinaJS Account]
-  F[MinaJS Account] -- handles accounts and signing for --> E[Wallet UI]
-  E[Wallet UI] -- interacts with --> I[Klesia SDK]
-  end
-
-  subgraph Klesia
-  I[Klesia SDK] -- provides data to --> E[Wallet UI]
-  G[Klesia RPC] -- interacts with --> H[Mina Node]
-  H[Mina Node] -- provides data to --> G[Klesia RPC]
-  B[zkApp UI] -- uses --> I[Klesia SDK]
-  I[Klesia SDK] -- provides data to --> B[zkApp UI]
-  I[Klesia SDK] -- interacts with --> G[Klesia RPC]
-  G[Klesia RPC] -- provides data to --> I[Klesia SDK]
-  G[Klesia RPC] -- interacts with --> J[Fallback Mina Node]
-  J[Fallback Mina Node] -- provides data to --> G[Klesia RPC]
+  C[MinaJS Connect]:::MinaJS --> D[MinaJS Provider]
+  D[MinaJS Provider]:::MinaJS --> C[MinaJS Connect]
+  D[MinaJS Provider]:::MinaJS --> E[Wallet UI & Connector]
+  E[Wallet UI & Connector] --> D[MinaJS Provider]
+  E[Wallet UI & Connector] --> F[MinaJS Account]
+  F[MinaJS Account]:::MinaJS --> E[Wallet UI & Connector]
+  I2[Klesia SDK - Wallet]:::MinaJS --> G[Klesia RPC]
+  G[Klesia RPC]:::MinaJS --> I2[Klesia SDK - Wallet]
+  E[Wallet UI & Connector] --> I2[Klesia SDK - Wallet]
+  I2[Klesia SDK - Wallet]:::MinaJS --> E[Wallet UI & Connector]
   end
 ```
 
