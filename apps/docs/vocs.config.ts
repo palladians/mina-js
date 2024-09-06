@@ -75,6 +75,10 @@ export default defineConfig({
 			link: "/faq",
 		},
 		{
+			text: "Roadmap",
+			link: "/roadmap",
+		},
+		{
 			text: "MinaJS Connect",
 			link: "/connect",
 			items: [

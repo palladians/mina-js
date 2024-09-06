@@ -3,7 +3,6 @@ import { serve } from "@hono/node-server";
 import { getConnInfo } from "@hono/node-server/conninfo";
 import { OpenAPIHono, createRoute } from "@hono/zod-openapi";
 import { PublicKeySchema } from "@mina-js/shared";
-import { apiReference } from "@scalar/hono-api-reference";
 import { rateLimiter } from "hono-rate-limiter";
 import { cors } from "hono/cors";
 import { logger } from "hono/logger";
@@ -15,12 +14,15 @@ import { mina } from "./methods/mina";
 import { RpcMethodSchema, RpcResponseSchema } from "./schema";
 import { buildResponse } from "./utils/build-response";
 
-const api = new OpenAPIHono();
+export const api = new OpenAPIHono();
 
 api.use(logger());
 api.use(
 	rateLimiter({
-		skip: (c) => c.req.path !== "/api" || c.req.method !== "POST",
+		skip: (c) =>
+			process.env.NODE_ENV === "test" ||
+			c.req.path !== "/api" ||
+			c.req.method !== "POST",
 		keyGenerator: (c) =>
 			c.req.header("x-forwarded-for") ??
 			getConnInfo(c).remote.address ??
@@ -58,9 +60,7 @@ const rpcRoute = createRoute({
 	},
 });
 
-api.get("/", ({ redirect }) => redirect("/api", 301));
-
-const klesiaRpcRoute = api.openapi(rpcRoute, async ({ req, json }) => {
+export const klesiaRpcRoute = api.openapi(rpcRoute, async ({ req, json }) => {
 	const body = req.valid("json");
 	return match(body)
 		.with({ method: "mina_getTransactionCount" }, async ({ params }) => {
@@ -92,16 +92,6 @@ const klesiaRpcRoute = api.openapi(rpcRoute, async ({ req, json }) => {
 		})
 		.exhaustive();
 });
-
-api.get(
-	"/api",
-	apiReference({
-		spec: {
-			url: "/api/openapi",
-		},
-		theme: "deepSpace",
-	}),
-);
 
 serve(api);
 
