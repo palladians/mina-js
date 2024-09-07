@@ -40,7 +40,7 @@ module.exports = {
 			},
 		],
 	},
-	content: ["./docs/**/*.{html,md,mdx,tsx,js,jsx}"],
+	content: ["./src/**/*.{html,md,mdx,tsx,js,jsx}"],
 	theme: {
 		extend: {},
 	},
