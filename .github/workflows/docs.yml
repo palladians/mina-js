@@ -21,7 +21,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: apps/docs/docs/dist/
+          path: apps/docs/src/dist/
   deploy:
     needs: build
     runs-on: ubuntu-latest
