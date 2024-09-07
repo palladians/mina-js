@@ -90,6 +90,13 @@ export const klesiaRpcRoute = api.openapi(rpcRoute, async ({ req, json }) => {
 			const result = await mina.sendTransaction({ signedTransaction, type });
 			return json(buildResponse(result), 200);
 		})
+		.with({ method: "mina_getAccount" }, async ({ params }) => {
+			const [publicKey] = params;
+			const result = await mina.getAccount({
+				publicKey: PublicKeySchema.parse(publicKey),
+			});
+			return json(buildResponse(result), 200);
+		})
 		.exhaustive();
 });
 

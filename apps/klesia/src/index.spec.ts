@@ -39,5 +39,17 @@ it("returns result for mina_chainId", async () => {
 		json: { method: "mina_chainId" },
 	});
 	const { result } = await response.json();
-	expect((result as unknown as string).length).toBeGreaterThan(0);
+	expect(result.length).toBeGreaterThan(0);
+});
+
+it("returns result for mina_getAccount", async () => {
+	const response = await client.api.$post({
+		json: {
+			method: "mina_getAccount",
+			params: ["B62qkYa1o6Mj6uTTjDQCob7FYZspuhkm4RRQhgJg9j4koEBWiSrTQrS"],
+		},
+	});
+	const { result } = await response.json();
+	expect(BigInt(result.nonce)).toBeGreaterThanOrEqual(0);
+	expect(BigInt(result.balance)).toBeGreaterThanOrEqual(0);
 });

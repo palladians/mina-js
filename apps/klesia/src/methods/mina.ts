@@ -127,10 +127,32 @@ const sendTransaction = async ({
 		.exhaustive();
 };
 
+const getAccount = async ({ publicKey }: { publicKey: string }) => {
+	const client = getNodeClient();
+	const { data } = await client.query(
+		gql`
+      query {
+        account(publicKey: $publicKey) {
+          nonce
+          balance {
+            total
+          }
+        }
+      }
+    `,
+		{ publicKey },
+	);
+	return {
+		nonce: data.account.nonce,
+		balance: data.account.balance.total,
+	};
+};
+
 export const mina = {
 	getTransactionCount,
 	getBalance,
 	blockHash,
 	chainId,
 	sendTransaction,
+	getAccount,
 };

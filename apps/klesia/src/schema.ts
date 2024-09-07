@@ -26,9 +26,13 @@ export const RpcMethodSchema = z.discriminatedUnion("method", [
 		method: z.literal("mina_sendTransaction"),
 		params: SendTransactionSchema,
 	}),
+	z.object({
+		method: z.literal("mina_getAccount"),
+		params: PublicKeyParamsSchema,
+	}),
 ]);
 
 export const RpcResponseSchema = z.object({
 	jsonrpc: z.literal("2.0"),
-	result: z.unknown(),
+	result: z.any(),
 });

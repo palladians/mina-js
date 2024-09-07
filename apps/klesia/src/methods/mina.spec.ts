@@ -22,3 +22,9 @@ it("should return chain id", async () => {
 	const result = await mina.chainId();
 	expect(result.length).toBeGreaterThan(0);
 });
+
+it("should get account info", async () => {
+	const result = await mina.getAccount({ publicKey: TEST_PKEY });
+	expect(BigInt(result.nonce)).toBeGreaterThanOrEqual(0);
+	expect(BigInt(result.balance)).toBeGreaterThanOrEqual(0);
+});
