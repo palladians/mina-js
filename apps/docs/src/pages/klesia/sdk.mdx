@@ -12,14 +12,20 @@ $ npm install @mina-js/klesia-sdk
 For now there are only [nightly builds](/klesia/sdk#nightly-builds) available. The stable version will be released soon™️.
 :::
 
+## Client Options
+
+- `network`: The network to connect to. One of: `mainnet`, `devnet`, `zeko-devnet`.
+- `customUrl`: A custom URL to connect to in case of self-hosted RPCs.
+- `throwable`: If `true`, the client will throw an error if the response contains an error. Default is `true`.
+
 ## Usage
 
-```typescript
+```typescript twoslash
 import { createClient } from '@mina-js/klesia-sdk'
 
 const client = createClient({ network: 'devnet' })
 
-const { result } = await client.request({
+const { result } = await client.request<'mina_getTransactionCount'>({
   method: 'mina_getTransactionCount',
   params: ['B62qkYa1o6Mj6uTTjDQCob7FYZspuhkm4RRQhgJg9j4koEBWiSrTQrS']
 })

@@ -15,7 +15,7 @@ const getTransactionCount = async ({ publicKey }: { publicKey: string }) => {
     `,
 		{ publicKey },
 	);
-	return Number.parseInt(data.account.nonce);
+	return data.account.nonce;
 };
 
 const getBalance = async ({ publicKey }: { publicKey: string }) => {

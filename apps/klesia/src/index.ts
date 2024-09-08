@@ -11,7 +11,7 @@ import { match } from "ts-pattern";
 import mainDocs from "../docs/index.txt";
 import rpcDocs from "../docs/rpc.txt";
 import { mina } from "./methods/mina";
-import { RpcMethodSchema, RpcResponseSchema } from "./schema";
+import { RpcMethod, RpcMethodSchema, RpcResponseSchema } from "./schema";
 import { buildResponse } from "./utils/build-response";
 
 export const api = new OpenAPIHono();
@@ -63,39 +63,81 @@ const rpcRoute = createRoute({
 export const klesiaRpcRoute = api.openapi(rpcRoute, async ({ req, json }) => {
 	const body = req.valid("json");
 	return match(body)
-		.with({ method: "mina_getTransactionCount" }, async ({ params }) => {
-			const [publicKey] = params;
-			const result = await mina.getTransactionCount({
-				publicKey: PublicKeySchema.parse(publicKey),
-			});
-			return json(buildResponse(result), 200);
-		})
-		.with({ method: "mina_getBalance" }, async ({ params }) => {
+		.with(
+			{ method: RpcMethod.enum.mina_getTransactionCount },
+			async ({ params }) => {
+				const [publicKey] = params;
+				const result = await mina.getTransactionCount({
+					publicKey: PublicKeySchema.parse(publicKey),
+				});
+				return json(
+					buildResponse({
+						method: RpcMethod.enum.mina_getTransactionCount,
+						result,
+					}),
+					200,
+				);
+			},
+		)
+		.with({ method: RpcMethod.enum.mina_getBalance }, async ({ params }) => {
 			const [publicKey] = params;
 			const result = await mina.getBalance({
 				publicKey: PublicKeySchema.parse(publicKey),
 			});
-			return json(buildResponse(result), 200);
+			return json(
+				buildResponse({ method: RpcMethod.enum.mina_getBalance, result }),
+				200,
+			);
 		})
-		.with({ method: "mina_blockHash" }, async () => {
+		.with({ method: RpcMethod.enum.mina_blockHash }, async () => {
+			if (process.env.MINA_NETWORK === "zeko_devnet") {
+				return json(
+					buildResponse({
+						method: RpcMethod.enum.mina_blockHash,
+						error: {
+							code: -32600,
+							message: "Network not supported.",
+						},
+					}),
+					200,
+				);
+			}
 			const result = await mina.blockHash();
-			return json(buildResponse(result), 200);
+			return json(
+				buildResponse({ method: RpcMethod.enum.mina_blockHash, result }),
+				200,
+			);
 		})
-		.with({ method: "mina_chainId" }, async () => {
+		.with({ method: RpcMethod.enum.mina_chainId }, async () => {
 			const result = await mina.chainId();
-			return json(buildResponse(result), 200);
+			return json(
+				buildResponse({ method: RpcMethod.enum.mina_chainId, result }),
+				200,
+			);
 		})
-		.with({ method: "mina_sendTransaction" }, async ({ params }) => {
-			const [signedTransaction, type] = params;
-			const result = await mina.sendTransaction({ signedTransaction, type });
-			return json(buildResponse(result), 200);
-		})
-		.with({ method: "mina_getAccount" }, async ({ params }) => {
+		.with(
+			{ method: RpcMethod.enum.mina_sendTransaction },
+			async ({ params }) => {
+				const [signedTransaction, type] = params;
+				const result = await mina.sendTransaction({ signedTransaction, type });
+				return json(
+					buildResponse({
+						method: RpcMethod.enum.mina_sendTransaction,
+						result,
+					}),
+					200,
+				);
+			},
+		)
+		.with({ method: RpcMethod.enum.mina_getAccount }, async ({ params }) => {
 			const [publicKey] = params;
 			const result = await mina.getAccount({
 				publicKey: PublicKeySchema.parse(publicKey),
 			});
-			return json(buildResponse(result), 200);
+			return json(
+				buildResponse({ method: RpcMethod.enum.mina_getAccount, result }),
+				200,
+			);
 		})
 		.exhaustive();
 });
@@ -103,3 +145,10 @@ export const klesiaRpcRoute = api.openapi(rpcRoute, async ({ req, json }) => {
 serve(api);
 
 export type KlesiaRpc = typeof klesiaRpcRoute;
+export {
+	KlesiaNetwork,
+	RpcMethod,
+	type RpcMethodType,
+	type RpcResponseType,
+	type RpcErrorType,
+} from "./schema";

@@ -1,25 +1,57 @@
-import type { KlesiaRpc } from "@mina-js/klesia";
+import {
+	KlesiaNetwork,
+	type KlesiaRpc,
+	type RpcErrorType,
+	type RpcResponseType,
+} from "@mina-js/klesia";
 import { hc } from "hono/client";
 import { match } from "ts-pattern";
-import { z } from "zod";
 
-const NetworkMatcher = z.enum(["mainnet", "devnet"]);
+type CreateClientProps = {
+	network: "mainnet" | "devnet" | "zeko_devnet";
+	customUrl?: string;
+	throwable?: boolean;
+};
 
-type CreateClientProps = { network: "mainnet" | "devnet"; customUrl?: string };
+const throwRpcError = ({
+	code,
+	message,
+}: { code: number; message: string }) => {
+	throw new Error(`${code} - ${message}`);
+};
 
-export const createClient = ({ network, customUrl }: CreateClientProps) => {
-	const baseClient = match(NetworkMatcher.parse(network))
+export const createClient = ({
+	network,
+	customUrl,
+	throwable = true,
+}: CreateClientProps) => {
+	const baseClient = match(KlesiaNetwork.parse(network))
 		.with("devnet", () =>
 			hc<KlesiaRpc>(customUrl ?? "https://devnet.klesia.palladians.xyz"),
 		)
 		.with("mainnet", () =>
 			hc<KlesiaRpc>(customUrl ?? "https://mainnet.klesia.palladians.xyz"),
 		)
+		.with("zeko_devnet", () =>
+			hc<KlesiaRpc>(customUrl ?? "https://zeko-devnet.klesia.palladians.xyz"),
+		)
 		.exhaustive();
 	const rpcHandler = baseClient.api.$post;
 	type RpcRequest = Parameters<typeof rpcHandler>[0];
-	const request = async (req: RpcRequest["json"]) => {
-		return (await baseClient.api.$post({ json: req })).json();
+	const request = async <T extends string>(req: RpcRequest["json"]) => {
+		const json = (await (
+			await baseClient.api.$post({ json: req })
+		).json()) as Extract<RpcResponseType, { method: T }> & {
+			error?: RpcErrorType;
+		};
+		if (!throwable) {
+			return json;
+		}
+		if (json?.error) {
+			const { code, message } = json.error;
+			return throwRpcError({ code, message });
+		}
+		return json;
 	};
 	return {
 		request,

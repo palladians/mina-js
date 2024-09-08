@@ -5,7 +5,7 @@ const TEST_PKEY = "B62qkYa1o6Mj6uTTjDQCob7FYZspuhkm4RRQhgJg9j4koEBWiSrTQrS";
 
 it("should return transactions count", async () => {
 	const result = await mina.getTransactionCount({ publicKey: TEST_PKEY });
-	expect(result).toBeGreaterThan(0);
+	expect(BigInt(result)).toBeGreaterThan(0);
 });
 
 it("should return balance", async () => {
