@@ -3,7 +3,7 @@
 	"private": true,
 	"scripts": {
 		"build": "turbo build",
-		"test": "bun run --filter '*' test",
+		"test": "turbo test",
 		"cleanup": "bun run --filter '*' cleanup",
 		"lint": "bunx biome check .",
 		"format": "bunx biome check . --write --unsafe"

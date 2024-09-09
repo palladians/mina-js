@@ -1,7 +1,6 @@
 import "dotenv/config";
-import { serve } from "@hono/node-server";
 import { getConnInfo } from "@hono/node-server/conninfo";
-import { OpenAPIHono, createRoute, z } from "@hono/zod-openapi";
+import { OpenAPIHono, createRoute } from "@hono/zod-openapi";
 import { PublicKeySchema } from "@mina-js/shared";
 import { rateLimiter } from "hono-rate-limiter";
 import { cors } from "hono/cors";
@@ -141,13 +140,6 @@ export const klesiaRpcRoute = api.openapi(rpcRoute, async ({ req, json }) => {
 		})
 		.exhaustive();
 });
-
-serve(
-	{ fetch: api.fetch, port: z.coerce.number().parse(process.env.PORT ?? 3000) },
-	(info) => {
-		console.log(`Listening on http://localhost:${info.port}`);
-	},
-);
 
 export type KlesiaRpc = typeof klesiaRpcRoute;
 export {

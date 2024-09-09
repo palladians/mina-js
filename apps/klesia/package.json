@@ -12,8 +12,8 @@
 	},
 	"scripts": {
 		"build": "tsup-node",
-		"dev": "tsup-node --watch --onSuccess \"node dist/index.js\"",
-		"start": "node dist/index.js",
+		"dev": "tsup-node --watch --onSuccess \"node dist/server.js\"",
+		"start": "node dist/server.js",
 		"test": "bun test"
 	},
 	"dependencies": {
