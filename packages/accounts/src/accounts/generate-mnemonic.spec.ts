@@ -3,6 +3,6 @@ import { english } from "../";
 import { generateMnemonic } from "./generate-mnemonic";
 
 it("generates 12 word mnemonic", () => {
-	const mnemonic = generateMnemonic(english);
+	const mnemonic = generateMnemonic({ wordlist: english });
 	expect(mnemonic.split(" ").length).toBe(12);
 });

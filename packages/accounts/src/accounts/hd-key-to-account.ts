@@ -1,6 +1,7 @@
 import { sha256 } from "@noble/hashes/sha256";
 import { bytesToHex } from "@noble/hashes/utils";
 import { base58check } from "@scure/base";
+import type { Simplify } from "type-fest";
 import {
 	type HDAccount,
 	type HDKey,
@@ -12,25 +13,24 @@ import {
 	privateKeyToAccount,
 } from "./private-key-to-account";
 
-export type HDKeyToAccountOptions = HDOptions &
-	Partial<PrivateKeyToAccountParams>;
+export type HDKeyToAccountOptions = Simplify<
+	{ hdKey: HDKey } & HDOptions & Partial<PrivateKeyToAccountParams>
+>;
 
 /**
  * @description Creates an Account from a HD Key.
  *
  * @returns A HD Account.
  */
-export function hdKeyToAccount(
-	hdKey_: HDKey,
-	{
-		accountIndex = 0,
-		addressIndex = 0,
-		changeIndex = 0,
-		path,
-		...options
-	}: HDKeyToAccountOptions = {},
-): HDAccount {
-	const childNode = hdKey_.derive(
+export function hdKeyToAccount({
+	hdKey,
+	accountIndex = 0,
+	addressIndex = 0,
+	changeIndex = 0,
+	path,
+	...options
+}: HDKeyToAccountOptions): HDAccount {
+	const childNode = hdKey.derive(
 		path ||
 			`m/${MinaKeyConst.PURPOSE}'/${MinaKeyConst.MINA_COIN_TYPE}'/${accountIndex}'/${changeIndex}/${addressIndex}`,
 	);

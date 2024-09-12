@@ -19,7 +19,7 @@ $ npm install @mina-js/accounts
 ```ts twoslash
 import { generateMnemonic, english } from '@mina-js/accounts'
 
-const mnemonic = generateMnemonic(english);
+const mnemonic = generateMnemonic({ wordlist: english });
 ```
 
 ### generatePrivateKey
@@ -35,7 +35,7 @@ const privateKey = generatePrivateKey();
 ```ts twoslash
 import { mnemonicToAccount } from '@mina-js/accounts'
 
-const account = mnemonicToAccount('your mnemonic here');
+const account = mnemonicToAccount({ mnemonic: 'your mnemonic here' });
 ```
 
 ### privateKeyToAccount
@@ -59,9 +59,9 @@ import { hdKeyToAccount, hex, HDKey } from '@mina-js/accounts'
 
 const hdKey = HDKey.fromMasterSeed(hex.decode("59eabf9e9..."));
 
-const addressIndexAccount = hdKeyToAccount(hdKey, { addressIndex: 5 });
-const accountIndexAccount = hdKeyToAccount(hdKey, { accountIndex: 5 });
-const customPathAccount = hdKeyToAccount(hdKey, { path: "m/44'/12586'/0'/0/5" });
+const addressIndexAccount = hdKeyToAccount({ hdKey, addressIndex: 5 });
+const accountIndexAccount = hdKeyToAccount({ hdKey, accountIndex: 5 });
+const customPathAccount = hdKeyToAccount({ hdKey, path: "m/44'/12586'/0'/0/5" });
 ```
 
 ### hex
@@ -79,7 +79,7 @@ Exported from `@scure/bip32`.
 ```ts twoslash
 import { mnemonicToAccount } from '@mina-js/accounts'
 
-const account = mnemonicToAccount('your mnemonic here');
+const account = mnemonicToAccount({ mnemonic: 'your mnemonic here' });
 
 const signedMessage = await account.signMessage({ message: 'your message here' });
 ```
@@ -89,7 +89,7 @@ const signedMessage = await account.signMessage({ message: 'your message here' }
 ```ts twoslash
 import { mnemonicToAccount } from '@mina-js/accounts'
 
-const account = mnemonicToAccount('your mnemonic here');
+const account = mnemonicToAccount({ mnemonic: 'your mnemonic here' });
 
 const signedTransaction = await account.signTransaction({
   transaction: {
@@ -107,7 +107,7 @@ const signedTransaction = await account.signTransaction({
 ```ts twoslash
 import { mnemonicToAccount } from '@mina-js/accounts'
 
-const account = mnemonicToAccount('your mnemonic here');
+const account = mnemonicToAccount({ mnemonic: 'your mnemonic here' });
 
 const signedFields = await account.signFields({ fields: [1n, 2n, 3n] });
 ```
@@ -117,7 +117,7 @@ const signedFields = await account.signFields({ fields: [1n, 2n, 3n] });
 ```ts twoslash
 import { mnemonicToAccount } from '@mina-js/accounts'
 
-const account = mnemonicToAccount('your mnemonic here');
+const account = mnemonicToAccount({ mnemonic: 'your mnemonic here' });
 
 const nullifier = await account.createNullifier({ message: [1n, 2n, 3n] });
 ```

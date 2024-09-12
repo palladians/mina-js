@@ -10,14 +10,15 @@ const hdKey = HDKey.fromMasterSeed(
 );
 
 it("matches the snapshot", () => {
-	const hdAccount = hdKeyToAccount(hdKey);
+	const hdAccount = hdKeyToAccount({ hdKey });
 	expect(hdAccount).toMatchSnapshot();
 });
 
 describe("args: addressIndex", () => {
 	Array.from({ length: 10 }).forEach((_, index) => {
 		it(`derives addressIndex: ${index}`, () => {
-			const account = hdKeyToAccount(hdKey, {
+			const account = hdKeyToAccount({
+				hdKey,
 				addressIndex: index,
 			});
 			expect(account.publicKey.length).toEqual(55);
@@ -29,7 +30,8 @@ describe("args: addressIndex", () => {
 describe("args: path", () => {
 	Array.from({ length: 10 }).forEach((_, index) => {
 		it(`derives path: m/44'/12586'/0'/0/${index}`, () => {
-			const account = hdKeyToAccount(hdKey, {
+			const account = hdKeyToAccount({
+				hdKey,
 				path: `m/44'/12586'/0'/0/${index}`,
 			});
 			expect(account.publicKey.length).toEqual(55);
@@ -39,17 +41,17 @@ describe("args: path", () => {
 });
 
 it("derives with accountIndex", () => {
-	const hdAccount = hdKeyToAccount(hdKey, { accountIndex: 1 }).publicKey;
+	const hdAccount = hdKeyToAccount({ hdKey, accountIndex: 1 }).publicKey;
 	expect(hdAccount).toMatchSnapshot();
 });
 
 it("derives with changeIndex", () => {
-	const hdAccount = hdKeyToAccount(hdKey, { changeIndex: 1 }).publicKey;
+	const hdAccount = hdKeyToAccount({ hdKey, changeIndex: 1 }).publicKey;
 	expect(hdAccount).toMatchSnapshot();
 });
 
 it("signs a message", async () => {
-	const account = hdKeyToAccount(hdKey);
+	const account = hdKeyToAccount({ hdKey });
 	const signature = await account.signMessage({ message: "hello word" });
 	expect(signature).toMatchSnapshot();
 });

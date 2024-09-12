@@ -1,5 +1,10 @@
 import { generateMnemonic as generateMnemonic_ } from "@scure/bip39";
 
+type GenerateMnemonicOptions = {
+	wordlist: string[];
+	strength?: number | undefined;
+};
+
 /**
  * @description Generates a random mnemonic phrase with a given wordlist.
  *
@@ -8,9 +13,9 @@ import { generateMnemonic as generateMnemonic_ } from "@scure/bip39";
  *
  * @returns A randomly generated mnemonic phrase.
  */
-export function generateMnemonic(
-	wordlist: string[],
-	strength?: number | undefined,
-): string {
+export function generateMnemonic({
+	wordlist,
+	strength,
+}: GenerateMnemonicOptions): string {
 	return generateMnemonic_(wordlist, strength);
 }

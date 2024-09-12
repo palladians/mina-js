@@ -3,6 +3,6 @@ import { mnemonic } from "../test/constants";
 import { mnemonicToAccount } from "./mnemonic-to-account";
 
 it("matches the snapshot", () => {
-	const mnemonicAccount = mnemonicToAccount(mnemonic);
+	const mnemonicAccount = mnemonicToAccount({ mnemonic });
 	expect(mnemonicAccount).toMatchSnapshot();
 });
