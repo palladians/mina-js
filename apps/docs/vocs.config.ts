@@ -90,7 +90,10 @@ export default defineConfig({
 		{
 			text: "MinaJS Accounts",
 			link: "/accounts",
-			items: [{ text: "Introduction", link: "/accounts" }],
+			items: [
+				{ text: "Introduction", link: "/accounts" },
+				{ text: "Getting Started", link: "/accounts/getting-started" },
+			],
 		},
 		{
 			text: "Klesia",

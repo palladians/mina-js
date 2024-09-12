@@ -1,4 +1,5 @@
 export { HDKey } from "@scure/bip32";
+export { hex } from "@scure/base";
 export { wordlist as english } from "@scure/bip39/wordlists/english";
 
 export { generateMnemonic } from "./accounts/generate-mnemonic";
