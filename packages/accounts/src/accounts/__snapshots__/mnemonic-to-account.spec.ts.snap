@@ -1,0 +1,14 @@
+// Bun Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`matches the snapshot 1`] = `
+{
+  "createNullifier": [Function: AsyncFunction],
+  "getHdKey": [Function],
+  "publicKey": "B62qkYa1o6Mj6uTTjDQCob7FYZspuhkm4RRQhgJg9j4koEBWiSrTQrS",
+  "signFields": [Function: AsyncFunction],
+  "signMessage": [Function: AsyncFunction],
+  "signTransaction": [Function: AsyncFunction],
+  "source": "hd",
+  "type": "local",
+}
+`;

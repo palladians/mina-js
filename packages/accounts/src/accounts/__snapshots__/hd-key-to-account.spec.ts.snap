@@ -1,0 +1,29 @@
+// Bun Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`matches the snapshot 1`] = `
+{
+  "createNullifier": [Function: AsyncFunction],
+  "getHdKey": [Function],
+  "publicKey": "B62qkYa1o6Mj6uTTjDQCob7FYZspuhkm4RRQhgJg9j4koEBWiSrTQrS",
+  "signFields": [Function: AsyncFunction],
+  "signMessage": [Function: AsyncFunction],
+  "signTransaction": [Function: AsyncFunction],
+  "source": "hd",
+  "type": "local",
+}
+`;
+
+exports[`derives with accountIndex 1`] = `"B62qpmbhZAQHHQHSMwngKy7NuNSEQav7GeTPKRQ9FSdPChAnYiwWyLz"`;
+
+exports[`derives with changeIndex 1`] = `"B62qoxndFokiZ2K4uCNV8673xV3V2qPcmZuQKHBQ1Zm4Narz7keS5bj"`;
+
+exports[`signs a message 1`] = `
+{
+  "data": "hello word",
+  "publicKey": "B62qkYa1o6Mj6uTTjDQCob7FYZspuhkm4RRQhgJg9j4koEBWiSrTQrS",
+  "signature": {
+    "field": "1737565114197582632206802090873583593478816160361909498260553982818075524406",
+    "scalar": "8097562446343817256257278438860076058640076299120594151149598887065384496675",
+  },
+}
+`;

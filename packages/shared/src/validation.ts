@@ -29,17 +29,17 @@ export const TransactionPayload = z.object({
 	from: PublicKeySchema,
 	to: PublicKeySchema,
 	memo: z.string().optional(),
-	fee: z.coerce.number(),
-	amount: z.coerce.number(),
-	nonce: z.coerce.number(),
-	validUntil: z.coerce.number().optional(),
+	fee: z.coerce.bigint(),
+	amount: z.coerce.bigint(),
+	nonce: z.coerce.bigint(),
+	validUntil: z.coerce.bigint().optional(),
 });
 
 /**
  * Parameter schemas
  */
 export const SignFieldsParamsSchema = z.object({
-	fields: z.array(z.coerce.number()),
+	fields: z.array(z.coerce.bigint()),
 });
 
 export const SignMessageParamsSchema = z.object({
@@ -47,7 +47,7 @@ export const SignMessageParamsSchema = z.object({
 });
 
 export const CreateNullifierParamsSchema = z.object({
-	message: z.array(z.coerce.number()),
+	message: z.array(z.coerce.bigint()),
 });
 
 export const SignTransactionParamsSchema = z.object({
@@ -78,7 +78,7 @@ export const SignedMessageSchema = z
 	.strict();
 
 export const SignedFieldsSchema = z.object({
-	data: z.array(z.number()),
+	data: z.array(FieldSchema),
 	publicKey: PublicKeySchema,
 	signature: z.string(),
 });

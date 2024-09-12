@@ -1,0 +1,55 @@
+// Bun Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`matches default values 1`] = `
+{
+  "createNullifier": [Function: AsyncFunction],
+  "publicKey": "B62qmWKtvNQTtUqo1LxfEEDLyWMg59cp6U7c4uDC7aqgaCEijSc3Hx5",
+  "signFields": [Function: AsyncFunction],
+  "signMessage": [Function: AsyncFunction],
+  "signTransaction": [Function: AsyncFunction],
+  "source": "privateKey",
+  "type": "local",
+}
+`;
+
+exports[`signs a message 1`] = `
+{
+  "data": "hello world",
+  "publicKey": "B62qmWKtvNQTtUqo1LxfEEDLyWMg59cp6U7c4uDC7aqgaCEijSc3Hx5",
+  "signature": {
+    "field": "26035766330205137973322965816888613275878847328888669700853142209707796713851",
+    "scalar": "19081530095096912440933327980723294881571166019208938317545493475572505570273",
+  },
+}
+`;
+
+exports[`signs a transaction 1`] = `
+{
+  "data": {
+    "amount": 3000000000n,
+    "fee": 100000000n,
+    "from": "B62qmWKtvNQTtUqo1LxfEEDLyWMg59cp6U7c4uDC7aqgaCEijSc3Hx5",
+    "memo": "",
+    "nonce": 1n,
+    "to": "B62qmWKtvNQTtUqo1LxfEEDLyWMg59cp6U7c4uDC7aqgaCEijSc3Hx5",
+    "validUntil": 4294967295n,
+  },
+  "publicKey": "B62qmWKtvNQTtUqo1LxfEEDLyWMg59cp6U7c4uDC7aqgaCEijSc3Hx5",
+  "signature": {
+    "field": "14481941291402553573872495627690275042434233928114864565201875644822981729719",
+    "scalar": "22662322359617803596615419576835284136875294231266919676620712008667696490687",
+  },
+}
+`;
+
+exports[`signs fields 1`] = `
+{
+  "data": [
+    1n,
+    2n,
+    3n,
+  ],
+  "publicKey": "B62qmWKtvNQTtUqo1LxfEEDLyWMg59cp6U7c4uDC7aqgaCEijSc3Hx5",
+  "signature": "7mXCUvhLhFvG9ptrdfNceCrpThkCUyg1ct2z8uwY7eQbKz7UNmhv33TbuDjTznaypJtXRiMJyQWDnf27TH1FSXG7uJHTKAd9",
+}
+`;

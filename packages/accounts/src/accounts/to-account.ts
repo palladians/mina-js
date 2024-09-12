@@ -1,29 +1,14 @@
-import {
-	InvalidAddressError,
-	type InvalidAddressErrorType,
-} from "../errors/address.js";
-import {
-	type IsAddressErrorType,
-	isAddress,
-} from "../utils/address/isAddress.js";
-
-import type { PublicKey } from "@mina-js/shared";
-import type { ErrorType } from "../errors/utils.js";
+import { type PublicKey, PublicKeySchema } from "@mina-js/shared";
 import type {
 	AccountSource,
 	CustomSource,
 	JsonRpcAccount,
 	LocalAccount,
-} from "./types.js";
+} from "../types";
 
 type GetAccountReturnType<accountSource extends AccountSource> =
 	| (accountSource extends PublicKey ? JsonRpcAccount : never)
 	| (accountSource extends CustomSource ? LocalAccount : never);
-
-export type ToAccountErrorType =
-	| InvalidAddressErrorType
-	| IsAddressErrorType
-	| ErrorType;
 
 /**
  * @description Creates an Account from a custom signing implementation.
@@ -33,18 +18,15 @@ export function toAccount<accountSource extends AccountSource>(
 	source: accountSource,
 ): GetAccountReturnType<accountSource> {
 	if (typeof source === "string") {
-		if (!isAddress(source, { strict: false }))
-			throw new InvalidAddressError({ address: source });
+		const publicKey = PublicKeySchema.parse(source);
 		return {
-			address: source,
+			publicKey,
 			type: "json-rpc",
 		} as GetAccountReturnType<accountSource>;
 	}
-
-	if (!isAddress(source.address, { strict: false }))
-		throw new InvalidAddressError({ address: source.address });
+	const publicKey = PublicKeySchema.parse(source.publicKey);
 	return {
-		publicKey: source.publicKey,
+		publicKey,
 		signMessage: source.signMessage,
 		signTransaction: source.signTransaction,
 		createNullifier: source.createNullifier,
