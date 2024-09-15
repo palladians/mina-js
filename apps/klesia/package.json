@@ -1,6 +1,7 @@
 {
 	"name": "@mina-js/klesia",
 	"type": "module",
+	"version": "0.0.1",
 	"module": "dist/index.js",
 	"types": "dist/index.d.ts",
 	"exports": {

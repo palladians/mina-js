@@ -15,6 +15,7 @@
 			"import": "./dist/index.mjs"
 		}
 	},
+	"files": ["dist"],
 	"scripts": {
 		"build": "tsup",
 		"test": "bun test",
