@@ -8,8 +8,14 @@ Klesia has a TypeScript SDK to interact with the JSON-RPC API. The SDK provides 
 $ npm install @mina-js/klesia-sdk
 ```
 
+### Nightly builds
+
+```sh
+$ npm install https://pkg.pr.new/palladians/mina-js/@mina-js/klesia-sdk@main
+```
+
 :::warning
-For now there are only [nightly builds](/klesia/sdk#nightly-builds) available. The stable version will be released soon™️.
+For now there are only [nightly builds](/getting-started#nightly-builds) available. The stable version will be released soon™️.
 :::
 
 ## Client Options
@@ -34,9 +40,3 @@ const { result } = await client.request<'mina_getTransactionCount'>({
 ## Methods
 
 Refer to the [RPC Methods](/klesia/rpc#rpc-methods) page for a complete list of methods available on Klesia.
-
-## Nightly Builds
-
-We have nightly builds available for the SDK. You can find the latest nightly versions of our packages on:
-
-https://nightly.akryum.dev/palladians/mina-js

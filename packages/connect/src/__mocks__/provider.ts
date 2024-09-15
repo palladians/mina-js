@@ -10,7 +10,7 @@ export const mockedProvider: MinaProviderDetail = {
 	},
 	provider: {
 		request: mock(),
-		addListener: mock(),
+		on: mock(),
 		removeListener: mock(),
 	},
 };

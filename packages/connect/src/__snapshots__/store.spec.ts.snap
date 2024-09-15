@@ -1,0 +1,13 @@
+// Bun Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should initialize the store 1`] = `
+{
+  "_listeners": [Function: _listeners],
+  "clear": [Function: clear],
+  "destroy": [Function: destroy],
+  "findProvider": [Function: findProvider],
+  "getProviders": [Function: getProviders],
+  "reset": [Function: reset],
+  "subscribe": [Function: subscribe],
+}
+`;

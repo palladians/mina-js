@@ -1,1 +1,31 @@
 # Getting Started [Start with MinaJS Connect.]
+
+## Installation
+
+```sh
+$ npm install @mina-js/connect
+```
+
+### Nightly builds
+
+```sh
+$ npm install https://pkg.pr.new/palladians/mina-js/@mina-js/connect@main
+```
+
+:::warning
+For now there are only [nightly builds](/getting-started#nightly-builds) available. The stable version will be released soon™️.
+:::
+
+## Find Mina wallets
+
+To discover injected wallet providers, we've developed a Provider Discovery reactive store utility. [Check out the usage](/connect/provider-discovery).
+
+## Window Polyfill
+
+For your convenient TypeScript development, we've created a window polyfill. This will make sure you have an autocompletion for MinaJS compliant providers.
+
+```ts
+import '@mina-js/connect/window'
+
+const account = await window.mina.request({ method: 'mina_accounts' })
+```

@@ -43,9 +43,10 @@ export function requestProviders(
 	if (typeof window === "undefined") return;
 	const handler = (event: MinaAnnounceProviderEvent) => listener(event.detail);
 
-	window.addEventListener("mina:announceProvider", handler);
+	window.addEventListener("mina:announceProvider", handler as never);
 
 	window.dispatchEvent(new CustomEvent("mina:requestProvider"));
 
-	return () => window.removeEventListener("mina:announceProvider", handler);
+	return () =>
+		window.removeEventListener("mina:announceProvider", handler as never);
 }

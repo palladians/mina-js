@@ -1,0 +1,56 @@
+# Provider Discovery [Discover injected wallet providers with ease.]
+
+For your convenience, MinaJS Connect provides a simple way to discover all Mina's injected wallet providers. This is done by an API similar to [Wevm's MIPD](https://github.com/wevm/mipd).
+
+## Vanilla TypeScript
+
+```ts twoslash
+import { createStore, type MinaProviderDetail } from '@mina-js/connect'
+
+const store = createStore()
+
+// Reactively, you can use MinaProviderDetail to type the array, but it fails in docs ffs.
+const providersReactively = []
+const unsubscribe = store.subscribe((provider) => providersReactively.push(provider))
+
+// Imperatively
+const providersImperatively = store.getProviders()
+```
+
+## React
+
+```tsx twoslash
+import { useSyncExternalStore } from 'react'
+import { createStore } from '@mina-js/connect'
+
+const store = createStore()
+
+function Example() {
+  const providers = useSyncExternalStore(store.subscribe, store.getProviders)
+}
+```
+
+## Svelte
+
+```svelte twoslash
+<script lang="ts">
+  import { readable } from 'svelte/store'
+  import { createStore } from '@mina-js/connect'
+
+  const store = createStore()
+  const providers = readable(store.getProviders(), store.subscribe)
+</script>
+```
+
+## Vue
+
+```vue twoslash
+<script setup lang="ts">
+  import { reactive } from 'vue'
+  import { createStore } from '@mina-js/connect'
+
+  const store = createStore()
+  const state = reactive({ providers: store.getProviders() })
+  store.subscribe(providers => (state.providers = providers))
+</script>
+```

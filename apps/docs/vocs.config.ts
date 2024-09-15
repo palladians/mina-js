@@ -85,6 +85,7 @@ export default defineConfig({
 			items: [
 				{ text: "Introduction", link: "/connect" },
 				{ text: "Getting Started", link: "/connect/getting-started" },
+				{ text: "Provider Discovery", link: "/connect/provider-discovery" },
 			],
 		},
 		{

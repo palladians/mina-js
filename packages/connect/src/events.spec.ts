@@ -5,7 +5,7 @@ import { announceProvider, requestProviders } from "./events";
 
 type Resolver = (value: unknown) => void;
 
-it("announcec Mina Provider with window event", async () => {
+it("announces Mina Provider with window event", async () => {
 	const listener =
 		(resolve: Resolver) =>
 		({ detail }: MinaAnnounceProviderEvent) => {

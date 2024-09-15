@@ -18,6 +18,7 @@
 	},
 	"devDependencies": {
 		"@mina-js/klesia-sdk": "workspace:*",
+		"@mina-js/connect": "workspace:*",
 		"daisyui": "^4.12.10"
 	}
 }

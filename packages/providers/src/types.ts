@@ -1,22 +1,17 @@
 import type {
+	CreateNullifierParams,
 	Nullifier,
 	PublicKey,
+	SendTransactionParams,
+	SignFieldsParams,
+	SignMessageParams,
+	SignTransactionParams,
 	SignedFields,
 	SignedMessage,
+	SignedTransaction,
 	TransactionReceipt,
 } from "@mina-js/shared";
-import type {
-	AddChainData,
-	CreateNullifierData,
-	SendTransactionData,
-	SignFieldsData,
-	SignMessageData,
-	SignTransactionData,
-	SwitchChainData,
-} from "./validation";
-
-// biome-ignore lint/suspicious/noExplicitAny: Deal with it.
-type TODO = any;
+import type { AddChainData, SwitchChainData } from "./validation";
 
 export type MinaProviderDetail = {
 	info: MinaProviderInfo;
@@ -74,38 +69,38 @@ export type GetBalanceRequest = (args: {
 
 export type SignRequest = (args: {
 	method: "mina_sign";
-	params: SignMessageData;
+	params: SignMessageParams;
 }) => Promise<SignedMessage>;
 
 export type SignFieldsRequest = (args: {
 	method: "mina_signFields";
-	params: SignFieldsData;
+	params: SignFieldsParams;
 }) => Promise<SignedFields>;
 
 export type SignTransactionRequest = (args: {
 	method: "mina_signTransaction";
-	params: SignTransactionData;
-}) => Promise<TODO>;
+	params: SignTransactionParams;
+}) => Promise<SignedTransaction>;
 
 export type SendTransactionRequest = (args: {
 	method: "mina_sendTransaction";
-	params: SendTransactionData;
+	params: SendTransactionParams;
 }) => Promise<TransactionReceipt>;
 
 export type CreateNullifierRequest = (args: {
 	method: "mina_createNullifier";
-	params: CreateNullifierData;
+	params: CreateNullifierParams;
 }) => Promise<Nullifier>;
 
 export type SwitchChainRequest = (args: {
 	method: "mina_switchChain";
 	params: SwitchChainData;
-}) => Promise<TODO>;
+}) => Promise<string>;
 
 export type AddChainRequest = (args: {
 	method: "mina_addChain";
 	params: AddChainData;
-}) => Promise<TODO>;
+}) => Promise<string>;
 
 export type ProviderRequest =
 	| AccountsRequest
