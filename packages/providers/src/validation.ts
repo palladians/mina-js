@@ -1,14 +1,11 @@
 import {
-	CreateNullifierParamsSchema,
+	FieldSchema,
 	NullifierSchema,
 	PublicKeySchema,
-	SendTransactionParamsSchema,
-	SignFieldsParamsSchema,
-	SignMessageParamsSchema,
-	SignTransactionParamsSchema,
 	SignedFieldsSchema,
 	SignedMessageSchema,
 	SignedTransactionSchema,
+	TransactionPayload,
 	TransactionReceiptSchema,
 } from "@mina-js/shared";
 import { z } from "zod";
@@ -38,41 +35,41 @@ export const GetBalanceRequestParamsSchema = z
 export const SignRequestParamsSchema = z
 	.object({
 		method: z.literal("mina_sign"),
-		params: SignMessageParamsSchema,
+		params: z.array(z.string()),
 	})
 	.strict();
 export const SignFieldsRequestParamsSchema = z
 	.object({
 		method: z.literal("mina_signFields"),
-		params: SignFieldsParamsSchema,
+		params: z.array(z.array(FieldSchema)),
 	})
 	.strict();
 export const SignTransactionRequestParamsSchema = z
 	.object({
 		method: z.literal("mina_signTransaction"),
-		params: SignTransactionParamsSchema,
+		params: z.array(TransactionPayload),
 	})
 	.strict();
 export const SendTransactionRequestParamsSchema = z
 	.object({
 		method: z.literal("mina_sendTransaction"),
-		params: SendTransactionParamsSchema,
+		params: z.array(TransactionPayload),
 	})
 	.strict();
 export const CreateNullifierRequestParamsSchema = z
 	.object({
 		method: z.literal("mina_createNullifier"),
-		params: CreateNullifierParamsSchema,
+		params: z.array(z.array(FieldSchema)),
 	})
 	.strict();
 export const SwitchChainRequestParamsSchema = z.object({
 	method: z.literal("mina_switchChain"),
-	params: SwitchChainRequestParams,
+	params: z.array(z.string()),
 });
 export const AddChainRequestParamsSchema = z
 	.object({
 		method: z.literal("mina_addChain"),
-		params: AddChainRequestParams,
+		params: z.array(AddChainRequestParams),
 	})
 	.strict();
 
@@ -144,7 +141,7 @@ export const AddChainRequestReturnSchema = z
 	})
 	.strict();
 
-export const RpcReturnTypes = z.discriminatedUnion("method", [
+export const RpcReturnTypesUnion = z.discriminatedUnion("method", [
 	AccountsRequestReturnSchema,
 	ChainIdRequestReturnSchema,
 	ChainInformationRequestReturnSchema,
@@ -158,7 +155,7 @@ export const RpcReturnTypes = z.discriminatedUnion("method", [
 	AddChainRequestReturnSchema,
 ]);
 
-export const ProviderRequestParamsSchema = z.discriminatedUnion("method", [
+export const ProviderRequestParamsUnion = z.discriminatedUnion("method", [
 	AccountsRequestParamsSchema,
 	ChainIdRequestParamsSchema,
 	ChainInformationRequestParamsSchema,
@@ -171,18 +168,11 @@ export const ProviderRequestParamsSchema = z.discriminatedUnion("method", [
 	SwitchChainRequestParamsSchema,
 	AddChainRequestParamsSchema,
 ]);
-export const ResultSchema = z.object({
-	jsonrpc: z.literal("2.0"),
-	result: z.promise(RpcReturnTypes),
-});
+export type RpcReturnTypesUnionType = z.infer<typeof RpcReturnTypesUnion>;
 export type ResultType<M extends string> = {
 	jsonrpc: "2.0";
-	result: Extract<M, z.infer<typeof RpcReturnTypes>>;
+	result: Extract<RpcReturnTypesUnionType, { method: M }>["result"];
 };
-export const ProviderRequestSchema = z
-	.function()
-	.args(ProviderRequestParamsSchema)
-	.returns(z.promise(ResultSchema));
 
 export const ChainIdCallbackSchema = z
 	.function()
@@ -258,16 +248,3 @@ export const MinaProviderInfoSchema = z.object({
 	rdns: z.string(),
 	slug: z.string(),
 });
-
-export const MinaProviderClientSchema = z.object({
-	request: ProviderRequestSchema,
-	on: ProviderListenerSchema,
-	removeListener: ProviderListenerSchema,
-});
-
-export const MinaProviderDetailSchema = z
-	.object({
-		info: MinaProviderInfoSchema,
-		provider: MinaProviderClientSchema,
-	})
-	.strict();

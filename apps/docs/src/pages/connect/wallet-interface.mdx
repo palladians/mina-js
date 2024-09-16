@@ -1,0 +1,103 @@
+# Wallet Interface [Make your zkApp compatible with Mina wallets.]
+
+To make your zkApp compatible with Mina wallets, we've created a strongly typed interface for `window.mina` and injected providers found by [Provider Discovery](/connect/provider-discovery).
+
+## Queries
+
+### mina_accounts
+
+```ts twoslash
+import { createStore } from '@mina-js/connect'
+
+const store = createStore()
+const { provider } = store.getProviders()[0]
+const { result } = await provider.request<'mina_accounts'>({ method: 'mina_accounts' })
+```
+
+### mina_chainId
+
+```ts twoslash
+import { createStore } from '@mina-js/connect'
+
+const store = createStore()
+const { provider } = store.getProviders()[0]
+const { result } = await provider.request<'mina_chainId'>({ method: 'mina_chainId' })
+```
+
+### mina_getBalance
+
+```ts twoslash
+import { createStore } from '@mina-js/connect'
+
+const store = createStore()
+const { provider } = store.getProviders()[0]
+const { result } = await provider.request<'mina_getBalance'>({ method: 'mina_getBalance' })
+```
+
+### mina_chainInformation
+
+```ts twoslash
+import { createStore } from '@mina-js/connect'
+
+const store = createStore()
+const { provider } = store.getProviders()[0]
+const { result } = await provider.request<'mina_chainInformation'>({ method: 'mina_chainInformation' })
+```
+
+## Commands
+
+### mina_sign
+
+```ts twoslash
+import { createStore } from '@mina-js/connect'
+
+const store = createStore()
+const { provider } = store.getProviders()[0]
+const { result } = await provider.request<'mina_sign'>({ method: 'mina_sign', params: ['My message'] })
+```
+
+### mina_signTransaction
+
+```ts twoslash
+import { createStore } from '@mina-js/connect'
+
+const store = createStore()
+const { provider } = store.getProviders()[0]
+const { result } = await provider.request<'mina_signTransaction'>({
+  method: 'mina_signTransaction',
+  params: [{
+    // You should probably get the right nonce from Klesia for that.
+  	nonce: 1n,
+  	from: "B62qmWKtvNQTtUqo1LxfEEDLyWMg59cp6U7c4uDC7aqgaCEijSc3Hx5",
+  	to: "B62qmWKtvNQTtUqo1LxfEEDLyWMg59cp6U7c4uDC7aqgaCEijSc3Hx5",
+  	amount: 3000000000n,
+  	fee: 100000000n,
+  }]
+})
+```
+
+### mina_signFields
+
+```ts twoslash
+import { createStore } from '@mina-js/connect'
+
+const store = createStore()
+const { provider } = store.getProviders()[0]
+const { result } = await provider.request<'mina_signFields'>({
+  method: 'mina_signFields',
+  params: [[1n, 2n, 3n]]
+})
+```
+
+### mina_createNullifier
+
+```ts twoslash
+import { createStore } from '@mina-js/connect'
+
+const store = createStore()
+const { provider } = store.getProviders()[0]
+const { result } = await provider.request<'mina_createNullifier'>({
+  method: 'mina_createNullifier',
+  params: [[1n, 2n, 3n]]
+})
+```

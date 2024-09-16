@@ -86,6 +86,7 @@ export default defineConfig({
 				{ text: "Introduction", link: "/connect" },
 				{ text: "Getting Started", link: "/connect/getting-started" },
 				{ text: "Provider Discovery", link: "/connect/provider-discovery" },
+				{ text: "Wallet Interface", link: "/connect/wallet-interface" },
 			],
 		},
 		{

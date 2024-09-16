@@ -15,7 +15,8 @@
 		"build": "tsup-node",
 		"dev": "tsup-node --watch --onSuccess \"node dist/server.js\"",
 		"start": "node dist/server.js",
-		"test": "bun test"
+		"test": "bun test",
+		"cleanup": "rimraf dist .turbo node_modules"
 	},
 	"dependencies": {
 		"@hono/node-server": "^1.12.2",

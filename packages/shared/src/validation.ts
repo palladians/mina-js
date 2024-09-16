@@ -40,40 +40,6 @@ export const TransactionPayload = z
 	.strict();
 
 /**
- * Parameter schemas
- */
-export const SignFieldsParamsSchema = z
-	.object({
-		fields: z.array(FieldSchema),
-	})
-	.strict();
-
-export const SignMessageParamsSchema = z
-	.object({
-		message: z.string(),
-	})
-	.strict();
-
-export const CreateNullifierParamsSchema = z
-	.object({
-		message: z.array(FieldSchema),
-	})
-	.strict();
-
-export const SignTransactionParamsSchema = z
-	.object({
-		transaction: TransactionPayload,
-	})
-	.strict();
-
-export const SendTransactionParamsSchema = z
-	.object({
-		signedTransaction: TransactionPayload.strict(),
-		transactionType: z.enum(["payment", "delegation", "zkapp"]),
-	})
-	.strict();
-
-/**
  * Return type schemas
  */
 export const SignatureSchema = z

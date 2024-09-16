@@ -1,14 +1,16 @@
 import type { z } from "zod";
 import type {
-	MinaProviderDetailSchema,
 	MinaProviderInfoSchema,
 	ProviderListenerSchema,
-	ProviderRequestParamsSchema,
+	ProviderRequestParamsUnion,
 	ProviderRpcErrorSchema,
 	ResultType,
 } from "./validation";
 
-export type MinaProviderDetail = z.infer<typeof MinaProviderDetailSchema>;
+export type MinaProviderDetail = {
+	info: MinaProviderInfo;
+	provider: MinaProviderClient;
+};
 
 export type MinaProviderInfo = z.infer<typeof MinaProviderInfoSchema>;
 
@@ -32,11 +34,12 @@ export type ProviderRpcEvent =
 
 export type ProviderListener = z.infer<typeof ProviderListenerSchema>;
 
+export type ProviderRequestParams = z.infer<typeof ProviderRequestParamsUnion>;
+
 export type MinaProviderRequest = <M extends string>(
-	args: Extract<M, z.infer<typeof ProviderRequestParamsSchema>>,
+	args: Extract<ProviderRequestParams, { method: M }>,
 ) => Promise<ResultType<M>>;
 
-// export type MinaProviderClient = z.infer<typeof MinaProviderClientSchema>;
 export type MinaProviderClient = {
 	request: MinaProviderRequest;
 	on: ProviderListener;

@@ -5,7 +5,8 @@
 	"scripts": {
 		"dev": "bunx vocs dev",
 		"build": "bunx vocs build",
-		"preview": "bunx vocs preview"
+		"preview": "bunx vocs preview",
+		"cleanup": "rimraf dist .turbo node_modules"
 	},
 	"dependencies": {
 		"@theguild/remark-mermaid": "^0.1.2",

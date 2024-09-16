@@ -4,7 +4,7 @@
 	"scripts": {
 		"build": "turbo build",
 		"test": "turbo test",
-		"cleanup": "bun run --filter '*' cleanup",
+		"cleanup": "bun run --filter '*' cleanup && rimraf node_modules .turbo",
 		"lint": "bunx biome check .",
 		"format": "bunx biome check . --write --unsafe"
 	},

@@ -1,12 +1,19 @@
 import type {
-	CreateNullifier,
+	Nullifier,
 	PublicKey,
-	SignFields,
-	SignMessage,
-	SignTransaction,
+	SignedFields,
+	SignedMessage,
+	SignedTransaction,
 } from "@mina-js/shared";
 import type { HDKey } from "@scure/bip32";
 import type { Simplify } from "type-fest";
+import type { z } from "zod";
+import type {
+	CreateNullifierParamsSchema,
+	SignFieldsParamsSchema,
+	SignMessageParamsSchema,
+	SignTransactionParamsSchema,
+} from "./validation";
 
 export enum MinaKeyConst {
 	PURPOSE = 44,
@@ -63,3 +70,23 @@ export type HDAccount = Simplify<
 export type PrivateKeyAccount = Simplify<LocalAccount<"privateKey">>;
 
 export type { HDKey };
+
+/**
+ * Parameter types
+ */
+export type SignFieldsParams = z.infer<typeof SignFieldsParamsSchema>;
+export type SignMessageParams = z.infer<typeof SignMessageParamsSchema>;
+export type CreateNullifierParams = z.infer<typeof CreateNullifierParamsSchema>;
+export type SignTransactionParams = z.infer<typeof SignTransactionParamsSchema>;
+
+/**
+ * Signer methods
+ */
+export type SignFields = (params: SignFieldsParams) => Promise<SignedFields>;
+export type SignMessage = (params: SignMessageParams) => Promise<SignedMessage>;
+export type CreateNullifier = (
+	params: CreateNullifierParams,
+) => Promise<Nullifier>;
+export type SignTransaction = (
+	params: SignTransactionParams,
+) => Promise<SignedTransaction>;
