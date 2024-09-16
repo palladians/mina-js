@@ -22,105 +22,174 @@ export const AddChainRequestParams = z.object({
 	name: z.string(),
 });
 
-export const AccountsRequestSchema = z
-	.function()
-	.args(z.object({ method: z.literal("mina_accounts") }))
-	.returns(z.promise(z.array(PublicKeySchema)));
-export const ChainIdRequestSchema = z
-	.function()
-	.args(z.object({ method: z.literal("mina_chainId") }))
-	.returns(z.promise(z.string()));
-export const ChainInformationRequestSchema = z
-	.function()
-	.args(z.object({ method: z.literal("mina_chainInformation") }))
-	.returns(z.promise(z.object({ url: z.string(), name: z.string() })));
-export const GetBalanceRequestSchema = z
-	.function()
-	.args(z.object({ method: z.literal("mina_getBalance") }))
-	.returns(z.promise(z.number()));
-export const SignRequestSchema = z
-	.function()
-	.args(
-		z.object({
-			method: z.literal("mina_sign"),
-			params: SignMessageParamsSchema,
-		}),
-	)
-	.returns(z.promise(SignedMessageSchema));
-export const SignFieldsRequestSchema = z
-	.function()
-	.args(
-		z.object({
-			method: z.literal("mina_signFields"),
-			params: SignFieldsParamsSchema,
-		}),
-	)
-	.returns(z.promise(SignedFieldsSchema));
-export const SignTransactionRequestSchema = z
-	.function()
-	.args(
-		z.object({
-			method: z.literal("mina_signTransaction"),
-			params: SignTransactionParamsSchema,
-		}),
-	)
-	.returns(z.promise(SignedTransactionSchema));
-export const SendTransactionRequestSchema = z
-	.function()
-	.args(
-		z.object({
-			method: z.literal("mina_sendTransaction"),
-			params: SendTransactionParamsSchema,
-		}),
-	)
-	.returns(z.promise(TransactionReceiptSchema));
-export const CreateNullifierRequestSchema = z
-	.function()
-	.args(
-		z.object({
-			method: z.literal("mina_createNullifier"),
-			params: CreateNullifierParamsSchema,
-		}),
-	)
-	.returns(z.promise(NullifierSchema));
-export const SwitchChainRequestSchema = z
-	.function()
-	.args(
-		z.object({
-			method: z.literal("mina_switchChain"),
-			params: SwitchChainRequestParams,
-		}),
-	)
-	.returns(z.promise(z.string()));
-export const AddChainRequestSchema = z
-	.function()
-	.args(
-		z.object({
-			method: z.literal("mina_addChain"),
-			params: AddChainRequestParams,
-		}),
-	)
-	.returns(z.promise(z.string()));
+// Params
+export const AccountsRequestParamsSchema = z
+	.object({ method: z.literal("mina_accounts") })
+	.strict();
+export const ChainIdRequestParamsSchema = z
+	.object({ method: z.literal("mina_chainId") })
+	.strict();
+export const ChainInformationRequestParamsSchema = z
+	.object({ method: z.literal("mina_chainInformation") })
+	.strict();
+export const GetBalanceRequestParamsSchema = z
+	.object({ method: z.literal("mina_getBalance") })
+	.strict();
+export const SignRequestParamsSchema = z
+	.object({
+		method: z.literal("mina_sign"),
+		params: SignMessageParamsSchema,
+	})
+	.strict();
+export const SignFieldsRequestParamsSchema = z
+	.object({
+		method: z.literal("mina_signFields"),
+		params: SignFieldsParamsSchema,
+	})
+	.strict();
+export const SignTransactionRequestParamsSchema = z
+	.object({
+		method: z.literal("mina_signTransaction"),
+		params: SignTransactionParamsSchema,
+	})
+	.strict();
+export const SendTransactionRequestParamsSchema = z
+	.object({
+		method: z.literal("mina_sendTransaction"),
+		params: SendTransactionParamsSchema,
+	})
+	.strict();
+export const CreateNullifierRequestParamsSchema = z
+	.object({
+		method: z.literal("mina_createNullifier"),
+		params: CreateNullifierParamsSchema,
+	})
+	.strict();
+export const SwitchChainRequestParamsSchema = z.object({
+	method: z.literal("mina_switchChain"),
+	params: SwitchChainRequestParams,
+});
+export const AddChainRequestParamsSchema = z
+	.object({
+		method: z.literal("mina_addChain"),
+		params: AddChainRequestParams,
+	})
+	.strict();
 
-export const ProviderRequestSchema = z.union([
-	AccountsRequestSchema,
-	ChainIdRequestSchema,
-	ChainInformationRequestSchema,
-	GetBalanceRequestSchema,
-	SignRequestSchema,
-	SignFieldsRequestSchema,
-	SignTransactionRequestSchema,
-	SendTransactionRequestSchema,
-	CreateNullifierRequestSchema,
-	SwitchChainRequestSchema,
-	AddChainRequestSchema,
+// Returns
+export const AccountsRequestReturnSchema = z
+	.object({
+		method: z.literal("mina_accounts"),
+		result: z.array(PublicKeySchema),
+	})
+	.strict();
+export const ChainIdRequestReturnSchema = z
+	.object({
+		method: z.literal("mina_chainId"),
+		result: z.string(),
+	})
+	.strict();
+export const ChainInformationRequestReturnSchema = z
+	.object({
+		method: z.literal("mina_chainInformation"),
+		result: z.object({ url: z.string(), name: z.string() }).strict(),
+	})
+	.strict();
+export const GetBalanceRequestReturnSchema = z
+	.object({
+		method: z.literal("mina_getBalance"),
+		result: z.number(),
+	})
+	.strict();
+export const SignRequestReturnSchema = z
+	.object({
+		method: z.literal("mina_sign"),
+		result: SignedMessageSchema,
+	})
+	.strict();
+export const SignFieldsRequestReturnSchema = z
+	.object({
+		method: z.literal("mina_signFields"),
+		result: SignedFieldsSchema,
+	})
+	.strict();
+export const SignTransactionRequestReturnSchema = z
+	.object({
+		method: z.literal("mina_signTransaction"),
+		result: SignedTransactionSchema,
+	})
+	.strict();
+export const SendTransactionRequestReturnSchema = z
+	.object({
+		method: z.literal("mina_sendTransaction"),
+		result: TransactionReceiptSchema,
+	})
+	.strict();
+export const CreateNullifierRequestReturnSchema = z
+	.object({
+		method: z.literal("mina_createNullifier"),
+		result: NullifierSchema,
+	})
+	.strict();
+export const SwitchChainRequestReturnSchema = z
+	.object({
+		method: z.literal("mina_switchChain"),
+		result: z.string(),
+	})
+	.strict();
+export const AddChainRequestReturnSchema = z
+	.object({
+		method: z.literal("mina_addChain"),
+		result: z.string(),
+	})
+	.strict();
+
+export const RpcReturnTypes = z.discriminatedUnion("method", [
+	AccountsRequestReturnSchema,
+	ChainIdRequestReturnSchema,
+	ChainInformationRequestReturnSchema,
+	GetBalanceRequestReturnSchema,
+	SignRequestReturnSchema,
+	SignFieldsRequestReturnSchema,
+	SignTransactionRequestReturnSchema,
+	SendTransactionRequestReturnSchema,
+	CreateNullifierRequestReturnSchema,
+	SwitchChainRequestReturnSchema,
+	AddChainRequestReturnSchema,
 ]);
+
+export const ProviderRequestParamsSchema = z.discriminatedUnion("method", [
+	AccountsRequestParamsSchema,
+	ChainIdRequestParamsSchema,
+	ChainInformationRequestParamsSchema,
+	GetBalanceRequestParamsSchema,
+	SignRequestParamsSchema,
+	SignFieldsRequestParamsSchema,
+	SignTransactionRequestParamsSchema,
+	SendTransactionRequestParamsSchema,
+	CreateNullifierRequestParamsSchema,
+	SwitchChainRequestParamsSchema,
+	AddChainRequestParamsSchema,
+]);
+export const ResultSchema = z.object({
+	jsonrpc: z.literal("2.0"),
+	result: z.promise(RpcReturnTypes),
+});
+export type ResultType<M extends string> = {
+	jsonrpc: "2.0";
+	result: Extract<M, z.infer<typeof RpcReturnTypes>>;
+};
+export const ProviderRequestSchema = z
+	.function()
+	.args(ProviderRequestParamsSchema)
+	.returns(z.promise(ResultSchema));
 
 export const ChainIdCallbackSchema = z
 	.function()
 	.args(z.object({ chainId: z.string() }))
 	.returns(z.void());
 
+// TODO: Add missing deconstruction types to listeners
 export const ConnectedListenerSchema = z
 	.function()
 	.args(z.literal("connected"), ChainIdCallbackSchema)
@@ -151,26 +220,36 @@ export const ProviderListenerSchema = z.union([
 ]);
 
 export const ProviderRpcErrorSchema = z.discriminatedUnion("code", [
-	z.object({
-		code: z.literal(4001),
-		message: z.literal("User Rejected Request"),
-	}),
-	z.object({
-		code: z.literal(4100),
-		message: z.literal("Unauthorized"),
-	}),
-	z.object({
-		code: z.literal(4200),
-		message: z.literal("Unsupported Method"),
-	}),
-	z.object({
-		code: z.literal(4900),
-		message: z.literal("Disconnected"),
-	}),
-	z.object({
-		code: z.literal(4901),
-		message: z.literal("Chain Disconnected"),
-	}),
+	z
+		.object({
+			code: z.literal(4001),
+			message: z.literal("User Rejected Request"),
+		})
+		.strict(),
+	z
+		.object({
+			code: z.literal(4100),
+			message: z.literal("Unauthorized"),
+		})
+		.strict(),
+	z
+		.object({
+			code: z.literal(4200),
+			message: z.literal("Unsupported Method"),
+		})
+		.strict(),
+	z
+		.object({
+			code: z.literal(4900),
+			message: z.literal("Disconnected"),
+		})
+		.strict(),
+	z
+		.object({
+			code: z.literal(4901),
+			message: z.literal("Chain Disconnected"),
+		})
+		.strict(),
 ]);
 
 export const MinaProviderInfoSchema = z.object({
@@ -186,7 +265,9 @@ export const MinaProviderClientSchema = z.object({
 	removeListener: ProviderListenerSchema,
 });
 
-export const MinaProviderDetailSchema = z.object({
-	info: MinaProviderInfoSchema,
-	provider: MinaProviderClientSchema,
-});
+export const MinaProviderDetailSchema = z
+	.object({
+		info: MinaProviderInfoSchema,
+		provider: MinaProviderClientSchema,
+	})
+	.strict();
