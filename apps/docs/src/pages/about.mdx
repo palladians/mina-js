@@ -23,20 +23,9 @@ MinaJS provides a set of services to interact with Mina Protocol. The services a
 graph TD
   classDef MinaJS fill:#C4A7E7,color:#000000
 
-  subgraph Klesia
-  G[Klesia RPC]:::MinaJS --> H[Mina Node]
-  H[Mina Node] --> G[Klesia RPC]
-  G[Klesia RPC]:::MinaJS --> J[Fallback Mina Node]
-  J[Fallback Mina Node] --> G[Klesia RPC]
-  end
-
   subgraph zkApp
   B[zkApp UI] --> C[MinaJS Connect]
   C[MinaJS Connect]:::MinaJS --> B[zkApp UI]
-  B[zkApp UI] --> I1[Klesia SDK - zkApp]
-  I1[Klesia SDK - zkApp]:::MinaJS --> G[Klesia RPC]
-  I1[Klesia SDK - zkApp]:::MinaJS --> B[zkApp UI]
-  G[Klesia RPC]:::MinaJS --> I1[Klesia SDK - zkApp]
   end
 
   subgraph Mina Wallet
@@ -46,10 +35,19 @@ graph TD
   E[Wallet UI & Connector] --> D[MinaJS Provider]
   E[Wallet UI & Connector] --> F[MinaJS Account]
   F[MinaJS Account]:::MinaJS --> E[Wallet UI & Connector]
-  I2[Klesia SDK - Wallet]:::MinaJS --> G[Klesia RPC]
-  G[Klesia RPC]:::MinaJS --> I2[Klesia SDK - Wallet]
   E[Wallet UI & Connector] --> I2[Klesia SDK - Wallet]
   I2[Klesia SDK - Wallet]:::MinaJS --> E[Wallet UI & Connector]
+  end
+
+  subgraph Klesia
+  I2[Klesia SDK - Wallet]:::MinaJS --> G[Klesia RPC]
+  G[Klesia RPC]:::MinaJS --> H[Mina Node]
+  H[Mina Node] --> G[Klesia RPC]
+  G[Klesia RPC]:::MinaJS --> J[Fallback Mina Node]
+  J[Fallback Mina Node] --> G[Klesia RPC]
+  G[Klesia RPC]:::MinaJS --> I2[Klesia SDK - Wallet]
+  C[MinaJS Connect]:::MinaJS --> G[Klesia RPC]
+  G[Klesia RPC] --> C[MinaJS Connect]
   end
 ```
 

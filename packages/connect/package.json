@@ -22,9 +22,14 @@
 		"cleanup": "rimraf dist .turbo"
 	},
 	"dependencies": {
+		"@mina-js/accounts": "workspace:*",
+		"@mina-js/klesia-sdk": "workspace:*",
 		"@mina-js/providers": "workspace:*",
 		"ts-pattern": "^5.3.1",
 		"zod": "3.23.8"
+	},
+	"devDependencies": {
+		"@happy-dom/global-registrator": "^15.7.4"
 	},
 	"peerDependencies": {
 		"typescript": "^5.0.0"

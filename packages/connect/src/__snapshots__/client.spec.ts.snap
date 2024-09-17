@@ -1,0 +1,15 @@
+// Bun Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`matches snapshot of local source 1`] = `
+{
+  "getAccounts": [Function: AsyncFunction],
+  "getBalance": [Function: AsyncFunction],
+}
+`;
+
+exports[`matches snapshot of json-rpc source 1`] = `
+{
+  "getAccounts": [Function: AsyncFunction],
+  "getBalance": [Function: AsyncFunction],
+}
+`;

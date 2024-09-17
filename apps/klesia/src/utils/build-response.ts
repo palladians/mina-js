@@ -1,16 +1,14 @@
-import type { RpcErrorType, RpcMethodType } from "../schema";
+import type { RpcErrorType } from "../schema";
 
 export const buildResponse = ({
 	result,
 	error,
-	method,
-}: { result?: unknown; error?: RpcErrorType; method: RpcMethodType }) => {
+}: { result?: unknown; error?: RpcErrorType }) => {
 	if (error) {
 		return {
 			jsonrpc: "2.0",
 			error,
-			method,
 		};
 	}
-	return { jsonrpc: "2.0", result, method };
+	return { jsonrpc: "2.0", result };
 };

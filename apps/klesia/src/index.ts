@@ -71,7 +71,6 @@ export const klesiaRpcRoute = api.openapi(rpcRoute, async ({ req, json }) => {
 				});
 				return json(
 					buildResponse({
-						method: RpcMethod.enum.mina_getTransactionCount,
 						result,
 					}),
 					200,
@@ -83,16 +82,12 @@ export const klesiaRpcRoute = api.openapi(rpcRoute, async ({ req, json }) => {
 			const result = await mina.getBalance({
 				publicKey: PublicKeySchema.parse(publicKey),
 			});
-			return json(
-				buildResponse({ method: RpcMethod.enum.mina_getBalance, result }),
-				200,
-			);
+			return json(buildResponse({ result }), 200);
 		})
 		.with({ method: RpcMethod.enum.mina_blockHash }, async () => {
 			if (process.env.MINA_NETWORK === "zeko_devnet") {
 				return json(
 					buildResponse({
-						method: RpcMethod.enum.mina_blockHash,
 						error: {
 							code: -32600,
 							message: "Network not supported.",
@@ -102,17 +97,11 @@ export const klesiaRpcRoute = api.openapi(rpcRoute, async ({ req, json }) => {
 				);
 			}
 			const result = await mina.blockHash();
-			return json(
-				buildResponse({ method: RpcMethod.enum.mina_blockHash, result }),
-				200,
-			);
+			return json(buildResponse({ result }), 200);
 		})
 		.with({ method: RpcMethod.enum.mina_chainId }, async () => {
 			const result = await mina.chainId();
-			return json(
-				buildResponse({ method: RpcMethod.enum.mina_chainId, result }),
-				200,
-			);
+			return json(buildResponse({ result }), 200);
 		})
 		.with(
 			{ method: RpcMethod.enum.mina_sendTransaction },
@@ -121,7 +110,6 @@ export const klesiaRpcRoute = api.openapi(rpcRoute, async ({ req, json }) => {
 				const result = await mina.sendTransaction({ signedTransaction, type });
 				return json(
 					buildResponse({
-						method: RpcMethod.enum.mina_sendTransaction,
 						result,
 					}),
 					200,
@@ -133,10 +121,7 @@ export const klesiaRpcRoute = api.openapi(rpcRoute, async ({ req, json }) => {
 			const result = await mina.getAccount({
 				publicKey: PublicKeySchema.parse(publicKey),
 			});
-			return json(
-				buildResponse({ method: RpcMethod.enum.mina_getAccount, result }),
-				200,
-			);
+			return json(buildResponse({ result }), 200);
 		})
 		.exhaustive();
 });

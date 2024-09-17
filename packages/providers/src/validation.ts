@@ -95,7 +95,7 @@ export const ChainInformationRequestReturnSchema = z
 export const GetBalanceRequestReturnSchema = z
 	.object({
 		method: z.literal("mina_getBalance"),
-		result: z.number(),
+		result: z.bigint(),
 	})
 	.strict();
 export const SignRequestReturnSchema = z

@@ -1,8 +1,8 @@
 import { expect, it } from "bun:test";
-import { mnemonic } from "../test/constants";
+import { Test } from "@mina-js/shared";
 import { mnemonicToAccount } from "./mnemonic-to-account";
 
 it("matches the snapshot", () => {
-	const mnemonicAccount = mnemonicToAccount({ mnemonic });
+	const mnemonicAccount = mnemonicToAccount({ mnemonic: Test.mnemonic });
 	expect(mnemonicAccount).toMatchSnapshot();
 });

@@ -5,34 +5,42 @@ import { getNodeClient } from "../utils/node";
 
 const getTransactionCount = async ({ publicKey }: { publicKey: string }) => {
 	const client = getNodeClient();
-	const { data } = await client.query(
-		gql`
-      query {
-        account(publicKey: $publicKey) {
-          nonce
+	try {
+		const { data } = await client.query(
+			gql`
+        query {
+          account(publicKey: $publicKey) {
+            nonce
+          }
         }
-      }
-    `,
-		{ publicKey },
-	);
-	return data.account.nonce;
+      `,
+			{ publicKey },
+		);
+		return data.account.nonce;
+	} catch {
+		return "0";
+	}
 };
 
 const getBalance = async ({ publicKey }: { publicKey: string }) => {
 	const client = getNodeClient();
-	const { data } = await client.query(
-		gql`
-      query {
-        account(publicKey: $publicKey) {
-          balance {
-            total
+	try {
+		const { data } = await client.query(
+			gql`
+        query {
+          account(publicKey: $publicKey) {
+            balance {
+              total
+            }
           }
         }
-      }
-    `,
-		{ publicKey },
-	);
-	return data.account.balance.total;
+      `,
+			{ publicKey },
+		);
+		return data.account.balance.total;
+	} catch {
+		return "0";
+	}
 };
 
 const blockHash = async () => {
@@ -129,8 +137,9 @@ const sendTransaction = async ({
 
 const getAccount = async ({ publicKey }: { publicKey: string }) => {
 	const client = getNodeClient();
-	const { data } = await client.query(
-		gql`
+	try {
+		const { data } = await client.query(
+			gql`
       query {
         account(publicKey: $publicKey) {
           nonce
@@ -140,12 +149,18 @@ const getAccount = async ({ publicKey }: { publicKey: string }) => {
         }
       }
     `,
-		{ publicKey },
-	);
-	return {
-		nonce: data.account.nonce,
-		balance: data.account.balance.total,
-	};
+			{ publicKey },
+		);
+		return {
+			nonce: data.account.nonce,
+			balance: data.account.balance.total,
+		};
+	} catch {
+		return {
+			nonce: "0",
+			balance: "0",
+		};
+	}
 };
 
 export const mina = {

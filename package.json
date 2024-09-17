@@ -3,6 +3,7 @@
 	"private": true,
 	"scripts": {
 		"build": "turbo build",
+		"build:packages": "turbo build --filter=\"./packages/*\"",
 		"test": "turbo test",
 		"cleanup": "bun run --filter '*' cleanup && rimraf node_modules .turbo",
 		"lint": "bunx biome check .",
@@ -10,7 +11,6 @@
 	},
 	"devDependencies": {
 		"@biomejs/biome": "1.8.3",
-		"@happy-dom/global-registrator": "^14.12.3",
 		"@tsconfig/bun": "1.0.7",
 		"@types/bun": "1.1.6",
 		"rimraf": "^6.0.1",

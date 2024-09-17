@@ -67,6 +67,10 @@ export type HDAccount = Simplify<
 	}
 >;
 
+export type Account<publicKey extends PublicKey = PublicKey> =
+	| JsonRpcAccount<publicKey>
+	| LocalAccount<publicKey>;
+
 export type PrivateKeyAccount = Simplify<LocalAccount<"privateKey">>;
 
 export type { HDKey };
