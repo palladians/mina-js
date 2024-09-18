@@ -29,7 +29,8 @@
 		"zod": "3.23.8"
 	},
 	"devDependencies": {
-		"@happy-dom/global-registrator": "14.12.3"
+		"@happy-dom/global-registrator": "15.7.4",
+		"happy-dom": "^15.7.4"
 	},
 	"peerDependencies": {
 		"typescript": "^5.0.0"
