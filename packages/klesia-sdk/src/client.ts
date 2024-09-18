@@ -25,17 +25,18 @@ export const createClient = ({
 	customUrl,
 	throwable = true,
 }: CreateClientProps) => {
-	const baseClient = match(KlesiaNetwork.parse(network))
-		.with("devnet", () =>
-			hc<KlesiaRpc>(customUrl ?? "https://devnet.klesia.palladians.xyz"),
-		)
-		.with("mainnet", () =>
-			hc<KlesiaRpc>(customUrl ?? "https://mainnet.klesia.palladians.xyz"),
-		)
-		.with("zeko_devnet", () =>
-			hc<KlesiaRpc>(customUrl ?? "https://zeko-devnet.klesia.palladians.xyz"),
-		)
-		.exhaustive();
+	const baseUrl = customUrl
+		? customUrl
+		: match(KlesiaNetwork.parse(network))
+				.with("devnet", () => "https://devnet.klesia.palladians.xyz")
+				.with("mainnet", () => "https://mainnet.klesia.palladians.xyz")
+				.with("zeko_devnet", () => "https://zeko-devnet.klesia.palladians.xyz")
+				.exhaustive();
+	const baseClient = hc<KlesiaRpc>(baseUrl, {
+		headers: {
+			"Access-Control-Allow-Origin": "*",
+		},
+	});
 	const rpcHandler = baseClient.api.$post;
 	type RpcRequest = Parameters<typeof rpcHandler>[0];
 	const request = async <T extends string>(req: RpcRequest["json"]) => {
