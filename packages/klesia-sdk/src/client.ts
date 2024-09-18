@@ -32,11 +32,7 @@ export const createClient = ({
 				.with("mainnet", () => "https://mainnet.klesia.palladians.xyz")
 				.with("zeko_devnet", () => "https://zeko-devnet.klesia.palladians.xyz")
 				.exhaustive();
-	const baseClient = hc<KlesiaRpc>(baseUrl, {
-		headers: {
-			"Access-Control-Allow-Origin": "*",
-		},
-	});
+	const baseClient = hc<KlesiaRpc>(baseUrl);
 	const rpcHandler = baseClient.api.$post;
 	type RpcRequest = Parameters<typeof rpcHandler>[0];
 	const request = async <T extends string>(req: RpcRequest["json"]) => {
