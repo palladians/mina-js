@@ -1,7 +1,14 @@
 import { SignedTransactionSchema } from "@mina-js/shared";
 import { gql } from "@urql/core";
+import { calculateQuantile } from "bigint-quantile";
 import { match } from "ts-pattern";
 import { getNodeClient } from "../utils/node";
+
+export const PRIORITY = {
+	low: 0.25,
+	medium: 0.5,
+	high: 0.75,
+} as Record<string, number>;
 
 const getTransactionCount = async ({ publicKey }: { publicKey: string }) => {
 	const client = getNodeClient();
@@ -163,6 +170,37 @@ const getAccount = async ({ publicKey }: { publicKey: string }) => {
 	}
 };
 
+const estimateFees = async () => {
+	const client = getNodeClient();
+	try {
+		const { data } = await client.query(
+			gql`
+        query {
+          snarkPool {
+            fee
+          }
+        }
+      `,
+			{},
+		);
+		const fees = data.snarkPool
+			.map((entry: { fee: string }) => entry.fee)
+			.filter((entry: string) => entry !== "0")
+			.map((entry: string) => BigInt(entry));
+		return {
+			low: String(calculateQuantile(fees, PRIORITY.low)),
+			medium: String(calculateQuantile(fees, PRIORITY.medium)),
+			high: String(calculateQuantile(fees, PRIORITY.high)),
+		};
+	} catch {
+		return {
+			low: "10000000",
+			medium: "100000000",
+			high: "200000000",
+		};
+	}
+};
+
 export const mina = {
 	getTransactionCount,
 	getBalance,
@@ -170,4 +208,5 @@ export const mina = {
 	chainId,
 	sendTransaction,
 	getAccount,
+	estimateFees,
 };

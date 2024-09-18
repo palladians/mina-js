@@ -2,14 +2,26 @@
 
 exports[`matches snapshot of local source 1`] = `
 {
+  "createNullifier": [Function: AsyncFunction],
   "getAccounts": [Function: AsyncFunction],
   "getBalance": [Function: AsyncFunction],
+  "getChainId": [Function: AsyncFunction],
+  "getTransactionCount": [Function: AsyncFunction],
+  "signFields": [Function: AsyncFunction],
+  "signMessage": [Function: AsyncFunction],
+  "signTransaction": [Function: AsyncFunction],
 }
 `;
 
 exports[`matches snapshot of json-rpc source 1`] = `
 {
+  "createNullifier": [Function: AsyncFunction],
   "getAccounts": [Function: AsyncFunction],
   "getBalance": [Function: AsyncFunction],
+  "getChainId": [Function: AsyncFunction],
+  "getTransactionCount": [Function: AsyncFunction],
+  "signFields": [Function: AsyncFunction],
+  "signMessage": [Function: AsyncFunction],
+  "signTransaction": [Function: AsyncFunction],
 }
 `;

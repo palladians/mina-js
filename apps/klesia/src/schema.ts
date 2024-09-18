@@ -13,6 +13,7 @@ export const RpcMethod = z.enum([
 	"mina_chainId",
 	"mina_sendTransaction",
 	"mina_getAccount",
+	"mina_estimateFees",
 ]);
 export type RpcMethodType = z.infer<typeof RpcMethod>;
 
@@ -40,6 +41,10 @@ export const RpcMethodSchema = z.discriminatedUnion("method", [
 	z.object({
 		method: z.literal(RpcMethod.enum.mina_getAccount),
 		params: PublicKeyParamsSchema,
+	}),
+	z.object({
+		method: z.literal(RpcMethod.enum.mina_estimateFees),
+		params: EmptyParamsSchema,
 	}),
 ]);
 
@@ -85,6 +90,14 @@ export const RpcResponseSchema = z.union([
 			result: z.object({
 				nonce: z.string(),
 				balance: z.string(),
+			}),
+		}),
+		JsonRpcResponse.extend({
+			method: z.literal(RpcMethod.enum.mina_estimateFees),
+			result: z.object({
+				low: z.string(),
+				medium: z.string(),
+				high: z.string(),
 			}),
 		}),
 	]),

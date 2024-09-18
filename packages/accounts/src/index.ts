@@ -9,3 +9,5 @@ export { hdKeyToAccount } from "./accounts/hd-key-to-account";
 export { mnemonicToAccount } from "./accounts/mnemonic-to-account";
 export { privateKeyToAccount } from "./accounts/private-key-to-account";
 export { toAccount } from "./accounts/to-account";
+
+export * from "./types";

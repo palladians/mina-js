@@ -55,4 +55,16 @@ describe("Mina Devnet RPC", () => {
 		expect(BigInt(result.nonce)).toBeGreaterThanOrEqual(0);
 		expect(BigInt(result.balance)).toBeGreaterThanOrEqual(0);
 	});
+
+	it("returns result for mina_estimateFee", async () => {
+		const response = await request({
+			json: {
+				method: "mina_estimateFees",
+			},
+		});
+		const { result } = (await response.json()) as {
+			result: { medium: string };
+		};
+		expect(result.medium.length).toBeGreaterThan(0);
+	});
 });

@@ -123,6 +123,10 @@ export const klesiaRpcRoute = api.openapi(rpcRoute, async ({ req, json }) => {
 			});
 			return json(buildResponse({ result }), 200);
 		})
+		.with({ method: RpcMethod.enum.mina_estimateFees }, async () => {
+			const result = await mina.estimateFees();
+			return json(buildResponse({ result }), 200);
+		})
 		.exhaustive();
 });
 

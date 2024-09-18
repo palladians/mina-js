@@ -39,7 +39,6 @@ export const createClient = ({
 	const rpcHandler = baseClient.api.$post;
 	type RpcRequest = Parameters<typeof rpcHandler>[0];
 	const request = async <T extends string>(req: RpcRequest["json"]) => {
-		console.log(">>>REQ", req);
 		const json = (await (
 			await baseClient.api.$post({ json: req })
 		).json()) as Extract<RpcResponseType, { method: T }> & {

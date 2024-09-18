@@ -1,4 +1,7 @@
-import type { Account } from "@mina-js/accounts";
+import type { Account, SignTransaction } from "@mina-js/accounts";
+import type { SignMessage } from "@mina-js/accounts";
+import type { SignFields } from "@mina-js/accounts";
+import type { CreateNullifier } from "@mina-js/accounts";
 import { createClient } from "@mina-js/klesia-sdk";
 import { match } from "ts-pattern";
 import { createStore } from "./store";
@@ -45,12 +48,10 @@ export const createWalletClient = ({
 	const getBalance = async () => {
 		return match(providerSource)
 			.with("klesia", async () => {
-				console.log(">>>START");
 				const { result } = await klesiaClient.request<"mina_getBalance">({
 					method: "mina_getBalance",
 					params: [account.publicKey],
 				});
-				console.log(">>>RES", result);
 				return BigInt(result);
 			})
 			.otherwise(async () => {
@@ -61,8 +62,53 @@ export const createWalletClient = ({
 				return result;
 			});
 	};
+	const getTransactionCount = async () => {
+		const { result } = await klesiaClient.request<"mina_getTransactionCount">({
+			method: "mina_getTransactionCount",
+			params: [account.publicKey],
+		});
+		return BigInt(result);
+	};
+	const getChainId = async () => {
+		return match(providerSource)
+			.with("klesia", async () => {
+				const { result } = await klesiaClient.request<"mina_chainId">({
+					method: "mina_chainId",
+				});
+				return result;
+			})
+			.otherwise(async () => {
+				const provider = getWalletProvider(providerSource);
+				const { result } = await provider.request<"mina_chainId">({
+					method: "mina_chainId",
+				});
+				return result;
+			});
+	};
+	const signTransaction: SignTransaction = async (params) => {
+		if (account.type !== "local") throw new Error("Account type not supported");
+		return account.signTransaction(params);
+	};
+	const signMessage: SignMessage = async (params) => {
+		if (account.type !== "local") throw new Error("Account type not supported");
+		return account.signMessage(params);
+	};
+	const signFields: SignFields = async (params) => {
+		if (account.type !== "local") throw new Error("Account type not supported");
+		return account.signFields(params);
+	};
+	const createNullifier: CreateNullifier = async (params) => {
+		if (account.type !== "local") throw new Error("Account type not supported");
+		return account.createNullifier(params);
+	};
 	return {
 		getAccounts,
 		getBalance,
+		getTransactionCount,
+		getChainId,
+		signTransaction,
+		signMessage,
+		signFields,
+		createNullifier,
 	};
 };
