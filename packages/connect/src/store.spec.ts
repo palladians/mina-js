@@ -11,7 +11,7 @@ it("should initialize the store", () => {
 it("should update providers", () => {
 	const store = createStore();
 	const listener = mock();
-	store.subscribe(listener);
+	store.subscribe(listener, { emitImmediately: true });
 	announceProvider(mockedProvider);
 	const provider = store.getProviders()[0];
 	expect(listener).toHaveBeenCalled();
