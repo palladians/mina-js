@@ -75,4 +75,18 @@ describe("local source", () => {
 		const signature = await client.signMessage({ message: "hello" });
 		expect(signature.data).toEqual("hello");
 	});
+
+	it("fills missing transaction fields", async () => {
+		const account = privateKeyToAccount({
+			privateKey: Test.accounts[0].privateKey,
+		});
+		const client = createWalletClient({ account, network: "devnet" });
+		const transaction = await client.prepareTransactionRequest({
+			from: PUBLIC_KEY,
+			to: PUBLIC_KEY,
+			amount: 1_000_000_000n,
+		});
+		expect(transaction.fee).toBeDefined();
+		expect(transaction.nonce).toBeDefined();
+	});
 });

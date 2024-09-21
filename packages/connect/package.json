@@ -22,6 +22,7 @@
 		"cleanup": "rimraf dist .turbo"
 	},
 	"dependencies": {
+		"@mina-js/shared": "workspace:*",
 		"@mina-js/accounts": "workspace:*",
 		"@mina-js/klesia-sdk": "workspace:*",
 		"@mina-js/providers": "workspace:*",

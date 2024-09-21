@@ -39,6 +39,11 @@ export const TransactionPayload = z
 	})
 	.strict();
 
+export const PartiallyFormedTransactionPayload = TransactionPayload.extend({
+	fee: z.coerce.bigint().optional(),
+	nonce: z.coerce.bigint().optional(),
+});
+
 /**
  * Return type schemas
  */

@@ -1,8 +1,12 @@
-import type { Account, SignTransaction } from "@mina-js/accounts";
-import type { SignMessage } from "@mina-js/accounts";
-import type { SignFields } from "@mina-js/accounts";
-import type { CreateNullifier } from "@mina-js/accounts";
+import type {
+	Account,
+	CreateNullifier,
+	SignFields,
+	SignMessage,
+	SignTransaction,
+} from "@mina-js/accounts";
 import { createClient } from "@mina-js/klesia-sdk";
+import type { PartiallyFormedTransactionProperties } from "@mina-js/shared";
 import { match } from "ts-pattern";
 import { createStore } from "./store";
 
@@ -101,6 +105,29 @@ export const createWalletClient = ({
 		if (account.type !== "local") throw new Error("Account type not supported");
 		return account.createNullifier(params);
 	};
+	const estimateFees = async () => {
+		const { result } = await klesiaClient.request<"mina_estimateFees">({
+			method: "mina_estimateFees",
+		});
+		return result;
+	};
+	const prepareTransactionRequest = async (
+		transaction: PartiallyFormedTransactionProperties,
+	) => {
+		let fee = transaction.fee;
+		let nonce = transaction.nonce;
+		if (!nonce) {
+			nonce = await getTransactionCount();
+		}
+		if (!fee) {
+			fee = BigInt((await estimateFees()).medium);
+		}
+		return {
+			...transaction,
+			fee,
+			nonce,
+		};
+	};
 	return {
 		getAccounts,
 		getBalance,
@@ -110,5 +137,7 @@ export const createWalletClient = ({
 		signMessage,
 		signFields,
 		createNullifier,
+		estimateFees,
+		prepareTransactionRequest,
 	};
 };
