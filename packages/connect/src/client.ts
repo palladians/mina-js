@@ -1,3 +1,4 @@
+import "./global-polyfill";
 import type {
 	Account,
 	CreateNullifier,
