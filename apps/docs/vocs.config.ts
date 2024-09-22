@@ -2,6 +2,8 @@ import { remarkMermaid } from "@theguild/remark-mermaid";
 import { defineConfig } from "vocs";
 
 export default defineConfig({
+	ogImageUrl:
+		"https://vocs.dev/api/og?logo=%logo&title=%title&description=%description",
 	title: "MinaJS",
 	description: "The TypeScript interface for Mina Protocol.",
 	rootDir: "src",
@@ -87,6 +89,7 @@ export default defineConfig({
 				{ text: "Getting Started", link: "/connect/getting-started" },
 				{ text: "Provider Discovery", link: "/connect/provider-discovery" },
 				{ text: "Wallet Interface", link: "/connect/wallet-interface" },
+				{ text: "Wallet Client", link: "/connect/wallet-client" },
 			],
 		},
 		{

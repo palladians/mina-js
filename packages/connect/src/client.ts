@@ -15,7 +15,7 @@ export type WalletProviderSlug = "pallad";
 export type ProviderSource = "window.mina" | "klesia" | WalletProviderSlug;
 
 export type CreateWalletClientProps = {
-	account: Account;
+	account?: Account;
 	network: "mainnet" | "devnet";
 	providerSource?: ProviderSource;
 };
@@ -40,7 +40,7 @@ export const createWalletClient = ({
 	const klesiaClient = createClient({ network });
 	const getAccounts = async () => {
 		return match(providerSource)
-			.with("klesia", () => [account.publicKey])
+			.with("klesia", () => (account ? [account.publicKey] : []))
 			.otherwise(async () => {
 				const provider = getWalletProvider(providerSource);
 				const { result } = await provider.request<"mina_accounts">({
@@ -50,23 +50,30 @@ export const createWalletClient = ({
 			});
 	};
 	const getBalance = async () => {
+		const getBalanceFromInjectedWallet = async () => {
+			const provider = getWalletProvider(providerSource);
+			const { result } = await provider.request<"mina_getBalance">({
+				method: "mina_getBalance",
+			});
+			return result;
+		};
+		const getBalanceFromKlesia = async (account: Account) => {
+			const { result } = await klesiaClient.request<"mina_getBalance">({
+				method: "mina_getBalance",
+				params: [account.publicKey],
+			});
+			return BigInt(result);
+		};
 		return match(providerSource)
 			.with("klesia", async () => {
-				const { result } = await klesiaClient.request<"mina_getBalance">({
-					method: "mina_getBalance",
-					params: [account.publicKey],
-				});
-				return BigInt(result);
+				if (account) return getBalanceFromKlesia(account);
+				return getBalanceFromInjectedWallet();
 			})
-			.otherwise(async () => {
-				const provider = getWalletProvider(providerSource);
-				const { result } = await provider.request<"mina_getBalance">({
-					method: "mina_getBalance",
-				});
-				return result;
-			});
+			.otherwise(getBalanceFromInjectedWallet);
 	};
 	const getTransactionCount = async () => {
+		if (!account)
+			throw new Error("Account is required to get transaction count");
 		const { result } = await klesiaClient.request<"mina_getTransactionCount">({
 			method: "mina_getTransactionCount",
 			params: [account.publicKey],
@@ -90,18 +97,22 @@ export const createWalletClient = ({
 			});
 	};
 	const signTransaction: SignTransaction = async (params) => {
+		if (!account) throw new Error("Account is required to sign transaction");
 		if (account.type !== "local") throw new Error("Account type not supported");
 		return account.signTransaction(params);
 	};
 	const signMessage: SignMessage = async (params) => {
+		if (!account) throw new Error("Account is required to sign message");
 		if (account.type !== "local") throw new Error("Account type not supported");
 		return account.signMessage(params);
 	};
 	const signFields: SignFields = async (params) => {
+		if (!account) throw new Error("Account is required to sign fields");
 		if (account.type !== "local") throw new Error("Account type not supported");
 		return account.signFields(params);
 	};
 	const createNullifier: CreateNullifier = async (params) => {
+		if (!account) throw new Error("Account is required to create nullifier");
 		if (account.type !== "local") throw new Error("Account type not supported");
 		return account.createNullifier(params);
 	};
@@ -109,7 +120,11 @@ export const createWalletClient = ({
 		const { result } = await klesiaClient.request<"mina_estimateFees">({
 			method: "mina_estimateFees",
 		});
-		return result;
+		return {
+			low: BigInt(result.low),
+			medium: BigInt(result.medium),
+			high: BigInt(result.high),
+		};
 	};
 	const prepareTransactionRequest = async (
 		transaction: PartiallyFormedTransactionProperties,

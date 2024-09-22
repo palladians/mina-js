@@ -1,6 +1,5 @@
 import { describe, expect, it } from "bun:test";
-import { privateKeyToAccount } from "@mina-js/accounts";
-import { toAccount } from "@mina-js/accounts";
+import { privateKeyToAccount, toAccount } from "@mina-js/accounts";
 import { Test } from "@mina-js/shared";
 import { createWalletClient } from "./client";
 
