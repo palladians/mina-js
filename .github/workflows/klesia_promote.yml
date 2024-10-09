@@ -1,6 +1,11 @@
 name: Promote Docker image to latest
 on:
   workflow_dispatch:
+    inputs:
+      commitShort:
+        description: "Short commit hash"
+        required: true
+        default: $(git rev-parse --short HEAD)
 jobs:
   promote_image:
     name: Tag latest and push to GHCR
@@ -16,4 +21,4 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Tag image
-        run: docker buildx imagetools create ghcr.io/palladians/klesia:$(git rev-parse --short HEAD) --tag ghcr.io/palladians/klesia:latest
+        run: docker buildx imagetools create ghcr.io/palladians/klesia:${{ github.event.inputs.commitShort }} --tag ghcr.io/palladians/klesia:latest
