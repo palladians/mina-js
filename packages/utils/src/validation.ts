@@ -27,17 +27,36 @@ export const PublicKeySchema = z.string().length(55).startsWith("B62");
 
 export const PrivateKeySchema = z.string().length(52);
 
-export const TransactionPayload = z
+export const DelegationPayload = z
 	.object({
 		from: PublicKeySchema,
 		to: PublicKeySchema,
 		memo: z.string().optional(),
 		fee: z.coerce.bigint(),
-		amount: z.coerce.bigint(),
 		nonce: z.coerce.bigint(),
 		validUntil: z.coerce.bigint().optional(),
 	})
 	.strict();
+
+export const TransportableDelegationPayload = z
+	.object({
+		from: PublicKeySchema,
+		to: PublicKeySchema,
+		memo: z.string().optional(),
+		fee: z.coerce.string(),
+		nonce: z.coerce.string(),
+		validUntil: z.coerce.string().optional(),
+	})
+	.strict();
+
+export const TransactionPayload = DelegationPayload.extend({
+	amount: z.coerce.bigint(),
+}).strict();
+
+export const TransportableTransactionPayload =
+	TransportableDelegationPayload.extend({
+		amount: z.coerce.string(),
+	}).strict();
 
 export const PartiallyFormedTransactionPayload = TransactionPayload.extend({
 	fee: z.coerce.bigint().optional(),

@@ -7,7 +7,7 @@ import type {
 	SignTransaction,
 } from "@mina-js/accounts";
 import { createClient } from "@mina-js/klesia-sdk";
-import type { PartiallyFormedTransactionProperties } from "@mina-js/shared";
+import type { PartiallyFormedTransactionProperties } from "@mina-js/utils";
 import { match } from "ts-pattern";
 import { createStore } from "./store";
 

@@ -4,7 +4,7 @@ import type {
 	SignedFields,
 	SignedMessage,
 	SignedTransaction,
-} from "@mina-js/shared";
+} from "@mina-js/utils";
 import type { HDKey } from "@scure/bip32";
 import type { Simplify } from "type-fest";
 import type { z } from "zod";

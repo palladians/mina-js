@@ -1,5 +1,5 @@
 {
-	"name": "@mina-js/shared",
+	"name": "@mina-js/utils",
 	"version": "0.0.1",
 	"type": "module",
 	"module": "dist/index.js",

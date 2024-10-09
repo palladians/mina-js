@@ -3,7 +3,7 @@ import {
 	SignedFieldsSchema,
 	SignedMessageSchema,
 	SignedTransactionSchema,
-} from "@mina-js/shared";
+} from "@mina-js/utils";
 import MinaSigner from "mina-signer";
 import type { PrivateKeyAccount } from "../types";
 import { toAccount } from "./to-account";

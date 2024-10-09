@@ -1,7 +1,11 @@
-import { SignedTransactionSchema } from "@mina-js/shared";
 import { gql } from "@urql/core";
 import { calculateQuantile } from "bigint-quantile";
 import { match } from "ts-pattern";
+import {
+	SendDelegationBodySchema,
+	SendTransactionBodySchema,
+	SendZkAppBodySchema,
+} from "../schema";
 import { getNodeClient } from "../utils/node";
 
 export const PRIORITY = {
@@ -91,8 +95,8 @@ const sendTransaction = async ({
 	const client = getNodeClient();
 	return match(type)
 		.with("payment", async () => {
-			const { signature, data: input } =
-				SignedTransactionSchema.parse(signedTransaction);
+			const { signature, input } =
+				SendTransactionBodySchema.parse(signedTransaction);
 			const { data } = await client.mutation(
 				gql`
           mutation {
@@ -108,8 +112,8 @@ const sendTransaction = async ({
 			return data.sendPayment.payment.hash;
 		})
 		.with("delegation", async () => {
-			const { signature, data: input } =
-				SignedTransactionSchema.parse(signedTransaction);
+			const { signature, input } =
+				SendDelegationBodySchema.parse(signedTransaction);
 			const { data } = await client.mutation(
 				gql`
           mutation {
@@ -125,6 +129,7 @@ const sendTransaction = async ({
 			return data.sendDelegation.delegation.hash;
 		})
 		.with("zkapp", async () => {
+			const { input } = SendZkAppBodySchema.parse(signedTransaction);
 			const { data } = await client.mutation(
 				gql`
           mutation {
@@ -135,7 +140,7 @@ const sendTransaction = async ({
             }
           }
         `,
-				{ input: signedTransaction },
+				{ input },
 			);
 			return data.sendZkapp.zkapp.hash;
 		})

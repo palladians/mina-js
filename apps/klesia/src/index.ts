@@ -1,7 +1,7 @@
 import "dotenv/config";
 import { getConnInfo } from "@hono/node-server/conninfo";
 import { OpenAPIHono, createRoute } from "@hono/zod-openapi";
-import { PublicKeySchema } from "@mina-js/shared";
+import { PublicKeySchema } from "@mina-js/utils";
 import { rateLimiter } from "hono-rate-limiter";
 import { cors } from "hono/cors";
 import { logger } from "hono/logger";

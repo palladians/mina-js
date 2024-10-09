@@ -18,7 +18,7 @@
 		"cleanup": "rimraf dist .turbo"
 	},
 	"dependencies": {
-		"@mina-js/shared": "workspace:*",
+		"@mina-js/utils": "workspace:*",
 		"zod": "3.23.8"
 	},
 	"peerDependencies": {

@@ -1,5 +1,5 @@
 import { defineConfig } from "tsup";
-import sharedConfig from "../shared/tsup.config";
+import sharedConfig from "../utils/tsup.config";
 
 export default defineConfig({
 	...sharedConfig,

@@ -1,10 +1,40 @@
-import { PublicKeySchema } from "@mina-js/shared";
+import {
+	PublicKeySchema,
+	TransportableDelegationPayload,
+	TransportableTransactionPayload,
+} from "@mina-js/utils";
 import { z } from "zod";
+import { SendZkappInput } from "./zkapp";
 
 export const KlesiaNetwork = z.enum(["devnet", "mainnet", "zeko_devnet"]);
 export const PublicKeyParamsSchema = z.array(PublicKeySchema).length(1);
 export const EmptyParamsSchema = z.array(z.string()).length(0).optional();
-export const SendTransactionSchema = z.array(z.any(), z.string()).length(2);
+export const SignatureSchema = z.union([
+	z.object({
+		rawSignature: z.string(),
+	}),
+	z.object({ field: z.string(), scalar: z.string() }),
+]);
+export const SendTransactionBodySchema = z.object({
+	input: TransportableTransactionPayload,
+	signature: SignatureSchema,
+});
+export const SendDelegationBodySchema = z.object({
+	input: TransportableDelegationPayload,
+	signature: SignatureSchema,
+});
+export const SendZkAppBodySchema = z.object({
+	input: SendZkappInput,
+});
+export const SendableSchema = z.union([
+	SendTransactionBodySchema,
+	SendDelegationBodySchema,
+	SendZkAppBodySchema,
+]);
+export const SendTransactionSchema = z.tuple([
+	SendableSchema,
+	z.enum(["payment", "delegation", "zkapp"]),
+]);
 
 export const RpcMethod = z.enum([
 	"mina_getTransactionCount",

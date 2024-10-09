@@ -7,7 +7,7 @@ import {
 	SignedTransactionSchema,
 	TransactionPayload,
 	TransactionReceiptSchema,
-} from "@mina-js/shared";
+} from "@mina-js/utils";
 import { z } from "zod";
 
 export const SwitchChainRequestParams = z.object({

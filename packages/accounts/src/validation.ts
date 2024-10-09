@@ -1,4 +1,4 @@
-import { FieldSchema, TransactionPayload } from "@mina-js/shared";
+import { FieldSchema, TransactionPayload } from "@mina-js/utils";
 import { z } from "zod";
 
 export const SignFieldsParamsSchema = z

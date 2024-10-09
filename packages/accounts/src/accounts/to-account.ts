@@ -1,4 +1,4 @@
-import { type PublicKey, PublicKeySchema } from "@mina-js/shared";
+import { type PublicKey, PublicKeySchema } from "@mina-js/utils";
 import type {
 	AccountSource,
 	CustomSource,

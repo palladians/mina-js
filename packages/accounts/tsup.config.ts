@@ -1,3 +1,3 @@
-import sharedConfig from "../shared/tsup.config";
+import sharedConfig from "../utils/tsup.config";
 
 export default sharedConfig;

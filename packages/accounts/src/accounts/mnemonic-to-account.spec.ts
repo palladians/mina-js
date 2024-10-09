@@ -1,5 +1,5 @@
 import { expect, it } from "bun:test";
-import { Test } from "@mina-js/shared";
+import { Test } from "@mina-js/utils";
 import { mnemonicToAccount } from "./mnemonic-to-account";
 
 it("matches the snapshot", () => {

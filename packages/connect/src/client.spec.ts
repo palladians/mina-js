@@ -1,6 +1,6 @@
 import { describe, expect, it } from "bun:test";
 import { privateKeyToAccount, toAccount } from "@mina-js/accounts";
-import { Test } from "@mina-js/shared";
+import { Test } from "@mina-js/utils";
 import { createWalletClient } from "./client";
 
 const PUBLIC_KEY = "B62qmWKtvNQTtUqo1LxfEEDLyWMg59cp6U7c4uDC7aqgaCEijSc3Hx5";

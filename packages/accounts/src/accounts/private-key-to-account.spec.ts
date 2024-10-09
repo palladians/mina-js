@@ -1,5 +1,5 @@
 import { expect, it } from "bun:test";
-import { Test } from "@mina-js/shared";
+import { Test } from "@mina-js/utils";
 import { privateKeyToAccount } from "./private-key-to-account";
 
 it("matches default values", () => {
