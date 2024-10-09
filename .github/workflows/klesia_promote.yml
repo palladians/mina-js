@@ -5,7 +5,6 @@ on:
       commitShort:
         description: "Short commit hash"
         required: true
-        default: $(git rev-parse --short HEAD)
 jobs:
   promote_image:
     name: Tag latest and push to GHCR
