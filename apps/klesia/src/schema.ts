@@ -32,7 +32,7 @@ export const SendableSchema = z.union([
 	SendZkAppBodySchema,
 ]);
 export const SendTransactionSchema = z.tuple([
-	SendableSchema,
+	z.any(),
 	z.enum(["payment", "delegation", "zkapp"]),
 ]);
 
