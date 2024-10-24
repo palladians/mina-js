@@ -63,7 +63,7 @@ export const createWalletClient = ({
 				method: "mina_getBalance",
 				params: [account.publicKey],
 			});
-			return BigInt(result);
+			return result;
 		};
 		return match(providerSource)
 			.with("klesia", async () => {
@@ -79,7 +79,7 @@ export const createWalletClient = ({
 			method: "mina_getTransactionCount",
 			params: [account.publicKey],
 		});
-		return BigInt(result);
+		return result;
 	};
 	const getChainId = async () => {
 		return match(providerSource)
@@ -122,9 +122,9 @@ export const createWalletClient = ({
 			method: "mina_estimateFees",
 		});
 		return {
-			low: BigInt(result.low),
-			medium: BigInt(result.medium),
-			high: BigInt(result.high),
+			low: result.low,
+			medium: result.medium,
+			high: result.high,
 		};
 	};
 	const prepareTransactionRequest = async (
@@ -136,7 +136,7 @@ export const createWalletClient = ({
 			nonce = await getTransactionCount();
 		}
 		if (!fee) {
-			fee = BigInt((await estimateFees()).medium);
+			fee = (await estimateFees()).medium;
 		}
 		return {
 			...transaction,

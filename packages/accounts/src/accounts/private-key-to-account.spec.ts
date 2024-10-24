@@ -23,11 +23,11 @@ it("signs a transaction", async () => {
 		privateKey: Test.accounts[0].privateKey,
 	});
 	const transaction = {
-		nonce: 1n,
+		nonce: "1",
 		from: "B62qmWKtvNQTtUqo1LxfEEDLyWMg59cp6U7c4uDC7aqgaCEijSc3Hx5",
 		to: "B62qmWKtvNQTtUqo1LxfEEDLyWMg59cp6U7c4uDC7aqgaCEijSc3Hx5",
-		amount: 3000000000n,
-		fee: 100000000n,
+		amount: "3000000000",
+		fee: "100000000",
 	};
 	const signedTransaction = await account.signTransaction({ transaction });
 	expect(signedTransaction).toMatchSnapshot();
@@ -38,7 +38,9 @@ it("creates a nullifier", async () => {
 		privateKey: Test.accounts[0].privateKey,
 	});
 	const message = [1n, 2n, 3n];
-	const nullifier = await account.createNullifier({ message });
+	const nullifier = await account.createNullifier({
+		message: message.map((el) => el.toString()),
+	});
 	expect(typeof nullifier.private.c).toBe("bigint");
 });
 
@@ -47,6 +49,8 @@ it("signs fields", async () => {
 		privateKey: Test.accounts[0].privateKey,
 	});
 	const fields = [1n, 2n, 3n];
-	const signedFields = await account.signFields({ fields });
+	const signedFields = await account.signFields({
+		fields: fields.map((el) => el.toString()),
+	});
 	expect(signedFields).toMatchSnapshot();
 });

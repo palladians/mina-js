@@ -1,3 +1,4 @@
+import { ZkAppCommandPayload } from "@mina-js/utils";
 import {
 	FieldSchema,
 	NullifierSchema,
@@ -47,13 +48,13 @@ export const SignFieldsRequestParamsSchema = z
 export const SignTransactionRequestParamsSchema = z
 	.object({
 		method: z.literal("mina_signTransaction"),
-		params: z.array(TransactionPayload),
+		params: z.array(z.union([TransactionPayload, ZkAppCommandPayload])),
 	})
 	.strict();
 export const SendTransactionRequestParamsSchema = z
 	.object({
 		method: z.literal("mina_sendTransaction"),
-		params: z.array(TransactionPayload),
+		params: z.array(SignedTransactionSchema),
 	})
 	.strict();
 export const CreateNullifierRequestParamsSchema = z

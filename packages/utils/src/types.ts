@@ -10,6 +10,7 @@ import type {
 	SignedTransactionSchema,
 	TransactionPayload,
 	TransactionReceiptSchema,
+	ZkAppCommandPayload,
 } from "./validation";
 
 /**
@@ -23,6 +24,7 @@ export type TransactionProperties = z.infer<typeof TransactionPayload>;
 export type PartiallyFormedTransactionProperties = z.infer<
 	typeof PartiallyFormedTransactionPayload
 >;
+export type ZkAppCommandProperties = z.infer<typeof ZkAppCommandPayload>;
 
 /**
  * Return types

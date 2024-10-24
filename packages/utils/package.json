@@ -18,6 +18,7 @@
 		"cleanup": "rimraf dist .turbo"
 	},
 	"dependencies": {
+		"mina-signer": "3.0.7",
 		"zod": "3.23.8"
 	},
 	"peerDependencies": {

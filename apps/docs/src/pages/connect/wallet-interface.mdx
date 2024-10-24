@@ -58,6 +58,8 @@ const { result } = await provider.request<'mina_sign'>({ method: 'mina_sign', pa
 
 ### mina_signTransaction
 
+Sign payment or delegation:
+
 ```ts twoslash
 import { createStore } from '@mina-js/connect'
 
@@ -67,11 +69,32 @@ const { result } = await provider.request<'mina_signTransaction'>({
   method: 'mina_signTransaction',
   params: [{
     // You should probably get the right nonce from Klesia for that.
-  	nonce: 1n,
+  	nonce: '1',
   	from: "B62qmWKtvNQTtUqo1LxfEEDLyWMg59cp6U7c4uDC7aqgaCEijSc3Hx5",
   	to: "B62qmWKtvNQTtUqo1LxfEEDLyWMg59cp6U7c4uDC7aqgaCEijSc3Hx5",
-  	amount: 3000000000n,
-  	fee: 100000000n,
+  	amount: '3000000000',
+  	fee: '100000000',
+  }]
+})
+```
+
+Sign zkApp command:
+
+```ts twoslash
+import { createStore } from '@mina-js/connect'
+
+const store = createStore()
+const { provider } = store.getProviders()[0]
+const { result } = await provider.request<'mina_signTransaction'>({
+  method: 'mina_signTransaction',
+  params: [{
+    zkappCommand: {},
+    feePayer: {
+      feePayer: 'B62qmWKtvNQTtUqo1LxfEEDLyWMg59cp6U7c4uDC7aqgaCEijSc3Hx5',
+      fee: '100000000',
+      nonce: '1',
+      memo: 'Hello, Mina!',
+    }
   }]
 })
 ```

@@ -35,10 +35,20 @@ export function privateKeyToAccount({
 			);
 		},
 		async createNullifier({ message }) {
-			return NullifierSchema.parse(client.createNullifier(message, privateKey));
+			return NullifierSchema.parse(
+				client.createNullifier(
+					message.map((el) => BigInt(el)),
+					privateKey,
+				),
+			);
 		},
 		async signFields({ fields }) {
-			return SignedFieldsSchema.parse(client.signFields(fields, privateKey));
+			return SignedFieldsSchema.parse(
+				client.signFields(
+					fields.map((el) => BigInt(el)),
+					privateKey,
+				),
+			);
 		},
 	});
 
