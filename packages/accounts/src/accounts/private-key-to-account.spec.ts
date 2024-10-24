@@ -41,7 +41,7 @@ it("creates a nullifier", async () => {
 	const nullifier = await account.createNullifier({
 		message: message.map((el) => el.toString()),
 	});
-	expect(typeof nullifier.private.c).toBe("bigint");
+	expect(typeof nullifier.private.c).toBe("string");
 });
 
 it("signs fields", async () => {

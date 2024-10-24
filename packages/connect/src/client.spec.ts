@@ -39,7 +39,7 @@ describe("json-rpc source", () => {
 			providerSource: "klesia",
 		});
 		const balance = await client.getBalance();
-		expect(balance).toBeGreaterThanOrEqual(0);
+		expect(BigInt(balance)).toBeGreaterThanOrEqual(0);
 	});
 
 	it("returns transaction count", async () => {
@@ -50,7 +50,7 @@ describe("json-rpc source", () => {
 			providerSource: "klesia",
 		});
 		const transactionCount = await client.getTransactionCount();
-		expect(transactionCount).toBeGreaterThanOrEqual(0);
+		expect(BigInt(transactionCount)).toBeGreaterThanOrEqual(0);
 	});
 
 	it("returns chain id", async () => {
@@ -83,7 +83,7 @@ describe("local source", () => {
 		const transaction = await client.prepareTransactionRequest({
 			from: PUBLIC_KEY,
 			to: PUBLIC_KEY,
-			amount: 1_000_000_000n,
+			amount: "1000000000",
 		});
 		expect(transaction.fee).toBeDefined();
 		expect(transaction.nonce).toBeDefined();
