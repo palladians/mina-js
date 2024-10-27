@@ -117,16 +117,6 @@ export const createWalletClient = ({
 		if (account.type !== "local") throw new Error("Account type not supported");
 		return account.createNullifier(params);
 	};
-	const estimateFees = async () => {
-		const { result } = await klesiaClient.request<"mina_estimateFees">({
-			method: "mina_estimateFees",
-		});
-		return {
-			low: result.low,
-			medium: result.medium,
-			high: result.high,
-		};
-	};
 	const prepareTransactionRequest = async (
 		transaction: PartiallyFormedTransactionProperties,
 	) => {
@@ -136,7 +126,7 @@ export const createWalletClient = ({
 			nonce = await getTransactionCount();
 		}
 		if (!fee) {
-			fee = (await estimateFees()).medium;
+			fee = "0.01";
 		}
 		return {
 			...transaction,
@@ -153,7 +143,6 @@ export const createWalletClient = ({
 		signMessage,
 		signFields,
 		createNullifier,
-		estimateFees,
 		prepareTransactionRequest,
 	};
 };

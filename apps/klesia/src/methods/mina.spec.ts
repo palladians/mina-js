@@ -28,8 +28,3 @@ it("should get account info", async () => {
 	expect(BigInt(result.nonce)).toBeGreaterThanOrEqual(0);
 	expect(BigInt(result.balance)).toBeGreaterThanOrEqual(0);
 });
-
-it("should estimate fee", async () => {
-	const result = await mina.estimateFees();
-	expect(result.medium.length).toBeGreaterThan(0);
-});

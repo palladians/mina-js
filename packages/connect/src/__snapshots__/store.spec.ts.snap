@@ -11,3 +11,15 @@ exports[`should initialize the store 1`] = `
   "subscribe": [Function: subscribe],
 }
 `;
+
+exports[`should initialize the store 2`] = `
+{
+  "_listeners": [Function: _listeners],
+  "clear": [Function: clear],
+  "destroy": [Function: destroy],
+  "findProvider": [Function: findProvider],
+  "getProviders": [Function: getProviders],
+  "reset": [Function: reset],
+  "subscribe": [Function: subscribe],
+}
+`;

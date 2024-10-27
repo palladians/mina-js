@@ -124,20 +124,6 @@ const client = createWalletClient({ account, network: "devnet" });
 const chainId = await client.getChainId();
 ```
 
-### Get estimated fees
-
-Query the estimated fees of a transaction.
-
-```ts twoslash
-import { toAccount } from "@mina-js/accounts";
-import { createWalletClient } from '@mina-js/connect'
-
-const account = toAccount('B62qmWKtvNQTtUqo1LxfEEDLyWMg59cp6U7c4uDC7aqgaCEijSc3Hx5');
-const client = createWalletClient({ account, network: "devnet" });
-
-const fees = await client.estimateFees();
-```
-
 ## Wallet commands
 
 If you provide a local wallet, Wallet Client will sign with it, otherwise, it will use the injected wallet.
