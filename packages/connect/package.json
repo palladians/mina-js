@@ -18,7 +18,7 @@
 	"files": ["dist"],
 	"scripts": {
 		"build": "tsup",
-		"test": "bun test",
+		"test": "bun test --rerun-each 3",
 		"cleanup": "rimraf dist .turbo"
 	},
 	"dependencies": {
