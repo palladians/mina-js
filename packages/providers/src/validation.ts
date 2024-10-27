@@ -29,10 +29,12 @@ export const AddChainRequestParams = z
 // Params
 export const AccountsRequestParamsSchema = z
 	.object({
-		method: z.union([
-			z.literal("mina_accounts"),
-			z.literal("mina_requestAccounts"),
-		]),
+		method: z.literal("mina_accounts"),
+	})
+	.strict();
+export const ReqquestAccountsRequestParamsSchema = z
+	.object({
+		method: z.literal("mina_requestAccounts"),
 	})
 	.strict();
 export const ChainIdRequestParamsSchema = z
