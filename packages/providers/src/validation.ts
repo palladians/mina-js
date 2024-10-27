@@ -11,14 +11,19 @@ import {
 } from "@mina-js/utils";
 import { z } from "zod";
 
-export const SwitchChainRequestParams = z.object({
-	chainId: z.string(),
-});
+export const SwitchChainRequestParams = z
+	.object({
+		chainId: z.string(),
+	})
+	.strict();
 
-export const AddChainRequestParams = z.object({
-	url: z.string().url(),
-	name: z.string(),
-});
+export const AddChainRequestParams = z
+	.object({
+		url: z.string().url(),
+		name: z.string(),
+		slug: z.string(),
+	})
+	.strict();
 
 // Params
 export const AccountsRequestParamsSchema = z
@@ -63,10 +68,12 @@ export const CreateNullifierRequestParamsSchema = z
 		params: z.array(z.array(FieldSchema)),
 	})
 	.strict();
-export const SwitchChainRequestParamsSchema = z.object({
-	method: z.literal("mina_switchChain"),
-	params: z.array(z.string()),
-});
+export const SwitchChainRequestParamsSchema = z
+	.object({
+		method: z.literal("mina_switchChain"),
+		params: z.array(z.string()),
+	})
+	.strict();
 export const AddChainRequestParamsSchema = z
 	.object({
 		method: z.literal("mina_addChain"),
@@ -90,13 +97,13 @@ export const ChainIdRequestReturnSchema = z
 export const ChainInformationRequestReturnSchema = z
 	.object({
 		method: z.literal("mina_chainInformation"),
-		result: z.object({ url: z.string(), name: z.string() }).strict(),
+		result: AddChainRequestParams,
 	})
 	.strict();
 export const GetBalanceRequestReturnSchema = z
 	.object({
 		method: z.literal("mina_getBalance"),
-		result: z.bigint(),
+		result: z.string(),
 	})
 	.strict();
 export const SignRequestReturnSchema = z
@@ -243,9 +250,11 @@ export const ProviderRpcErrorSchema = z.discriminatedUnion("code", [
 		.strict(),
 ]);
 
-export const MinaProviderInfoSchema = z.object({
-	icon: z.string().startsWith("data:image/"),
-	name: z.string(),
-	rdns: z.string(),
-	slug: z.string(),
-});
+export const MinaProviderInfoSchema = z
+	.object({
+		icon: z.string().startsWith("data:image/"),
+		name: z.string(),
+		rdns: z.string(),
+		slug: z.string(),
+	})
+	.strict();
