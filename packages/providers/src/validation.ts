@@ -27,82 +27,62 @@ export const AddChainRequestParams = z
 	.strict();
 
 // Params
-export const RequestWithContext = z.object({
-  context: z.record(z.any()).default({}).optional()
-}).strict()
-export const AccountsRequestParamsSchema = RequestWithContext
-	.extend({
-		method: z.literal("mina_accounts"),
+export const RequestWithContext = z
+	.object({
+		context: z.record(z.any()).default({}).optional(),
 	})
 	.strict();
-export const RequestAccountsRequestParamsSchema = RequestWithContext
-	.extend({
-		method: z.literal("mina_requestAccounts"),
-	})
-	.strict();
-export const ChainIdRequestParamsSchema = RequestWithContext
-	.extend({ method: z.literal("mina_chainId") })
-	.strict();
-export const ChainInformationRequestParamsSchema = RequestWithContext
-	.extend({ method: z.literal("mina_chainInformation") })
-	.strict();
-export const GetBalanceRequestParamsSchema = RequestWithContext
-	.extend({ method: z.literal("mina_getBalance") })
-	.strict();
-export const SignRequestParamsSchema = RequestWithContext
-	.extend({
-		method: z.literal("mina_sign"),
-		params: z.array(z.string()),
-	})
-	.strict();
-export const SignFieldsRequestParamsSchema = RequestWithContext
-	.extend({
-		method: z.literal("mina_signFields"),
-		params: z.array(z.array(FieldSchema)),
-	})
-	.strict();
-export const SignTransactionRequestParamsSchema = RequestWithContext
-	.extend({
-		method: z.literal("mina_signTransaction"),
-		params: z.array(z.union([TransactionPayload, ZkAppCommandPayload])),
-	})
-	.strict();
-export const SendTransactionRequestParamsSchema = RequestWithContext
-	.extend({
-		method: z.literal("mina_sendTransaction"),
-		params: z.array(SignedTransactionSchema),
-	})
-	.strict();
-export const CreateNullifierRequestParamsSchema = RequestWithContext
-	.extend({
-		method: z.literal("mina_createNullifier"),
-		params: z.array(z.array(FieldSchema)),
-	})
-	.strict();
-export const SwitchChainRequestParamsSchema = RequestWithContext
-	.extend({
-		method: z.literal("mina_switchChain"),
-		params: z.array(z.string()),
-	})
-	.strict();
-export const AddChainRequestParamsSchema = RequestWithContext
-	.extend({
-		method: z.literal("mina_addChain"),
-		params: z.array(AddChainRequestParams),
-	})
-	.strict();
-export const SetStateRequestParamsSchema = RequestWithContext
-	.extend({
-		method: z.literal("mina_setState"),
-		params: z.array(JsonSchema),
-	})
-	.strict();
-export const GetStateRequestParamsSchema = RequestWithContext
-	.extend({
-		method: z.literal("mina_getState"),
-		params: z.array(z.string()),
-	})
-	.strict();
+export const AccountsRequestParamsSchema = RequestWithContext.extend({
+	method: z.literal("mina_accounts"),
+}).strict();
+export const RequestAccountsRequestParamsSchema = RequestWithContext.extend({
+	method: z.literal("mina_requestAccounts"),
+}).strict();
+export const ChainIdRequestParamsSchema = RequestWithContext.extend({
+	method: z.literal("mina_chainId"),
+}).strict();
+export const ChainInformationRequestParamsSchema = RequestWithContext.extend({
+	method: z.literal("mina_chainInformation"),
+}).strict();
+export const GetBalanceRequestParamsSchema = RequestWithContext.extend({
+	method: z.literal("mina_getBalance"),
+}).strict();
+export const SignRequestParamsSchema = RequestWithContext.extend({
+	method: z.literal("mina_sign"),
+	params: z.array(z.string()),
+}).strict();
+export const SignFieldsRequestParamsSchema = RequestWithContext.extend({
+	method: z.literal("mina_signFields"),
+	params: z.array(z.array(FieldSchema)),
+}).strict();
+export const SignTransactionRequestParamsSchema = RequestWithContext.extend({
+	method: z.literal("mina_signTransaction"),
+	params: z.array(z.union([TransactionPayload, ZkAppCommandPayload])),
+}).strict();
+export const SendTransactionRequestParamsSchema = RequestWithContext.extend({
+	method: z.literal("mina_sendTransaction"),
+	params: z.array(SignedTransactionSchema),
+}).strict();
+export const CreateNullifierRequestParamsSchema = RequestWithContext.extend({
+	method: z.literal("mina_createNullifier"),
+	params: z.array(z.array(FieldSchema)),
+}).strict();
+export const SwitchChainRequestParamsSchema = RequestWithContext.extend({
+	method: z.literal("mina_switchChain"),
+	params: z.array(z.string()),
+}).strict();
+export const AddChainRequestParamsSchema = RequestWithContext.extend({
+	method: z.literal("mina_addChain"),
+	params: z.array(AddChainRequestParams),
+}).strict();
+export const SetStateRequestParamsSchema = RequestWithContext.extend({
+	method: z.literal("mina_setState"),
+	params: z.array(JsonSchema),
+}).strict();
+export const GetStateRequestParamsSchema = RequestWithContext.extend({
+	method: z.literal("mina_getState"),
+	params: z.array(z.string()),
+}).strict();
 
 // Returns
 export const AccountsRequestReturnSchema = z
