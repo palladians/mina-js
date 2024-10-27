@@ -1,4 +1,5 @@
 import { ZkAppCommandPayload } from "@mina-js/utils";
+import { JsonSchema } from "@mina-js/utils";
 import {
 	FieldSchema,
 	NullifierSchema,
@@ -27,7 +28,12 @@ export const AddChainRequestParams = z
 
 // Params
 export const AccountsRequestParamsSchema = z
-	.object({ method: z.literal("mina_accounts") })
+	.object({
+		method: z.union([
+			z.literal("mina_accounts"),
+			z.literal("mina_requestAccounts"),
+		]),
+	})
 	.strict();
 export const ChainIdRequestParamsSchema = z
 	.object({ method: z.literal("mina_chainId") })
@@ -78,6 +84,18 @@ export const AddChainRequestParamsSchema = z
 	.object({
 		method: z.literal("mina_addChain"),
 		params: z.array(AddChainRequestParams),
+	})
+	.strict();
+export const SetStateRequestParamsSchema = z
+	.object({
+		method: z.literal("mina_setState"),
+		params: z.array(JsonSchema),
+	})
+	.strict();
+export const GetStateRequestParamsSchema = z
+	.object({
+		method: z.literal("mina_getState"),
+		params: z.array(z.string()),
 	})
 	.strict();
 
@@ -148,6 +166,18 @@ export const AddChainRequestReturnSchema = z
 		result: z.string(),
 	})
 	.strict();
+export const SetStateRequestReturnSchema = z
+	.object({
+		method: z.literal("mina_setState"),
+		result: z.object({ success: z.boolean() }),
+	})
+	.strict();
+export const GetStateRequestReturnSchema = z
+	.object({
+		method: z.literal("mina_getState"),
+		result: JsonSchema,
+	})
+	.strict();
 
 export const RpcReturnTypesUnion = z.discriminatedUnion("method", [
 	AccountsRequestReturnSchema,
@@ -161,6 +191,8 @@ export const RpcReturnTypesUnion = z.discriminatedUnion("method", [
 	CreateNullifierRequestReturnSchema,
 	SwitchChainRequestReturnSchema,
 	AddChainRequestReturnSchema,
+	SetStateRequestReturnSchema,
+	GetStateRequestReturnSchema,
 ]);
 
 export const ProviderRequestParamsUnion = z.discriminatedUnion("method", [
@@ -175,6 +207,8 @@ export const ProviderRequestParamsUnion = z.discriminatedUnion("method", [
 	CreateNullifierRequestParamsSchema,
 	SwitchChainRequestParamsSchema,
 	AddChainRequestParamsSchema,
+	SetStateRequestParamsSchema,
+	GetStateRequestParamsSchema,
 ]);
 export type RpcReturnTypesUnionType = z.infer<typeof RpcReturnTypesUnion>;
 export type ResultType<M extends string> = {

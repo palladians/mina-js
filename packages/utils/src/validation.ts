@@ -10,7 +10,7 @@ export const LiteralSchema = z.union([
 	z.boolean(),
 	z.null(),
 ]);
-const JsonSchema: z.ZodType<Json> = z.lazy(() =>
+export const JsonSchema: z.ZodType<Json> = z.lazy(() =>
 	z.union([LiteralSchema, z.array(JsonSchema), z.record(JsonSchema)]),
 );
 
