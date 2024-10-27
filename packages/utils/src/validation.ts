@@ -37,7 +37,7 @@ export const FeePayerSchema = z
 	})
 	.strict();
 
-export const TransactionBody = z
+export const TransactionBodySchema = z
 	.object({
 		from: PublicKeySchema,
 		to: PublicKeySchema,
@@ -49,13 +49,13 @@ export const TransactionBody = z
 	})
 	.strict();
 
-export const TransactionPayload = z
+export const TransactionPayloadSchema = z
 	.object({
-		transaction: TransactionBody,
+		transaction: TransactionBodySchema,
 	})
 	.strict();
 
-export const PartiallyFormedTransactionPayload = TransactionPayload.extend({
+export const PartialTransactionSchema = TransactionPayloadSchema.extend({
 	fee: z.coerce.string().optional(),
 	nonce: z.coerce.string().optional(),
 });
@@ -112,7 +112,7 @@ export const SignedTransactionSchema = z
 	.object({
 		signature: SignatureSchema,
 		publicKey: PublicKeySchema,
-		data: TransactionBody,
+		data: TransactionBodySchema,
 	})
 	.strict();
 

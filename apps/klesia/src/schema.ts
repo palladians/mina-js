@@ -1,4 +1,4 @@
-import { PublicKeySchema, TransactionPayload } from "@mina-js/utils";
+import { PublicKeySchema, TransactionBodySchema } from "@mina-js/utils";
 import { z } from "zod";
 import { SendZkappInput } from "./zkapp";
 
@@ -12,7 +12,7 @@ export const SignatureSchema = z.union([
 	z.object({ field: z.string(), scalar: z.string() }),
 ]);
 export const SendTransactionBodySchema = z.object({
-	input: TransactionPayload,
+	input: TransactionBodySchema,
 	signature: SignatureSchema,
 });
 export const SendZkAppBodySchema = z.object({

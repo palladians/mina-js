@@ -1,4 +1,4 @@
-import { FieldSchema, TransactionBody } from "@mina-js/utils";
+import { FieldSchema, TransactionBodySchema } from "@mina-js/utils";
 import { z } from "zod";
 
 export const SignFieldsParamsSchema = z
@@ -21,6 +21,6 @@ export const CreateNullifierParamsSchema = z
 
 export const SignTransactionParamsSchema = z
 	.object({
-		transaction: TransactionBody,
+		transaction: TransactionBodySchema,
 	})
 	.strict();

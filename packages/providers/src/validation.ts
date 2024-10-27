@@ -7,7 +7,7 @@ import {
 	SignedFieldsSchema,
 	SignedMessageSchema,
 	SignedTransactionSchema,
-	TransactionPayload,
+	TransactionPayloadSchema,
 	TransactionReceiptSchema,
 } from "@mina-js/utils";
 import { z } from "zod";
@@ -57,7 +57,7 @@ export const SignFieldsRequestParamsSchema = RequestWithContext.extend({
 }).strict();
 export const SignTransactionRequestParamsSchema = RequestWithContext.extend({
 	method: z.literal("mina_signTransaction"),
-	params: z.array(z.union([TransactionPayload, ZkAppCommandPayload])),
+	params: z.array(z.union([TransactionPayloadSchema, ZkAppCommandPayload])),
 }).strict();
 export const SendTransactionRequestParamsSchema = RequestWithContext.extend({
 	method: z.literal("mina_sendTransaction"),

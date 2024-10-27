@@ -7,7 +7,7 @@ import type {
 	SignTransaction,
 } from "@mina-js/accounts";
 import { createClient } from "@mina-js/klesia-sdk";
-import type { PartiallyFormedTransactionProperties } from "@mina-js/utils";
+import type { PartialTransaction } from "@mina-js/utils";
 import { match } from "ts-pattern";
 import { createStore } from "./store";
 
@@ -117,9 +117,7 @@ export const createWalletClient = ({
 		if (account.type !== "local") throw new Error("Account type not supported");
 		return account.createNullifier(params);
 	};
-	const prepareTransactionRequest = async (
-		transaction: PartiallyFormedTransactionProperties,
-	) => {
+	const prepareTransactionRequest = async (transaction: PartialTransaction) => {
 		let fee = transaction.fee;
 		let nonce = transaction.nonce;
 		if (!nonce) {

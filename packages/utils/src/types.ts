@@ -2,13 +2,14 @@ import type { z } from "zod";
 import type {
 	LiteralSchema,
 	NullifierSchema,
-	PartiallyFormedTransactionPayload,
+	PartialTransactionSchema,
 	PrivateKeySchema,
 	PublicKeySchema,
 	SignedFieldsSchema,
 	SignedMessageSchema,
 	SignedTransactionSchema,
-	TransactionPayload,
+	TransactionBodySchema,
+	TransactionPayloadSchema,
 	TransactionReceiptSchema,
 	ZkAppCommandPayload,
 } from "./validation";
@@ -20,10 +21,9 @@ export type Literal = z.infer<typeof LiteralSchema>;
 export type Json = Literal | { [key: string]: Json } | Json[];
 export type PublicKey = z.infer<typeof PublicKeySchema>;
 export type PrivateKey = z.infer<typeof PrivateKeySchema>;
-export type TransactionProperties = z.infer<typeof TransactionPayload>;
-export type PartiallyFormedTransactionProperties = z.infer<
-	typeof PartiallyFormedTransactionPayload
->;
+export type TransactionBody = z.infer<typeof TransactionBodySchema>;
+export type TransactionPayload = z.infer<typeof TransactionPayloadSchema>;
+export type PartialTransaction = z.infer<typeof PartialTransactionSchema>;
 export type ZkAppCommandProperties = z.infer<typeof ZkAppCommandPayload>;
 
 /**
