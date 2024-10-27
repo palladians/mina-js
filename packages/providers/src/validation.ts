@@ -32,7 +32,7 @@ export const AccountsRequestParamsSchema = z
 		method: z.literal("mina_accounts"),
 	})
 	.strict();
-export const ReqquestAccountsRequestParamsSchema = z
+export const RequestAccountsRequestParamsSchema = z
 	.object({
 		method: z.literal("mina_requestAccounts"),
 	})
@@ -105,6 +105,12 @@ export const GetStateRequestParamsSchema = z
 export const AccountsRequestReturnSchema = z
 	.object({
 		method: z.literal("mina_accounts"),
+		result: z.array(PublicKeySchema),
+	})
+	.strict();
+export const RequestAccountsRequestReturnSchema = z
+	.object({
+		method: z.literal("mina_requestAccounts"),
 		result: z.array(PublicKeySchema),
 	})
 	.strict();
@@ -183,6 +189,7 @@ export const GetStateRequestReturnSchema = z
 
 export const RpcReturnTypesUnion = z.discriminatedUnion("method", [
 	AccountsRequestReturnSchema,
+	RequestAccountsRequestReturnSchema,
 	ChainIdRequestReturnSchema,
 	ChainInformationRequestReturnSchema,
 	GetBalanceRequestReturnSchema,
@@ -199,6 +206,7 @@ export const RpcReturnTypesUnion = z.discriminatedUnion("method", [
 
 export const ProviderRequestParamsUnion = z.discriminatedUnion("method", [
 	AccountsRequestParamsSchema,
+	RequestAccountsRequestParamsSchema,
 	ChainIdRequestParamsSchema,
 	ChainInformationRequestParamsSchema,
 	GetBalanceRequestParamsSchema,
