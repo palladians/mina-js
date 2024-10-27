@@ -37,7 +37,7 @@ export const FeePayerSchema = z
 	})
 	.strict();
 
-export const DelegationPayload = z
+export const TransactionBody = z
 	.object({
 		from: PublicKeySchema,
 		to: PublicKeySchema,
@@ -45,28 +45,15 @@ export const DelegationPayload = z
 		fee: z.coerce.string(),
 		nonce: z.coerce.string(),
 		validUntil: z.coerce.string().optional(),
+		amount: z.coerce.string().optional(),
 	})
 	.strict();
 
-export const TransportableDelegationPayload = z
+export const TransactionPayload = z
 	.object({
-		from: PublicKeySchema,
-		to: PublicKeySchema,
-		memo: z.string().optional(),
-		fee: z.coerce.string(),
-		nonce: z.coerce.string(),
-		validUntil: z.coerce.string().optional(),
+		transaction: TransactionBody,
 	})
 	.strict();
-
-export const TransactionPayload = DelegationPayload.extend({
-	amount: z.coerce.string(),
-}).strict();
-
-export const TransportableTransactionPayload =
-	TransportableDelegationPayload.extend({
-		amount: z.coerce.string(),
-	}).strict();
 
 export const PartiallyFormedTransactionPayload = TransactionPayload.extend({
 	fee: z.coerce.string().optional(),
@@ -125,7 +112,7 @@ export const SignedTransactionSchema = z
 	.object({
 		signature: SignatureSchema,
 		publicKey: PublicKeySchema,
-		data: TransactionPayload,
+		data: TransactionBody,
 	})
 	.strict();
 

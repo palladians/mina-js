@@ -1,8 +1,4 @@
-import {
-	PublicKeySchema,
-	TransportableDelegationPayload,
-	TransportableTransactionPayload,
-} from "@mina-js/utils";
+import { PublicKeySchema, TransactionPayload } from "@mina-js/utils";
 import { z } from "zod";
 import { SendZkappInput } from "./zkapp";
 
@@ -16,11 +12,7 @@ export const SignatureSchema = z.union([
 	z.object({ field: z.string(), scalar: z.string() }),
 ]);
 export const SendTransactionBodySchema = z.object({
-	input: TransportableTransactionPayload,
-	signature: SignatureSchema,
-});
-export const SendDelegationBodySchema = z.object({
-	input: TransportableDelegationPayload,
+	input: TransactionPayload,
 	signature: SignatureSchema,
 });
 export const SendZkAppBodySchema = z.object({
@@ -28,7 +20,6 @@ export const SendZkAppBodySchema = z.object({
 });
 export const SendableSchema = z.union([
 	SendTransactionBodySchema,
-	SendDelegationBodySchema,
 	SendZkAppBodySchema,
 ]);
 export const SendTransactionSchema = z.tuple([

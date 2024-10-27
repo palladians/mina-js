@@ -1,11 +1,6 @@
 import { gql } from "@urql/core";
-import { calculateQuantile } from "bigint-quantile";
 import { match } from "ts-pattern";
-import {
-	SendDelegationBodySchema,
-	SendTransactionBodySchema,
-	SendZkAppBodySchema,
-} from "../schema";
+import { SendTransactionBodySchema, SendZkAppBodySchema } from "../schema";
 import { getNodeClient } from "../utils/node";
 
 export const PRIORITY = {
@@ -113,7 +108,7 @@ const sendTransaction = async ({
 		})
 		.with("delegation", async () => {
 			const { signature, input } =
-				SendDelegationBodySchema.parse(signedTransaction);
+				SendTransactionBodySchema.parse(signedTransaction);
 			const { data } = await client.mutation(
 				gql`
           mutation {
