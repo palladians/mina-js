@@ -112,7 +112,7 @@ export const SignedTransactionSchema = z
 	.object({
 		signature: SignatureSchema,
 		publicKey: PublicKeySchema,
-		data: TransactionBodySchema,
+		data: z.union([TransactionBodySchema, ZkAppCommandPayload]),
 	})
 	.strict();
 
