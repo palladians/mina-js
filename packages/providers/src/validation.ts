@@ -81,7 +81,7 @@ export const SetStateRequestParamsSchema = RequestWithContext.extend({
 }).strict();
 export const GetStateRequestParamsSchema = RequestWithContext.extend({
 	method: z.literal("mina_getState"),
-	params: z.array(z.string()),
+	params: z.array(JsonSchema),
 }).strict();
 
 // Returns
