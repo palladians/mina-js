@@ -13,7 +13,7 @@
 	},
 	"files": ["dist"],
 	"scripts": {
-		"build": "tsup",
+		"build": "tsc --noEmit && tsup",
 		"test": "bun test",
 		"cleanup": "rimraf dist .turbo"
 	},

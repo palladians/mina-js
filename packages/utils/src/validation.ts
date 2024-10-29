@@ -55,15 +55,21 @@ export const TransactionPayloadSchema = z
 	})
 	.strict();
 
-export const PartialTransactionSchema = TransactionPayloadSchema.extend({
+export const PartialTransactionSchema = TransactionBodySchema.extend({
 	fee: z.coerce.string().optional(),
 	nonce: z.coerce.string().optional(),
 });
 
-export const ZkAppCommandPayload = z
+export const ZkAppCommandBodySchema = z
 	.object({
 		zkappCommand: JsonSchema,
 		feePayer: FeePayerSchema,
+	})
+	.strict();
+
+export const ZkAppCommandPayload = z
+	.object({
+		command: ZkAppCommandBodySchema,
 	})
 	.strict();
 
@@ -112,7 +118,7 @@ export const SignedTransactionSchema = z
 	.object({
 		signature: SignatureSchema,
 		publicKey: PublicKeySchema,
-		data: z.union([TransactionBodySchema, ZkAppCommandPayload]),
+		data: z.union([TransactionBodySchema, ZkAppCommandBodySchema]),
 	})
 	.strict();
 
