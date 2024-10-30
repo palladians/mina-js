@@ -30,7 +30,7 @@ export type ProviderRpcEvent =
 	| "disconnect"
 	| "chainChanged"
 	| "accountsChanged"
-	| "mina_message";
+	| "minaMessage";
 
 export type ProviderListener = z.infer<typeof ProviderListenerSchema>;
 

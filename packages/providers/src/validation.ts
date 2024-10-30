@@ -1,4 +1,3 @@
-import { ZkAppCommandPayload } from "@mina-js/utils";
 import { JsonSchema } from "@mina-js/utils";
 import {
 	FieldSchema,
@@ -9,6 +8,7 @@ import {
 	SignedTransactionSchema,
 	TransactionPayloadSchema,
 	TransactionReceiptSchema,
+	ZkAppCommandPayload,
 } from "@mina-js/utils";
 import { z } from "zod";
 
