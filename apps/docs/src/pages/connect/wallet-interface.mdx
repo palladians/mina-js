@@ -68,12 +68,14 @@ const { provider } = store.getProviders()[0]
 const { result } = await provider.request<'mina_signTransaction'>({
   method: 'mina_signTransaction',
   params: [{
-    // You should probably get the right nonce from Klesia for that.
-  	nonce: '1',
-  	from: "B62qmWKtvNQTtUqo1LxfEEDLyWMg59cp6U7c4uDC7aqgaCEijSc3Hx5",
-  	to: "B62qmWKtvNQTtUqo1LxfEEDLyWMg59cp6U7c4uDC7aqgaCEijSc3Hx5",
-  	amount: '3000000000',
-  	fee: '100000000',
+    transaction: {
+      // You should probably get the right nonce from Klesia for that.
+    	nonce: '1',
+    	from: "B62qmWKtvNQTtUqo1LxfEEDLyWMg59cp6U7c4uDC7aqgaCEijSc3Hx5",
+    	to: "B62qmWKtvNQTtUqo1LxfEEDLyWMg59cp6U7c4uDC7aqgaCEijSc3Hx5",
+    	amount: '3000000000',
+    	fee: '100000000',
+    }
   }]
 })
 ```
@@ -88,12 +90,14 @@ const { provider } = store.getProviders()[0]
 const { result } = await provider.request<'mina_signTransaction'>({
   method: 'mina_signTransaction',
   params: [{
-    zkappCommand: {},
-    feePayer: {
-      feePayer: 'B62qmWKtvNQTtUqo1LxfEEDLyWMg59cp6U7c4uDC7aqgaCEijSc3Hx5',
-      fee: '100000000',
-      nonce: '1',
-      memo: 'Hello, Mina!',
+    command: {
+      zkappCommand: {},
+      feePayer: {
+        feePayer: 'B62qmWKtvNQTtUqo1LxfEEDLyWMg59cp6U7c4uDC7aqgaCEijSc3Hx5',
+        fee: '100000000',
+        nonce: '1',
+        memo: 'Hello, Mina!',
+      }
     }
   }]
 })
@@ -108,7 +112,7 @@ const store = createStore()
 const { provider } = store.getProviders()[0]
 const { result } = await provider.request<'mina_signFields'>({
   method: 'mina_signFields',
-  params: [[1n, 2n, 3n]]
+  params: [['1', '2', '3']]
 })
 ```
 
@@ -121,6 +125,6 @@ const store = createStore()
 const { provider } = store.getProviders()[0]
 const { result } = await provider.request<'mina_createNullifier'>({
   method: 'mina_createNullifier',
-  params: [[1n, 2n, 3n]]
+  params: [['1', '2', '3']]
 })
 ```

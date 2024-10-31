@@ -1,4 +1,3 @@
-import "dotenv/config";
 import { getConnInfo } from "@hono/node-server/conninfo";
 import { OpenAPIHono, createRoute } from "@hono/zod-openapi";
 import { PublicKeySchema } from "@mina-js/utils";

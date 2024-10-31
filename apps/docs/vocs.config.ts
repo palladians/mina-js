@@ -90,6 +90,7 @@ export default defineConfig({
 				{ text: "Provider Discovery", link: "/connect/provider-discovery" },
 				{ text: "Wallet Interface", link: "/connect/wallet-interface" },
 				{ text: "Wallet Client", link: "/connect/wallet-client" },
+				{ text: "Test zkApp", link: "/connect/test" },
 			],
 		},
 		{
@@ -110,4 +111,9 @@ export default defineConfig({
 			],
 		},
 	],
+	vite: {
+		define: {
+			"process.env": {},
+		},
+	},
 });
