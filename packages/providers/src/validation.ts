@@ -3,6 +3,7 @@ import {
 	FieldSchema,
 	NullifierSchema,
 	PublicKeySchema,
+	SignatureSchema,
 	SignedFieldsSchema,
 	SignedMessageSchema,
 	SignedTransactionSchema,
@@ -25,6 +26,50 @@ export const AddChainRequestParams = z
 		slug: z.string(),
 	})
 	.strict();
+
+// Private Credentials: Witness Schemas
+
+export const SimpleWitnessSchema = z.object({
+	type: z.literal("simple"),
+	issuer: PublicKeySchema,
+	issuerSignature: SignatureSchema
+  }).strict();
+  
+export const RecursiveWitnessSchema = z.object({
+	type: z.literal("recursive"),
+	vk: z.object({
+	  data: z.string(),
+	  hash: FieldSchema
+	}).strict(),
+	proof: z.object({
+	  publicInput: JsonSchema,
+	  publicOutput: JsonSchema,
+	  maxProofsVerified: z.number(),
+	  proof: z.string()
+	}).strict()
+  }).strict();
+  
+export const UnsignedWitnessSchema = z.object({
+	type: z.literal("unsigned")
+  }).strict();
+  
+export const WitnessSchema = z.discriminatedUnion("type", [
+	SimpleWitnessSchema,
+	RecursiveWitnessSchema,
+	UnsignedWitnessSchema
+  ]);
+
+// Private Credentials: Stored Credential Schema
+
+export const StoredCredentialSchema = z.object({
+	version: z.string(),
+	witness: WitnessSchema,
+	metadata: JsonSchema,
+	credential: z.object({
+	  owner: PublicKeySchema,
+	  data: JsonSchema
+	}).strict()
+  }).strict();
 
 // Params
 export const RequestWithContext = z
@@ -82,6 +127,10 @@ export const SetStateRequestParamsSchema = RequestWithContext.extend({
 export const GetStateRequestParamsSchema = RequestWithContext.extend({
 	method: z.literal("mina_getState"),
 	params: z.array(JsonSchema),
+}).strict();
+export const StorePrivateCredentialRequestParamsSchema = RequestWithContext.extend({
+	method: z.literal("mina_storePrivateCredential"),
+	params: z.array(StoredCredentialSchema)
 }).strict();
 
 // Returns
@@ -169,6 +218,11 @@ export const GetStateRequestReturnSchema = z
 		result: JsonSchema,
 	})
 	.strict();
+export const StorePrivateCredentialReturnSchema = z.object({
+	method: z.literal("mina_storePrivateCredential"),
+	result: z.object({ success: z.boolean() }).strict()
+	})
+	.strict();
 
 export const RpcReturnTypesUnion = z.discriminatedUnion("method", [
 	AccountsRequestReturnSchema,
@@ -185,6 +239,7 @@ export const RpcReturnTypesUnion = z.discriminatedUnion("method", [
 	AddChainRequestReturnSchema,
 	SetStateRequestReturnSchema,
 	GetStateRequestReturnSchema,
+	StorePrivateCredentialReturnSchema,
 ]);
 
 export const ProviderRequestParamsUnion = z.discriminatedUnion("method", [
@@ -202,6 +257,7 @@ export const ProviderRequestParamsUnion = z.discriminatedUnion("method", [
 	AddChainRequestParamsSchema,
 	SetStateRequestParamsSchema,
 	GetStateRequestParamsSchema,
+	StorePrivateCredentialRequestParamsSchema,
 ]);
 export type RpcReturnTypesUnionType = z.infer<typeof RpcReturnTypesUnion>;
 export type ResultType<M extends string> = {
