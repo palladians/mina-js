@@ -1,6 +1,5 @@
-import { PublicKeySchema, TransactionBodySchema } from "@mina-js/utils";
+import { PublicKeySchema } from "@mina-js/utils";
 import { z } from "zod";
-import { SendZkappInput } from "./zkapp";
 
 export const KlesiaNetwork = z.enum(["devnet", "mainnet", "zeko_devnet"]);
 export const PublicKeyParamsSchema = z.array(PublicKeySchema).length(1);
@@ -10,17 +9,6 @@ export const SignatureSchema = z.union([
 		rawSignature: z.string(),
 	}),
 	z.object({ field: z.string(), scalar: z.string() }),
-]);
-export const SendTransactionBodySchema = z.object({
-	input: TransactionBodySchema,
-	signature: SignatureSchema,
-});
-export const SendZkAppBodySchema = z.object({
-	input: SendZkappInput,
-});
-export const SendableSchema = z.union([
-	SendTransactionBodySchema,
-	SendZkAppBodySchema,
 ]);
 export const SendTransactionSchema = z.tuple([
 	z.any(),

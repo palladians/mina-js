@@ -1,8 +1,10 @@
-import { JsonSchema } from "@mina-js/utils";
 import {
 	FieldSchema,
+	JsonSchema,
+	NetworkId,
 	NullifierSchema,
 	PublicKeySchema,
+	SendableSchema,
 	SignedFieldsSchema,
 	SignedMessageSchema,
 	SignedTransactionSchema,
@@ -22,7 +24,7 @@ export const AddChainRequestParams = z
 	.object({
 		url: z.string().url(),
 		name: z.string(),
-		slug: z.string(),
+		slug: NetworkId,
 	})
 	.strict();
 
@@ -61,7 +63,7 @@ export const SignTransactionRequestParamsSchema = RequestWithContext.extend({
 }).strict();
 export const SendTransactionRequestParamsSchema = RequestWithContext.extend({
 	method: z.literal("mina_sendTransaction"),
-	params: z.array(SignedTransactionSchema),
+	params: z.tuple([SendableSchema, z.enum(["payment", "delegation", "zkapp"])]),
 }).strict();
 export const CreateNullifierRequestParamsSchema = RequestWithContext.extend({
 	method: z.literal("mina_createNullifier"),
@@ -100,7 +102,7 @@ export const RequestAccountsRequestReturnSchema = z
 export const ChainIdRequestReturnSchema = z
 	.object({
 		method: z.literal("mina_chainId"),
-		result: z.string(),
+		result: NetworkId,
 	})
 	.strict();
 export const ChainInformationRequestReturnSchema = z

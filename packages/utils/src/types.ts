@@ -5,6 +5,7 @@ import type {
 	PartialTransactionSchema,
 	PrivateKeySchema,
 	PublicKeySchema,
+	SendableSchema,
 	SignedFieldsSchema,
 	SignedMessageSchema,
 	SignedTransactionSchema,
@@ -27,6 +28,7 @@ export type TransactionPayload = z.infer<typeof TransactionPayloadSchema>;
 export type PartialTransaction = z.infer<typeof PartialTransactionSchema>;
 export type ZkAppCommandBody = z.infer<typeof ZkAppCommandBodySchema>;
 export type ZkAppCommandProperties = z.infer<typeof ZkAppCommandPayload>;
+export type Sendable = z.infer<typeof SendableSchema>;
 
 /**
  * Return types

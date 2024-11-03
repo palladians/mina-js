@@ -1,6 +1,10 @@
+import {
+	SendTransactionBodySchema,
+	SendZkAppBodySchema,
+	type Sendable,
+} from "@mina-js/utils";
 import { gql } from "@urql/core";
 import { match } from "ts-pattern";
-import { SendTransactionBodySchema, SendZkAppBodySchema } from "../schema";
 import { getNodeClient } from "../utils/node";
 
 export const PRIORITY = {
@@ -83,8 +87,7 @@ const sendTransaction = async ({
 	signedTransaction,
 	type,
 }: {
-	// biome-ignore lint/suspicious/noExplicitAny: TODO
-	signedTransaction: any;
+	signedTransaction: Sendable;
 	type: "payment" | "delegation" | "zkapp";
 }) => {
 	const client = getNodeClient();

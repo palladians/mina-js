@@ -1,6 +1,8 @@
 import { z } from "zod";
 import type { Json } from "./types";
 
+export const networkPattern = /^[^:]+:[^:]+$/;
+
 /**
  * Data primitive schemas
  */
@@ -26,6 +28,8 @@ export const GroupSchema = z
 export const PublicKeySchema = z.string().length(55).startsWith("B62");
 
 export const PrivateKeySchema = z.string().length(52);
+
+export const NetworkId = z.string().regex(networkPattern);
 
 export const FeePayerSchema = z
 	.object({
@@ -127,3 +131,17 @@ export const TransactionReceiptSchema = z
 		hash: z.string(),
 	})
 	.strict();
+
+export const SendTransactionBodySchema = z.object({
+	input: TransactionBodySchema,
+	signature: SignatureSchema,
+});
+
+export const SendZkAppBodySchema = z.object({
+	input: JsonSchema,
+});
+
+export const SendableSchema = z.union([
+	SendTransactionBodySchema,
+	SendZkAppBodySchema,
+]);

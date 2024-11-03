@@ -6,6 +6,8 @@ To make your zkApp compatible with Mina wallets, we've created a strongly typed 
 
 ### mina_accounts
 
+Get accounts. If not authorized, the response is an empty array.
+
 ```ts twoslash
 import { createStore } from '@mina-js/connect'
 
@@ -14,7 +16,21 @@ const { provider } = store.getProviders()[0]
 const { result } = await provider.request<'mina_accounts'>({ method: 'mina_accounts' })
 ```
 
+### mina_requestAccounts
+
+Acts like `mina_accounts` but with a prompt to authorize in case user didn't authorize yet.
+
+```ts twoslash
+import { createStore } from '@mina-js/connect'
+
+const store = createStore()
+const { provider } = store.getProviders()[0]
+const { result } = await provider.request<'mina_requestAccounts'>({ method: 'mina_requestAccounts' })
+```
+
 ### mina_chainId
+
+Get the chain ID. It's a string that represents the current network. Values are `mina:mainnet` or `mina:testnet`.
 
 ```ts twoslash
 import { createStore } from '@mina-js/connect'
@@ -26,6 +42,8 @@ const { result } = await provider.request<'mina_chainId'>({ method: 'mina_chainI
 
 ### mina_getBalance
 
+Get the balance of the current account. The value is already parsed to Mina units.
+
 ```ts twoslash
 import { createStore } from '@mina-js/connect'
 
@@ -36,12 +54,29 @@ const { result } = await provider.request<'mina_getBalance'>({ method: 'mina_get
 
 ### mina_chainInformation
 
+Get chain information. Similar to `mina_chainId`, but more detailed. It returns current network's RPC url, name, and slug (chain ID).
+
 ```ts twoslash
 import { createStore } from '@mina-js/connect'
 
 const store = createStore()
 const { provider } = store.getProviders()[0]
 const { result } = await provider.request<'mina_chainInformation'>({ method: 'mina_chainInformation' })
+```
+
+### mina_getState
+
+Returns filtered Public Credentials.
+
+```ts twoslash
+import { createStore } from '@mina-js/connect'
+
+const store = createStore()
+const { provider } = store.getProviders()[0]
+const { result } = await provider.request<'mina_getState'>({
+  method: 'mina_getState',
+  params: [{ issuer: "University of Example" }, []],
+})
 ```
 
 ## Commands
@@ -126,5 +161,76 @@ const { provider } = store.getProviders()[0]
 const { result } = await provider.request<'mina_createNullifier'>({
   method: 'mina_createNullifier',
   params: [['1', '2', '3']]
+})
+```
+
+### mina_sendTransaction
+
+Send a signed transaction to the network.
+
+```ts twoslash
+import { createStore } from '@mina-js/connect'
+
+const store = createStore()
+const { provider } = store.getProviders()[0]
+const { result } = await provider.request<'mina_sendTransaction'>({
+  method: 'mina_sendTransaction',
+  params: [{ input: {}, signature: { field: 'xyz', scalar: 'xyz' } }, 'payment']
+})
+```
+
+### mina_setState
+
+Saves a new Public Credential.
+
+```ts twoslash
+import { createStore } from '@mina-js/connect'
+
+const store = createStore()
+const { provider } = store.getProviders()[0]
+const { result } = await provider.request<'mina_setState'>({
+  method: "mina_setState",
+  params: [
+    {
+      objectName: "Pallad Mock Credential",
+      object: {}, // DID Credential with a Kimchi proof
+    },
+  ],
+})
+```
+
+### mina_switchChain
+
+Prompts user to switch to another network. It's useful for dApps that support multiple networks.
+
+```ts twoslash
+import { createStore } from '@mina-js/connect'
+
+const store = createStore()
+const { provider } = store.getProviders()[0]
+await provider.request<'mina_switchChain'>({
+  method: 'mina_switchChain',
+  params: ['mina:mainnet']
+})
+```
+
+### mina_addChain
+
+Prompts user to add a new chain.
+
+```ts twoslash
+import { createStore } from '@mina-js/connect'
+
+const store = createStore()
+const { provider } = store.getProviders()[0]
+await provider.request<'mina_addChain'>({
+  method: 'mina_addChain',
+  params: [
+    {
+      name: 'Mina Fakenet',
+      slug: 'mina:fakenet',
+      url: 'https://fakenet.example.com',
+    }
+  ]
 })
 ```
