@@ -27,49 +27,135 @@ export const AddChainRequestParams = z
 	})
 	.strict();
 
+// Private Credentials: Serialized Schemas
+
+const SerializedValueSchema = z
+	.object({
+		_type: z.string(),
+		value: z.union([z.string(), z.record(z.any())]),
+	})
+	.strict();
+
+const SerializedTypeSchema = z
+	.object({
+		_type: z.string(),
+	})
+	.strict();
+
+const SerializedFieldSchema = z
+	.object({
+		_type: z.literal("Field"),
+		value: z.string(),
+	})
+	.strict();
+
+const SerializedPublicKeySchema = z
+	.object({
+		_type: z.literal("PublicKey"),
+		value: z.string(),
+	})
+	.strict();
+
+const SerializedPublicKeyTypeSchema = z
+	.object({
+		_type: z.literal("PublicKey"),
+	})
+	.strict();
+
+const SerializedSignatureSchema = z
+	.object({
+		_type: z.literal("Signature"),
+		value: z.object({
+			r: z.string(),
+			s: z.string(),
+		}),
+	})
+	.strict();
+
 // Private Credentials: Witness Schemas
 
-export const SimpleWitnessSchema = z.object({
-	type: z.literal("simple"),
-	issuer: PublicKeySchema,
-	issuerSignature: SignatureSchema
-  }).strict();
-  
-export const RecursiveWitnessSchema = z.object({
-	type: z.literal("recursive"),
-	vk: z.object({
-	  data: z.string(),
-	  hash: FieldSchema
-	}).strict(),
-	proof: z.object({
-	  publicInput: JsonSchema,
-	  publicOutput: JsonSchema,
-	  maxProofsVerified: z.number(),
-	  proof: z.string()
-	}).strict()
-  }).strict();
-  
-export const UnsignedWitnessSchema = z.object({
-	type: z.literal("unsigned")
-  }).strict();
-  
-export const WitnessSchema = z.discriminatedUnion("type", [
+const SimpleWitnessSchema = z
+	.object({
+		type: z.literal("simple"),
+		issuer: SerializedPublicKeySchema,
+		issuerSignature: SerializedSignatureSchema,
+	})
+	.strict();
+
+const RecursiveWitnessSchema = z
+	.object({
+		type: z.literal("recursive"),
+		vk: z
+			.object({
+				data: z.string(),
+				hash: SerializedFieldSchema,
+			})
+			.strict(),
+		proof: z
+			.object({
+				_type: z.literal("Proof"),
+				value: z
+					.object({
+						publicInput: JsonSchema,
+						publicOutput: JsonSchema,
+						maxProofsVerified: z.number().min(0).max(2),
+						proof: z.string(),
+					})
+					.strict(),
+			})
+			.strict(),
+	})
+	.strict();
+
+const UnsignedWitnessSchema = z
+	.object({
+		type: z.literal("unsigned"),
+	})
+	.strict();
+
+const WitnessSchema = z.discriminatedUnion("type", [
 	SimpleWitnessSchema,
 	RecursiveWitnessSchema,
-	UnsignedWitnessSchema
-  ]);
+	UnsignedWitnessSchema,
+]);
+
+// Private Credentials: Credential Schemas
+
+const SimpleCredentialSchema = z
+	.object({
+		owner: SerializedPublicKeySchema,
+		data: z.record(SerializedValueSchema),
+	})
+	.strict();
+
+const StructCredentialSchema = z
+	.object({
+		_type: z.literal("Struct"),
+		properties: z
+			.object({
+				owner: SerializedPublicKeyTypeSchema,
+				data: JsonSchema,
+			})
+			.strict(),
+		value: z
+			.object({
+				owner: PublicKeySchema,
+				data: JsonSchema,
+			})
+			.strict(),
+	})
+	.strict();
 
 // Private Credentials: Stored Credential Schema
 
-export const StoredCredentialSchema = z.object({
-	version: z.string(),
-	witness: WitnessSchema,
-	metadata: JsonSchema,
-	credential: z.object({
-	  owner: PublicKeySchema,
-	  data: JsonSchema
-	}).strict()
-  }).strict();
+export const StoredCredentialSchema = z
+	.object({
+		version: z.literal("v0"),
+		witness: WitnessSchema,
+		metadata: JsonSchema.optional(),
+		credential: z.union([SimpleCredentialSchema, StructCredentialSchema]),
+	})
+	.strict();
 
 // Params
 export const RequestWithContext = z
@@ -128,10 +214,11 @@ export const GetStateRequestParamsSchema = RequestWithContext.extend({
 	method: z.literal("mina_getState"),
 	params: z.array(JsonSchema),
 }).strict();
-export const StorePrivateCredentialRequestParamsSchema = RequestWithContext.extend({
-	method: z.literal("mina_storePrivateCredential"),
-	params: z.array(StoredCredentialSchema)
-}).strict();
+export const StorePrivateCredentialRequestParamsSchema =
+	RequestWithContext.extend({
+		method: z.literal("mina_storePrivateCredential"),
+		params: z.array(StoredCredentialSchema),
+	}).strict();
 
 // Returns
 export const AccountsRequestReturnSchema = z
@@ -218,9 +305,10 @@ export const GetStateRequestReturnSchema = z
 		result: JsonSchema,
 	})
 	.strict();
-export const StorePrivateCredentialReturnSchema = z.object({
-	method: z.literal("mina_storePrivateCredential"),
-	result: z.object({ success: z.boolean() }).strict()
+export const StorePrivateCredentialReturnSchema = z
+	.object({
+		method: z.literal("mina_storePrivateCredential"),
+		result: z.object({ success: z.boolean() }).strict(),
 	})
 	.strict();
 
