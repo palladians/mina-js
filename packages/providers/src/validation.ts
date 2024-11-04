@@ -4,12 +4,12 @@ import {
 	NetworkId,
 	NullifierSchema,
 	PublicKeySchema,
-	SendableSchema,
 	SignedFieldsSchema,
 	SignedMessageSchema,
 	SignedTransactionSchema,
 	TransactionPayloadSchema,
 	TransactionReceiptSchema,
+	TypedSendableSchema,
 	ZkAppCommandPayload,
 } from "@mina-js/utils";
 import { z } from "zod";
@@ -63,7 +63,7 @@ export const SignTransactionRequestParamsSchema = RequestWithContext.extend({
 }).strict();
 export const SendTransactionRequestParamsSchema = RequestWithContext.extend({
 	method: z.literal("mina_sendTransaction"),
-	params: z.tuple([SendableSchema, z.enum(["payment", "delegation", "zkapp"])]),
+	params: TypedSendableSchema,
 }).strict();
 export const CreateNullifierRequestParamsSchema = RequestWithContext.extend({
 	method: z.literal("mina_createNullifier"),

@@ -1,8 +1,8 @@
 import {
 	KlesiaNetwork,
-	type RpcRequestType,
-	type RpcResponseType,
-} from "@mina-js/klesia/schema";
+	type KlesiaRpcRequestType,
+	type KlesiaRpcResponseType,
+} from "@mina-js/utils";
 import { ftch, jsonrpc } from "micro-ftch";
 import { match } from "ts-pattern";
 
@@ -25,9 +25,9 @@ export const createClient = ({ network, customUrl }: CreateClientProps) => {
 				)
 				.exhaustive();
 	const rpc = jsonrpc(net, baseUrl);
-	const request = async <T extends string>(req: RpcRequestType) => {
+	const request = async <T extends string>(req: KlesiaRpcRequestType) => {
 		const params = req.params ?? [];
-		const json: Extract<RpcResponseType, { method: T }>["result"] =
+		const json: Extract<KlesiaRpcResponseType, { method: T }>["result"] =
 			await rpc.call(req.method, ...params);
 		return json;
 	};
