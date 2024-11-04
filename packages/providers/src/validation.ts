@@ -31,7 +31,7 @@ export const AddChainRequestParams = z
 const SerializedValueSchema = z
 	.object({
 		_type: z.string(),
-		value: z.union([z.string(), z.record(z.any())]),
+		value: JsonSchema,
 	})
 	.strict();
 
