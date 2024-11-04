@@ -31,7 +31,7 @@ import { createClient } from '@mina-js/klesia-sdk'
 
 const client = createClient({ network: 'devnet' })
 
-const { result } = await client.request<'mina_getTransactionCount'>({
+const result = await client.request<'mina_getTransactionCount'>({
   method: 'mina_getTransactionCount',
   params: ['B62qkYa1o6Mj6uTTjDQCob7FYZspuhkm4RRQhgJg9j4koEBWiSrTQrS']
 })
