@@ -17,11 +17,14 @@ export const createClient = ({ network, customUrl }: CreateClientProps) => {
 	const baseUrl = customUrl
 		? customUrl
 		: match(KlesiaNetwork.parse(network))
-				.with("devnet", () => "https://devnet.klesia.palladians.xyz")
-				.with("mainnet", () => "https://mainnet.klesia.palladians.xyz")
-				.with("zeko_devnet", () => "https://zeko-devnet.klesia.palladians.xyz")
+				.with("devnet", () => "https://devnet.klesia.palladians.xyz/api")
+				.with("mainnet", () => "https://mainnet.klesia.palladians.xyz/api")
+				.with(
+					"zeko_devnet",
+					() => "https://zeko-devnet.klesia.palladians.xyz/api",
+				)
 				.exhaustive();
-	const rpc = jsonrpc(net, `${baseUrl}/api`);
+	const rpc = jsonrpc(net, baseUrl);
 	const request = async <T extends string>(req: RpcRequestType) => {
 		const params = req.params ?? [];
 		const json: Extract<RpcResponseType, { method: T }>["result"] =
