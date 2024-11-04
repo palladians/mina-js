@@ -53,15 +53,15 @@ describe("json-rpc source", () => {
 		expect(BigInt(transactionCount)).toBeGreaterThanOrEqual(0);
 	});
 
-	it("returns chain id", async () => {
+	it("returns network id", async () => {
 		const account = toAccount(PUBLIC_KEY);
 		const client = createWalletClient({
 			account,
 			network: "devnet",
 			providerSource: "klesia",
 		});
-		const chainId = await client.getChainId();
-		expect(chainId.length).toBeGreaterThan(0);
+		const networkId = await client.getNetworkId();
+		expect(networkId.length).toBeGreaterThan(0);
 	});
 });
 

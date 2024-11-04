@@ -1,6 +1,10 @@
+import {
+	SendTransactionBodySchema,
+	SendZkAppBodySchema,
+	type Sendable,
+} from "@mina-js/utils";
 import { gql } from "@urql/core";
 import { match } from "ts-pattern";
-import { SendTransactionBodySchema, SendZkAppBodySchema } from "../schema";
 import { getNodeClient } from "../utils/node";
 
 export const PRIORITY = {
@@ -64,27 +68,24 @@ const blockHash = async () => {
 	return data.daemonStatus.stateHash;
 };
 
-const chainId = async () => {
+const networkId = async () => {
 	const client = getNodeClient();
 	const { data } = await client.query(
 		gql`
       query {
-        daemonStatus {
-          chainId
-        }
+        networkID
       }
     `,
 		{},
 	);
-	return data.daemonStatus.chainId;
+	return data.networkID;
 };
 
 const sendTransaction = async ({
 	signedTransaction,
 	type,
 }: {
-	// biome-ignore lint/suspicious/noExplicitAny: TODO
-	signedTransaction: any;
+	signedTransaction: Sendable;
 	type: "payment" | "delegation" | "zkapp";
 }) => {
 	const client = getNodeClient();
@@ -174,7 +175,7 @@ export const mina = {
 	getTransactionCount,
 	getBalance,
 	blockHash,
-	chainId,
+	networkId,
 	sendTransaction,
 	getAccount,
 };

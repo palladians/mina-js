@@ -7,8 +7,7 @@
 	"exports": {
 		".": {
 			"types": "./dist/index.d.ts",
-			"default": "./dist/index.cjs",
-			"import": "./dist/index.js"
+			"default": "./dist/index.js"
 		}
 	},
 	"files": ["dist"],
@@ -17,9 +16,8 @@
 		"test": "bun test",
 		"cleanup": "rimraf dist .turbo"
 	},
-	"dependencies": {
-		"@mina-js/utils": "workspace:*",
-		"zod": "3.23.8"
+	"devDependencies": {
+		"@mina-js/utils": "workspace:*"
 	},
 	"peerDependencies": {
 		"typescript": "^5.0.0"

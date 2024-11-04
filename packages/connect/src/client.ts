@@ -59,7 +59,7 @@ export const createWalletClient = ({
 			return result;
 		};
 		const getBalanceFromKlesia = async (account: Account) => {
-			const { result } = await klesiaClient.request<"mina_getBalance">({
+			const result = await klesiaClient.request<"mina_getBalance">({
 				method: "mina_getBalance",
 				params: [account.publicKey],
 			});
@@ -75,24 +75,24 @@ export const createWalletClient = ({
 	const getTransactionCount = async () => {
 		if (!account)
 			throw new Error("Account is required to get transaction count");
-		const { result } = await klesiaClient.request<"mina_getTransactionCount">({
+		const result = await klesiaClient.request<"mina_getTransactionCount">({
 			method: "mina_getTransactionCount",
 			params: [account.publicKey],
 		});
 		return result;
 	};
-	const getChainId = async () => {
+	const getNetworkId = async () => {
 		return match(providerSource)
 			.with("klesia", async () => {
-				const { result } = await klesiaClient.request<"mina_chainId">({
-					method: "mina_chainId",
+				const result = await klesiaClient.request<"mina_networkId">({
+					method: "mina_networkId",
 				});
 				return result;
 			})
 			.otherwise(async () => {
 				const provider = getWalletProvider(providerSource);
-				const { result } = await provider.request<"mina_chainId">({
-					method: "mina_chainId",
+				const { result } = await provider.request<"mina_networkId">({
+					method: "mina_networkId",
 				});
 				return result;
 			});
@@ -136,7 +136,7 @@ export const createWalletClient = ({
 		getAccounts,
 		getBalance,
 		getTransactionCount,
-		getChainId,
+		getNetworkId,
 		signTransaction,
 		signMessage,
 		signFields,

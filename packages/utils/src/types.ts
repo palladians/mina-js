@@ -1,10 +1,14 @@
 import type { z } from "zod";
 import type {
+	KlesiaRpcMethod,
+	KlesiaRpcMethodSchema,
+	KlesiaRpcResponseSchema,
 	LiteralSchema,
 	NullifierSchema,
 	PartialTransactionSchema,
 	PrivateKeySchema,
 	PublicKeySchema,
+	SendableSchema,
 	SignedFieldsSchema,
 	SignedMessageSchema,
 	SignedTransactionSchema,
@@ -27,6 +31,7 @@ export type TransactionPayload = z.infer<typeof TransactionPayloadSchema>;
 export type PartialTransaction = z.infer<typeof PartialTransactionSchema>;
 export type ZkAppCommandBody = z.infer<typeof ZkAppCommandBodySchema>;
 export type ZkAppCommandProperties = z.infer<typeof ZkAppCommandPayload>;
+export type Sendable = z.infer<typeof SendableSchema>;
 
 /**
  * Return types
@@ -36,3 +41,10 @@ export type SignedFields = z.infer<typeof SignedFieldsSchema>;
 export type Nullifier = z.infer<typeof NullifierSchema>;
 export type SignedTransaction = z.infer<typeof SignedTransactionSchema>;
 export type TransactionReceipt = z.infer<typeof TransactionReceiptSchema>;
+
+/**
+ * Klesia RPC types
+ */
+export type KlesiaRpcMethodType = z.infer<typeof KlesiaRpcMethod>;
+export type KlesiaRpcRequestType = z.infer<typeof KlesiaRpcMethodSchema>;
+export type KlesiaRpcResponseType = z.infer<typeof KlesiaRpcResponseSchema>;

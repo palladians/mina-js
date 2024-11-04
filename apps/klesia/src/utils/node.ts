@@ -1,7 +1,7 @@
+import { KlesiaNetwork } from "@mina-js/utils";
 import { Client, cacheExchange, fetchExchange } from "@urql/core";
 import { match } from "ts-pattern";
 import { z } from "zod";
-import { KlesiaNetwork } from "../schema";
 
 const MINA_NETWORK = KlesiaNetwork.parse(process.env.MINA_NETWORK ?? "devnet");
 const NODE_API_DEVNET = z

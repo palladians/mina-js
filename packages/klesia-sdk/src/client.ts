@@ -1,53 +1,34 @@
 import {
 	KlesiaNetwork,
-	type KlesiaRpc,
-	type RpcErrorType,
-	type RpcResponseType,
-} from "@mina-js/klesia";
-import { hc } from "hono/client";
+	type KlesiaRpcRequestType,
+	type KlesiaRpcResponseType,
+} from "@mina-js/utils";
+import { ftch, jsonrpc } from "micro-ftch";
 import { match } from "ts-pattern";
+
+const net = ftch(fetch);
 
 type CreateClientProps = {
 	network: "mainnet" | "devnet" | "zeko_devnet";
 	customUrl?: string;
-	throwable?: boolean;
 };
 
-const throwRpcError = ({
-	code,
-	message,
-}: { code: number; message: string }) => {
-	throw new Error(`${code} - ${message}`);
-};
-
-export const createClient = ({
-	network,
-	customUrl,
-	throwable = true,
-}: CreateClientProps) => {
+export const createClient = ({ network, customUrl }: CreateClientProps) => {
 	const baseUrl = customUrl
 		? customUrl
 		: match(KlesiaNetwork.parse(network))
-				.with("devnet", () => "https://devnet.klesia.palladians.xyz")
-				.with("mainnet", () => "https://mainnet.klesia.palladians.xyz")
-				.with("zeko_devnet", () => "https://zeko-devnet.klesia.palladians.xyz")
+				.with("devnet", () => "https://devnet.klesia.palladians.xyz/api")
+				.with("mainnet", () => "https://mainnet.klesia.palladians.xyz/api")
+				.with(
+					"zeko_devnet",
+					() => "https://zeko-devnet.klesia.palladians.xyz/api",
+				)
 				.exhaustive();
-	const baseClient = hc<KlesiaRpc>(baseUrl);
-	const rpcHandler = baseClient.api.$post;
-	type RpcRequest = Parameters<typeof rpcHandler>[0];
-	const request = async <T extends string>(req: RpcRequest["json"]) => {
-		const json = (await (
-			await baseClient.api.$post({ json: req })
-		).json()) as Extract<RpcResponseType, { method: T }> & {
-			error?: RpcErrorType;
-		};
-		if (!throwable) {
-			return json;
-		}
-		if (json?.error) {
-			const { code, message } = json.error;
-			return throwRpcError({ code, message });
-		}
+	const rpc = jsonrpc(net, baseUrl);
+	const request = async <T extends string>(req: KlesiaRpcRequestType) => {
+		const params = req.params ?? [];
+		const json: Extract<KlesiaRpcResponseType, { method: T }>["result"] =
+			await rpc.call(req.method, ...params);
 		return json;
 	};
 	return {

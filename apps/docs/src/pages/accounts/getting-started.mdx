@@ -103,11 +103,11 @@ const account = mnemonicToAccount({ mnemonic: 'your mnemonic here' });
 
 const signedTransaction = await account.signTransaction({
   transaction: {
-  	nonce: 1n,
+  	nonce: "1",
   	from: "B62qmWKtvNQTtUqo1LxfEEDLyWMg59cp6U7c4uDC7aqgaCEijSc3Hx5",
   	to: "B62qmWKtvNQTtUqo1LxfEEDLyWMg59cp6U7c4uDC7aqgaCEijSc3Hx5",
-  	amount: 3000000000n,
-  	fee: 100000000n,
+  	amount: "3000000000",
+  	fee: "100000000",
   }
 });
 ```
@@ -119,7 +119,7 @@ import { mnemonicToAccount } from '@mina-js/accounts'
 
 const account = mnemonicToAccount({ mnemonic: 'your mnemonic here' });
 
-const signedFields = await account.signFields({ fields: [1n, 2n, 3n] });
+const signedFields = await account.signFields({ fields: ["1", "2", "3"] });
 ```
 
 ### Create a nullifier
@@ -129,5 +129,5 @@ import { mnemonicToAccount } from '@mina-js/accounts'
 
 const account = mnemonicToAccount({ mnemonic: 'your mnemonic here' });
 
-const nullifier = await account.createNullifier({ message: [1n, 2n, 3n] });
+const nullifier = await account.createNullifier({ message: ["1", "2", "3"] });
 ```

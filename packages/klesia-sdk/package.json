@@ -7,8 +7,7 @@
 	"exports": {
 		".": {
 			"types": "./dist/index.d.ts",
-			"default": "./dist/index.cjs",
-			"import": "./dist/index.js"
+			"default": "./dist/index.js"
 		}
 	},
 	"files": ["dist"],
@@ -17,14 +16,14 @@
 		"test": "bun test --rerun-each 3",
 		"cleanup": "rimraf dist .turbo"
 	},
-	"devDependencies": {
-		"@mina-js/klesia": "workspace:*"
-	},
 	"peerDependencies": {
 		"typescript": "^5.0.0"
 	},
+	"devDependencies": {
+		"@mina-js/utils": "workspace:*"
+	},
 	"dependencies": {
-		"hono": "^4.5.10",
+		"micro-ftch": "^0.4.0",
 		"ts-pattern": "^5.3.1"
 	}
 }

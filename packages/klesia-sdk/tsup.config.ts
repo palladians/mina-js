@@ -1,3 +1,8 @@
+import { defineConfig } from "tsup";
 import sharedConfig from "../utils/tsup.config";
 
-export default sharedConfig;
+export default defineConfig({
+	...sharedConfig,
+	bundle: true,
+	splitting: false,
+});

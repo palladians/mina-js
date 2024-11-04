@@ -110,9 +110,9 @@ const client = createWalletClient({ account, network: "devnet" });
 const transactionCount = await client.getTransactionCount();
 ```
 
-### Get chain ID
+### Get network ID
 
-Query the chain ID of the network.
+Query the network ID of the network.
 
 ```ts twoslash
 import { toAccount } from "@mina-js/accounts";
@@ -121,7 +121,7 @@ import { createWalletClient } from '@mina-js/connect'
 const account = toAccount('B62qmWKtvNQTtUqo1LxfEEDLyWMg59cp6U7c4uDC7aqgaCEijSc3Hx5');
 const client = createWalletClient({ account, network: "devnet" });
 
-const chainId = await client.getChainId();
+const networkId = await client.getNetworkId();
 ```
 
 ## Wallet commands
@@ -155,11 +155,11 @@ const client = createWalletClient({ account, network: "devnet" });
 
 const signature = await client.signTransaction({
   transaction: {
-  	nonce: 1n,
+  	nonce: "1",
   	from: "B62qmWKtvNQTtUqo1LxfEEDLyWMg59cp6U7c4uDC7aqgaCEijSc3Hx5",
   	to: "B62qmWKtvNQTtUqo1LxfEEDLyWMg59cp6U7c4uDC7aqgaCEijSc3Hx5",
-  	amount: 3000000000n,
-  	fee: 100000000n,
+  	amount: "3000000000",
+  	fee: "100000000",
   }
 })
 ```
@@ -176,7 +176,7 @@ const account = toAccount('B62qmWKtvNQTtUqo1LxfEEDLyWMg59cp6U7c4uDC7aqgaCEijSc3H
 const client = createWalletClient({ account, network: "devnet" });
 
 const signature = await client.signFields({
-  fields: [1n, 2n, 3n]
+  fields: ["1", "2", "3"]
 })
 ```
 
@@ -192,7 +192,7 @@ const account = toAccount('B62qmWKtvNQTtUqo1LxfEEDLyWMg59cp6U7c4uDC7aqgaCEijSc3H
 const client = createWalletClient({ account, network: "devnet" });
 
 const nullifier = await client.createNullifier({
-  message: [1n, 2n, 3n]
+  message: ["1", "2", "3"]
 });
 ```
 
@@ -210,6 +210,6 @@ const client = createWalletClient({ account, network: "devnet" });
 const transactionRequest = await client.prepareTransactionRequest({
   from: "B62qmWKtvNQTtUqo1LxfEEDLyWMg59cp6U7c4uDC7aqgaCEijSc3Hx5",
   to: "B62qmWKtvNQTtUqo1LxfEEDLyWMg59cp6U7c4uDC7aqgaCEijSc3Hx5",
-  amount: 3000000000n,
+  amount: "3000000000",
 })
 ```
