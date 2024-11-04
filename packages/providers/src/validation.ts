@@ -37,11 +37,11 @@ const SerializedValueSchema = z
 	})
 	.strict();
 
-const SerializedTypeSchema = z
-	.object({
-		_type: z.string(),
-	})
-	.strict();
+// const SerializedTypeSchema = z
+// 	.object({
+// 		_type: z.string(),
+// 	})
+// 	.strict();
 
 const SerializedFieldSchema = z
 	.object({
