@@ -23,7 +23,7 @@
 		"typescript": "^5.0.0"
 	},
 	"dependencies": {
-		"hono": "^4.5.10",
+		"micro-ftch": "^0.4.0",
 		"ts-pattern": "^5.3.1"
 	}
 }

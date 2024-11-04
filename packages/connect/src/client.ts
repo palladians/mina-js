@@ -59,7 +59,7 @@ export const createWalletClient = ({
 			return result;
 		};
 		const getBalanceFromKlesia = async (account: Account) => {
-			const { result } = await klesiaClient.request<"mina_getBalance">({
+			const result = await klesiaClient.request<"mina_getBalance">({
 				method: "mina_getBalance",
 				params: [account.publicKey],
 			});
@@ -75,7 +75,7 @@ export const createWalletClient = ({
 	const getTransactionCount = async () => {
 		if (!account)
 			throw new Error("Account is required to get transaction count");
-		const { result } = await klesiaClient.request<"mina_getTransactionCount">({
+		const result = await klesiaClient.request<"mina_getTransactionCount">({
 			method: "mina_getTransactionCount",
 			params: [account.publicKey],
 		});
@@ -84,7 +84,7 @@ export const createWalletClient = ({
 	const getChainId = async () => {
 		return match(providerSource)
 			.with("klesia", async () => {
-				const { result } = await klesiaClient.request<"mina_chainId">({
+				const result = await klesiaClient.request<"mina_chainId">({
 					method: "mina_chainId",
 				});
 				return result;

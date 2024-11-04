@@ -52,6 +52,8 @@ export const RpcMethodSchema = z.discriminatedUnion("method", [
 	}),
 ]);
 
+export type RpcRequestType = z.infer<typeof RpcMethodSchema>;
+
 export const JsonRpcResponse = z.object({
 	jsonrpc: z.literal("2.0"),
 });
