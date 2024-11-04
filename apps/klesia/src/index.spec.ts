@@ -35,9 +35,9 @@ describe("Mina Devnet RPC", () => {
 		expect(result.length).toBeGreaterThan(0);
 	});
 
-	it("returns result for mina_chainId", async () => {
+	it("returns result for mina_networkId", async () => {
 		const response = await request({
-			json: { method: "mina_chainId" },
+			json: { method: "mina_networkId" },
 		});
 		const { result } = (await response.json()) as { result: string };
 		expect(result.length).toBeGreaterThan(0);

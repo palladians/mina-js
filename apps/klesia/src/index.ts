@@ -103,8 +103,8 @@ export const klesiaRpcRoute = api.openapi(rpcRoute, async ({ req, json }) => {
 			const result = await mina.blockHash();
 			return json(buildResponse({ result }), 200);
 		})
-		.with({ method: KlesiaRpcMethod.enum.mina_chainId }, async () => {
-			const result = await mina.chainId();
+		.with({ method: KlesiaRpcMethod.enum.mina_networkId }, async () => {
+			const result = await mina.networkId();
 			return json(buildResponse({ result }), 200);
 		})
 		.with(

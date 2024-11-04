@@ -81,18 +81,18 @@ export const createWalletClient = ({
 		});
 		return result;
 	};
-	const getChainId = async () => {
+	const getNetworkId = async () => {
 		return match(providerSource)
 			.with("klesia", async () => {
-				const result = await klesiaClient.request<"mina_chainId">({
-					method: "mina_chainId",
+				const result = await klesiaClient.request<"mina_networkId">({
+					method: "mina_networkId",
 				});
 				return result;
 			})
 			.otherwise(async () => {
 				const provider = getWalletProvider(providerSource);
-				const { result } = await provider.request<"mina_chainId">({
-					method: "mina_chainId",
+				const { result } = await provider.request<"mina_networkId">({
+					method: "mina_networkId",
 				});
 				return result;
 			});
@@ -136,7 +136,7 @@ export const createWalletClient = ({
 		getAccounts,
 		getBalance,
 		getTransactionCount,
-		getChainId,
+		getNetworkId,
 		signTransaction,
 		signMessage,
 		signFields,

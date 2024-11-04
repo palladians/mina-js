@@ -157,7 +157,7 @@ export const KlesiaRpcMethod = z.enum([
 	"mina_getTransactionCount",
 	"mina_getBalance",
 	"mina_blockHash",
-	"mina_chainId",
+	"mina_networkId",
 	"mina_sendTransaction",
 	"mina_getAccount",
 ]);
@@ -180,7 +180,7 @@ export const KlesiaRpcMethodSchema = z.discriminatedUnion("method", [
 		params: EmptyParamsSchema,
 	}),
 	z.object({
-		method: z.literal(KlesiaRpcMethod.enum.mina_chainId),
+		method: z.literal(KlesiaRpcMethod.enum.mina_networkId),
 		params: EmptyParamsSchema,
 	}),
 	z.object({
@@ -223,7 +223,7 @@ export const KlesiaRpcResponseSchema = z.union([
 			result: z.string(),
 		}),
 		JsonRpcResponse.extend({
-			method: z.literal(KlesiaRpcMethod.enum.mina_chainId),
+			method: z.literal(KlesiaRpcMethod.enum.mina_networkId),
 			result: z.string(),
 		}),
 		JsonRpcResponse.extend({

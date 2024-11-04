@@ -16,7 +16,7 @@ import { z } from "zod";
 
 export const SwitchChainRequestParams = z
 	.object({
-		chainId: z.string(),
+		networkId: z.string(),
 	})
 	.strict();
 
@@ -40,11 +40,11 @@ export const AccountsRequestParamsSchema = RequestWithContext.extend({
 export const RequestAccountsRequestParamsSchema = RequestWithContext.extend({
 	method: z.literal("mina_requestAccounts"),
 }).strict();
-export const ChainIdRequestParamsSchema = RequestWithContext.extend({
-	method: z.literal("mina_chainId"),
+export const NetworkIdRequestParamsSchema = RequestWithContext.extend({
+	method: z.literal("mina_networkId"),
 }).strict();
 export const ChainInformationRequestParamsSchema = RequestWithContext.extend({
-	method: z.literal("mina_chainInformation"),
+	method: z.literal("mina_requestNetwork"),
 }).strict();
 export const GetBalanceRequestParamsSchema = RequestWithContext.extend({
 	method: z.literal("mina_getBalance"),
@@ -99,15 +99,15 @@ export const RequestAccountsRequestReturnSchema = z
 		result: z.array(PublicKeySchema),
 	})
 	.strict();
-export const ChainIdRequestReturnSchema = z
+export const NetworkIdRequestReturnSchema = z
 	.object({
-		method: z.literal("mina_chainId"),
+		method: z.literal("mina_networkId"),
 		result: NetworkId,
 	})
 	.strict();
 export const ChainInformationRequestReturnSchema = z
 	.object({
-		method: z.literal("mina_chainInformation"),
+		method: z.literal("mina_requestNetwork"),
 		result: AddChainRequestParams,
 	})
 	.strict();
@@ -175,7 +175,7 @@ export const GetStateRequestReturnSchema = z
 export const RpcReturnTypesUnion = z.discriminatedUnion("method", [
 	AccountsRequestReturnSchema,
 	RequestAccountsRequestReturnSchema,
-	ChainIdRequestReturnSchema,
+	NetworkIdRequestReturnSchema,
 	ChainInformationRequestReturnSchema,
 	GetBalanceRequestReturnSchema,
 	SignRequestReturnSchema,
@@ -192,7 +192,7 @@ export const RpcReturnTypesUnion = z.discriminatedUnion("method", [
 export const ProviderRequestParamsUnion = z.discriminatedUnion("method", [
 	AccountsRequestParamsSchema,
 	RequestAccountsRequestParamsSchema,
-	ChainIdRequestParamsSchema,
+	NetworkIdRequestParamsSchema,
 	ChainInformationRequestParamsSchema,
 	GetBalanceRequestParamsSchema,
 	SignRequestParamsSchema,
@@ -211,15 +211,15 @@ export type ResultType<M extends string> = {
 	result: Extract<RpcReturnTypesUnionType, { method: M }>["result"];
 };
 
-export const ChainIdCallbackSchema = z
+export const NetworkIdCallbackSchema = z
 	.function()
-	.args(z.object({ chainId: z.string() }))
+	.args(z.object({ networkId: z.string() }))
 	.returns(z.void());
 
 // TODO: Add missing deconstruction types to listeners
 export const ConnectedListenerSchema = z
 	.function()
-	.args(z.literal("connected"), ChainIdCallbackSchema)
+	.args(z.literal("connected"), NetworkIdCallbackSchema)
 	.returns(z.void());
 export const DisconnectedListenerSchema = z
 	.function()
@@ -227,7 +227,7 @@ export const DisconnectedListenerSchema = z
 	.returns(z.void());
 export const ChainChangedListenerSchema = z
 	.function()
-	.args(z.literal("chainChanged"), ChainIdCallbackSchema)
+	.args(z.literal("chainChanged"), NetworkIdCallbackSchema)
 	.returns(z.void());
 export const AccountsChangedListenerSchema = z
 	.function()

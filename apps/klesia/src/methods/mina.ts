@@ -68,19 +68,17 @@ const blockHash = async () => {
 	return data.daemonStatus.stateHash;
 };
 
-const chainId = async () => {
+const networkId = async () => {
 	const client = getNodeClient();
 	const { data } = await client.query(
 		gql`
       query {
-        daemonStatus {
-          chainId
-        }
+        networkID
       }
     `,
 		{},
 	);
-	return data.daemonStatus.chainId;
+	return data.networkID;
 };
 
 const sendTransaction = async ({
@@ -177,7 +175,7 @@ export const mina = {
 	getTransactionCount,
 	getBalance,
 	blockHash,
-	chainId,
+	networkId,
 	sendTransaction,
 	getAccount,
 };

@@ -28,16 +28,16 @@ const { provider } = store.getProviders()[0]
 const { result } = await provider.request<'mina_requestAccounts'>({ method: 'mina_requestAccounts' })
 ```
 
-### mina_chainId
+### mina_networkId
 
-Get the chain ID. It's a string that represents the current network. Values are `mina:mainnet` or `mina:testnet`.
+Get the network ID. It's a string that represents the current network. Values are `mina:mainnet` or `mina:testnet`.
 
 ```ts twoslash
 import { createStore } from '@mina-js/connect'
 
 const store = createStore()
 const { provider } = store.getProviders()[0]
-const { result } = await provider.request<'mina_chainId'>({ method: 'mina_chainId' })
+const { result } = await provider.request<'mina_networkId'>({ method: 'mina_networkId' })
 ```
 
 ### mina_getBalance
@@ -52,16 +52,16 @@ const { provider } = store.getProviders()[0]
 const { result } = await provider.request<'mina_getBalance'>({ method: 'mina_getBalance' })
 ```
 
-### mina_chainInformation
+### mina_requestNetwork
 
-Get chain information. Similar to `mina_chainId`, but more detailed. It returns current network's RPC url, name, and slug (chain ID).
+Get network information. Similar to `mina_networkId`, but more detailed. It returns current network's RPC url, name, and slug (network ID).
 
 ```ts twoslash
 import { createStore } from '@mina-js/connect'
 
 const store = createStore()
 const { provider } = store.getProviders()[0]
-const { result } = await provider.request<'mina_chainInformation'>({ method: 'mina_chainInformation' })
+const { result } = await provider.request<'mina_requestNetwork'>({ method: 'mina_requestNetwork' })
 ```
 
 ### mina_getState

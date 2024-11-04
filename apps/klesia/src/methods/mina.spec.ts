@@ -18,8 +18,8 @@ it("should return block hash", async () => {
 	expect(result.length).toBeGreaterThan(0);
 });
 
-it("should return chain id", async () => {
-	const result = await mina.chainId();
+it("should return network id", async () => {
+	const result = await mina.networkId();
 	expect(result.length).toBeGreaterThan(0);
 });
 

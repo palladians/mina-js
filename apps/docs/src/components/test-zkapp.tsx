@@ -21,7 +21,7 @@ export const TestZkApp = () => {
 	});
 	const [results, setResults] = useObjectState({
 		mina_accounts: "",
-		mina_chainId: "",
+		mina_networkId: "",
 		mina_getBalance: "",
 		mina_sign: "",
 		mina_signFields: "",
@@ -45,12 +45,12 @@ export const TestZkApp = () => {
 		});
 		setResults(() => ({ mina_accounts: JSON.stringify(result) }));
 	};
-	const fetchChainId = async () => {
+	const fetchNetworkId = async () => {
 		if (!provider) return;
 		const { result } = await provider.request({
-			method: "mina_chainId",
+			method: "mina_networkId",
 		});
-		setResults(() => ({ mina_chainId: result }));
+		setResults(() => ({ mina_networkId: result }));
 	};
 	const fetchBalance = async () => {
 		if (!provider) return;
@@ -201,18 +201,18 @@ export const TestZkApp = () => {
 								Request Accounts
 							</button>
 						</div>
-						<label>mina_chainId</label>
+						<label>mina_networkId</label>
 						<div className="flex justify-between items-center gap-4">
 							<input
-								value={results.mina_chainId}
+								value={results.mina_networkId}
 								className="input input-bordered flex-1"
 							/>
 							<button
 								type="button"
 								className="btn btn-primary"
-								onClick={fetchChainId}
+								onClick={fetchNetworkId}
 							>
-								Get Chain ID
+								Get Network ID
 							</button>
 						</div>
 						<label>mina_getBalance</label>
