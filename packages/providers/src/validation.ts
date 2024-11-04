@@ -3,7 +3,6 @@ import {
 	FieldSchema,
 	NullifierSchema,
 	PublicKeySchema,
-	SignatureSchema,
 	SignedFieldsSchema,
 	SignedMessageSchema,
 	SignedTransactionSchema,
