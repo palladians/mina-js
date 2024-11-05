@@ -40,6 +40,7 @@ interface ProofType {
 
 interface SerializedType {
 	_type?: string;
+	// TODO: update based on mina-credentials
 	type?: "Constant";
 	value?: string;
 	size?: number;
