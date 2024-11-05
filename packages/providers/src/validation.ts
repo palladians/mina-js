@@ -28,20 +28,89 @@ export const AddChainRequestParams = z
 	})
 	.strict();
 
-// Private Credentials: Serialized Schemas
+// TODO: Should probably move these validations to a separate file
+
+interface ProofType {
+	name: string;
+	publicInput: SerializedType;
+	publicOutput: SerializedType;
+	maxProofsVerified: number;
+	featureFlags: Record<string, unknown>;
+}
+
+interface SerializedType {
+	_type?: string;
+	type?: "Constant";
+	value?: string;
+	size?: number;
+	proof?: ProofType;
+	innerType?: SerializedType;
+	[key: string]: SerializedType | string | number | ProofType | undefined;
+}
+
+// Private Credentials: Serialized Type and Value Schemas
 
 const SerializedValueSchema = z
 	.object({
 		_type: z.string(),
 		value: JsonSchema,
+		properties: z.record(z.any()).optional(),
 	})
 	.strict();
 
-// const SerializedTypeSchema = z
-// 	.object({
-// 		_type: z.string(),
-// 	})
-// 	.strict();
+const ProofTypeSchema: z.ZodType<ProofType> = z.lazy(() =>
+	z
+		.object({
+			name: z.string(),
+			publicInput: SerializedTypeSchema,
+			publicOutput: SerializedTypeSchema,
+			maxProofsVerified: z.number(),
+			featureFlags: z.record(z.any()),
+		})
+		.strict(),
+);
+
+const SerializedTypeSchema: z.ZodType<SerializedType> = z.lazy(() =>
+	z.union([
+		// Basic type
+		z
+			.object({
+				_type: z.string(),
+			})
+			.strict(),
+		// Constant type
+		z
+			.object({
+				type: z.literal("Constant"),
+				value: z.string(),
+			})
+			.strict(),
+		// Bytes type
+		z
+			.object({
+				_type: z.literal("Bytes"),
+				size: z.number(),
+			})
+			.strict(),
+		// Proof type
+		z
+			.object({
+				_type: z.literal("Proof"),
+				proof: ProofTypeSchema,
+			})
+			.strict(),
+		// Array type
+		z
+			.object({
+				_type: z.literal("Array"),
+				innerType: SerializedTypeSchema,
+				size: z.number(),
+			})
+			.strict(),
+		// Allow records of nested types for Struct
+		z.record(SerializedTypeSchema),
+	]),
+);
 
 const SerializedFieldSchema = z
 	.object({
@@ -70,6 +139,257 @@ const SerializedSignatureSchema = z
 			r: z.string(),
 			s: z.string(),
 		}),
+	})
+	.strict();
+
+// Private Credentials: Node schemas
+
+type Node =
+	| { type: "owner" }
+	| { type: "issuer"; credentialKey: string }
+	| { type: "constant"; data: z.infer<typeof SerializedValueSchema> }
+	| { type: "root" }
+	| { type: "property"; key: string; inner: Node }
+	| { type: "record"; data: Record<string, Node> }
+	| { type: "equals"; left: Node; right: Node }
+	| { type: "equalsOneOf"; input: Node; options: Node[] | Node }
+	| { type: "lessThan"; left: Node; right: Node }
+	| { type: "lessThanEq"; left: Node; right: Node }
+	| { type: "add"; left: Node; right: Node }
+	| { type: "sub"; left: Node; right: Node }
+	| { type: "mul"; left: Node; right: Node }
+	| { type: "div"; left: Node; right: Node }
+	| { type: "and"; inputs: Node[] }
+	| { type: "or"; left: Node; right: Node }
+	| { type: "not"; inner: Node }
+	| { type: "hash"; inputs: Node[]; prefix?: string | null }
+	| { type: "ifThenElse"; condition: Node; thenNode: Node; elseNode: Node };
+
+const NodeSchema: z.ZodType<Node> = z.lazy(() =>
+	z.discriminatedUnion("type", [
+		z
+			.object({
+				type: z.literal("owner"),
+			})
+			.strict(),
+
+		z
+			.object({
+				type: z.literal("issuer"),
+				credentialKey: z.string(),
+			})
+			.strict(),
+
+		z
+			.object({
+				type: z.literal("constant"),
+				data: SerializedValueSchema,
+			})
+			.strict(),
+
+		z
+			.object({
+				type: z.literal("root"),
+			})
+			.strict(),
+
+		z
+			.object({
+				type: z.literal("property"),
+				key: z.string(),
+				inner: NodeSchema,
+			})
+			.strict(),
+
+		z
+			.object({
+				type: z.literal("record"),
+				data: z.record(NodeSchema),
+			})
+			.strict(),
+
+		z
+			.object({
+				type: z.literal("equals"),
+				left: NodeSchema,
+				right: NodeSchema,
+			})
+			.strict(),
+
+		z
+			.object({
+				type: z.literal("equalsOneOf"),
+				input: NodeSchema,
+				options: z.union([
+					z.array(NodeSchema), // For array of nodes case
+					NodeSchema,
+				]),
+			})
+			.strict(),
+
+		z
+			.object({
+				type: z.literal("lessThan"),
+				left: NodeSchema,
+				right: NodeSchema,
+			})
+			.strict(),
+
+		z
+			.object({
+				type: z.literal("lessThanEq"),
+				left: NodeSchema,
+				right: NodeSchema,
+			})
+			.strict(),
+
+		z
+			.object({
+				type: z.literal("add"),
+				left: NodeSchema,
+				right: NodeSchema,
+			})
+			.strict(),
+
+		z
+			.object({
+				type: z.literal("sub"),
+				left: NodeSchema,
+				right: NodeSchema,
+			})
+			.strict(),
+
+		z
+			.object({
+				type: z.literal("mul"),
+				left: NodeSchema,
+				right: NodeSchema,
+			})
+			.strict(),
+
+		z
+			.object({
+				type: z.literal("div"),
+				left: NodeSchema,
+				right: NodeSchema,
+			})
+			.strict(),
+
+		z
+			.object({
+				type: z.literal("and"),
+				inputs: z.array(NodeSchema),
+			})
+			.strict(),
+
+		z
+			.object({
+				type: z.literal("or"),
+				left: NodeSchema,
+				right: NodeSchema,
+			})
+			.strict(),
+
+		z
+			.object({
+				type: z.literal("not"),
+				inner: NodeSchema,
+			})
+			.strict(),
+
+		z
+			.object({
+				type: z.literal("hash"),
+				inputs: z.array(NodeSchema),
+				prefix: z.union([z.string(), z.null()]).optional(),
+			})
+			.strict(),
+
+		z
+			.object({
+				type: z.literal("ifThenElse"),
+				condition: NodeSchema,
+				thenNode: NodeSchema,
+				elseNode: NodeSchema,
+			})
+			.strict(),
+	]),
+);
+
+// Private Credentials: Input Schema
+
+const InputSchema = z.discriminatedUnion("type", [
+	z
+		.object({
+			type: z.literal("credential"),
+			credentialType: z.union([
+				z.literal("simple"),
+				z.literal("unsigned"),
+				z.literal("recursive"),
+			]),
+			witness: z.union([z.record(SerializedTypeSchema), SerializedTypeSchema]),
+			data: z.union([z.record(SerializedTypeSchema), SerializedTypeSchema]),
+		})
+		.strict(),
+
+	z
+		.object({
+			type: z.literal("constant"),
+			data: SerializedTypeSchema,
+			value: z.union([z.string(), z.record(z.string())]),
+		})
+		.strict(),
+
+	z
+		.object({
+			type: z.literal("claim"),
+			data: z.union([z.record(SerializedTypeSchema), SerializedTypeSchema]),
+		})
+		.strict(),
+]);
+
+// Private Credentials: Context schemas
+
+const HttpsContextSchema = z
+	.object({
+		type: z.literal("https"),
+		action: z.string(),
+		serverNonce: SerializedFieldSchema,
+	})
+	.strict();
+
+const ZkAppContextSchema = z
+	.object({
+		type: z.literal("zk-app"),
+		action: SerializedFieldSchema,
+		serverNonce: SerializedFieldSchema,
+	})
+	.strict();
+
+const ContextSchema = z.union([HttpsContextSchema, ZkAppContextSchema]);
+
+// Private Credentials: PresentationRequestSchema
+
+export const PresentationRequestSchema = z
+	.object({
+		type: z.union([
+			z.literal("no-context"),
+			z.literal("zk-app"),
+			z.literal("https"),
+		]),
+		spec: z
+			.object({
+				inputs: z.record(InputSchema),
+				logic: z
+					.object({
+						assert: NodeSchema,
+						outputClaim: NodeSchema,
+					})
+					.strict(),
+			})
+			.strict(),
+		claims: z.record(SerializedValueSchema),
+		inputContext: z.union([ContextSchema, z.null()]),
 	})
 	.strict();
 
