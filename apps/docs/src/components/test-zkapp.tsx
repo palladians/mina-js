@@ -4,6 +4,12 @@ import { clsx } from "clsx";
 import { useState, useSyncExternalStore } from "react";
 import bs58 from 'bs58';
 
+enum TransactionType {
+	PAYMENT = "payment",
+	DELEGATION = "delegation",
+	ZKAPP = "zkapp"
+}
+
 function bytesToHex(bytes: Uint8Array): string {
 	return Array.from(bytes)
 		.map((byte) => byte.toString(16).padStart(2, '0'))
@@ -44,6 +50,7 @@ export const TestZkApp = () => {
 	);
 	const [message, setMessage] = useState("A message to sign");
 	const [fields, setFields] = useState('["1", "2", "3"]');
+	const [transactionType, setTransactionType] = useState(TransactionType.PAYMENT)
 	const [transactionBody, setTransactionBody] = useObjectState({
 		to: "B62qnVUL6A53E4ZaGd3qbTr6RCtEZYTu3kTijVrrquNpPo4d3MuJ3nb",
 		amount: "3000000000",
@@ -139,6 +146,7 @@ export const TestZkApp = () => {
 		setResults(() => ({
 			mina_signTransaction: JSON.stringify(result, undefined, "\t"),
 		}));
+		setTransactionType(TransactionType.PAYMENT);
 	};
 	const signZkAppCommand = async () => {
 		if (!provider) return;
@@ -173,22 +181,24 @@ export const TestZkApp = () => {
 		setResults(() => ({
 			mina_signTransaction: JSON.stringify(result, undefined, "\t"),
 		}));
+		setTransactionType(TransactionType.ZKAPP);
 	};
 	const sendTransaction = async () => {
 		if (!provider) return;
 		if (!results.mina_signTransaction) return;
 		const signedTransaction = JSON.parse(results.mina_signTransaction)
-		const { result } = await provider.request({
-			method: "mina_sendTransaction",
-			params: [{
-				...signedTransaction,
-				signature: typeof signedTransaction.signature === "string" ?
-					convertSignature(signedTransaction.signature) : signedTransaction.signature
-			}],
-		});
-		setResults(() => ({
-			mina_sendTransaction: JSON.stringify(result, undefined, "\t"),
-		}));
+		if (transactionType === TransactionType.PAYMENT) {
+			const { result } = await provider.request({
+				method: "mina_sendTransaction",
+				params: [{
+					input: signedTransaction.data,
+					signature: signedTransaction.signature
+				}, "payment"],
+			});
+			setResults(() => ({
+				mina_sendTransaction: JSON.stringify(result, undefined, "\t"),
+			}));
+		}
 	};
 	const switchChain = async (networkId: string) => {
 		if (!provider) return;
