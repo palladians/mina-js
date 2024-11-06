@@ -26,6 +26,7 @@ export const TestZkApp = () => {
 		mina_sign: "",
 		mina_signFields: "",
 		mina_signTransaction: "",
+		mina_switchChain: "",
 	});
 	const providers = useSyncExternalStore(store.subscribe, store.getProviders);
 	const provider = providers.find(
@@ -140,6 +141,14 @@ export const TestZkApp = () => {
 			mina_signTransaction: JSON.stringify(result, undefined, "\t"),
 		}));
 	};
+	const switchChain = async (networkId: string) => {
+		if (!provider) return;
+		const { result } = await provider.request({
+			method: "mina_switchChain",
+			params: [networkId],
+		});
+		setResults(() => ({ mina_switchChain: result }));
+	};
 	return (
 		<main className="flex flex-col gap-8">
 			<h1 className="text-3xl font-bold">Test zkApp</h1>
@@ -201,6 +210,27 @@ export const TestZkApp = () => {
 								Request Accounts
 							</button>
 						</div>
+						<label>mina_getBalance</label>
+						<div className="flex justify-between items-center gap-4">
+							<input
+								value={results.mina_getBalance}
+								className="input input-bordered flex-1"
+							/>
+							<button
+								type="button"
+								className="btn btn-primary"
+								onClick={fetchBalance}
+							>
+								Get Balance
+							</button>
+						</div>
+					</div>
+				</div>
+			</section>
+			<section className="card bg-neutral">
+				<div className="card-body gap-4">
+					<h2 className="card-title">Network</h2>
+					<div className="flex flex-col gap-2">
 						<label>mina_networkId</label>
 						<div className="flex justify-between items-center gap-4">
 							<input
@@ -215,18 +245,21 @@ export const TestZkApp = () => {
 								Get Network ID
 							</button>
 						</div>
-						<label>mina_getBalance</label>
-						<div className="flex justify-between items-center gap-4">
-							<input
-								value={results.mina_getBalance}
-								className="input input-bordered flex-1"
-							/>
+						<label>mina_switchChain</label>
+						<div className="flex items-center gap-4">
 							<button
 								type="button"
 								className="btn btn-primary"
-								onClick={fetchBalance}
+								onClick={() => switchChain("mina:devnet")}
 							>
-								Get Balance
+								Switch to Devnet
+							</button>
+							<button
+								type="button"
+								className="btn btn-primary"
+								onClick={() => switchChain("mina:mainnet")}
+							>
+								Switch to Mainnet
 							</button>
 						</div>
 					</div>
