@@ -2,6 +2,44 @@ import { createStore } from "@mina-js/connect";
 import { useLocalStorage, useObjectState } from "@uidotdev/usehooks";
 import { clsx } from "clsx";
 import { useState, useSyncExternalStore } from "react";
+import bs58 from 'bs58';
+
+enum TransactionType {
+	PAYMENT = "payment",
+	DELEGATION = "delegation",
+	ZKAPP = "zkapp"
+}
+
+function bytesToHex(bytes: Uint8Array): string {
+	return Array.from(bytes)
+		.map((byte) => byte.toString(16).padStart(2, '0'))
+		.join('');
+}
+
+function convertSignature(signature: string): { field: string; scalar: string } {
+	// Decode the base58-encoded signature into bytes
+	const bytes = bs58.decode(signature);
+
+	// Ensure the byte array can be split into two equal parts
+	if (bytes.length % 2 !== 0) {
+		throw new Error('Invalid signature length.');
+	}
+
+	const half = bytes.length / 2;
+	const fieldBytes = bytes.slice(0, half);
+	const scalarBytes = bytes.slice(half);
+
+	// Convert bytes to hexadecimal strings
+	const fieldHex = bytesToHex(fieldBytes);
+	const scalarHex = bytesToHex(scalarBytes);
+
+	// Convert hexadecimal strings to decimal strings
+	const field = BigInt('0x' + fieldHex).toString(10);
+	const scalar = BigInt('0x' + scalarHex).toString(10);
+
+	// Return the signature object
+	return { field, scalar };
+}
 
 const store = createStore();
 
@@ -12,6 +50,7 @@ export const TestZkApp = () => {
 	);
 	const [message, setMessage] = useState("A message to sign");
 	const [fields, setFields] = useState('["1", "2", "3"]');
+	const [transactionType, setTransactionType] = useState(TransactionType.PAYMENT)
 	const [transactionBody, setTransactionBody] = useObjectState({
 		to: "B62qnVUL6A53E4ZaGd3qbTr6RCtEZYTu3kTijVrrquNpPo4d3MuJ3nb",
 		amount: "3000000000",
@@ -27,6 +66,7 @@ export const TestZkApp = () => {
 		mina_signFields: "",
 		mina_signTransaction: "",
 		mina_switchChain: "",
+		mina_sendTransaction: ""
 	});
 	const providers = useSyncExternalStore(store.subscribe, store.getProviders);
 	const provider = providers.find(
@@ -106,6 +146,7 @@ export const TestZkApp = () => {
 		setResults(() => ({
 			mina_signTransaction: JSON.stringify(result, undefined, "\t"),
 		}));
+		setTransactionType(TransactionType.PAYMENT);
 	};
 	const signZkAppCommand = async () => {
 		if (!provider) return;
@@ -140,6 +181,24 @@ export const TestZkApp = () => {
 		setResults(() => ({
 			mina_signTransaction: JSON.stringify(result, undefined, "\t"),
 		}));
+		setTransactionType(TransactionType.ZKAPP);
+	};
+	const sendTransaction = async () => {
+		if (!provider) return;
+		if (!results.mina_signTransaction) return;
+		const signedTransaction = JSON.parse(results.mina_signTransaction)
+		if (transactionType === TransactionType.PAYMENT) {
+			const { result } = await provider.request({
+				method: "mina_sendTransaction",
+				params: [{
+					input: signedTransaction.data,
+					signature: signedTransaction.signature
+				}, "payment"],
+			});
+			setResults(() => ({
+				mina_sendTransaction: JSON.stringify(result, undefined, "\t"),
+			}));
+		}
 	};
 	const switchChain = async (networkId: string) => {
 		if (!provider) return;
@@ -392,6 +451,23 @@ export const TestZkApp = () => {
 						<label>Result</label>
 						<textarea
 							value={results.mina_signTransaction}
+							className="textarea textarea-bordered h-48 resize-none"
+						/>
+					</div>
+					<div className="flex gap-4">
+						<button
+							type="button"
+							className="btn btn-primary flex-1"
+							disabled={!results.mina_signTransaction}
+							onClick={sendTransaction}
+						>
+							Send Transaction
+						</button>
+					</div>
+					<div className="flex flex-col gap-2">
+						<label>Result</label>
+						<textarea
+							value={results.mina_sendTransaction}
 							className="textarea textarea-bordered h-48 resize-none"
 						/>
 					</div>
