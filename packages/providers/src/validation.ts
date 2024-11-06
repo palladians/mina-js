@@ -223,7 +223,7 @@ export const ProviderRequestParamsUnion = z.discriminatedUnion("method", [
 	SetStateRequestParamsSchema,
 	GetStateRequestParamsSchema,
 	StorePrivateCredentialRequestParamsSchema,
-	PresentationRequestParamsSchema
+	PresentationRequestParamsSchema,
 ]);
 export type RpcReturnTypesUnionType = z.infer<typeof RpcReturnTypesUnion>;
 export type ResultType<M extends string> = {
