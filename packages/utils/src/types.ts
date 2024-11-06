@@ -53,4 +53,4 @@ export type KlesiaRpcResponseType = z.infer<typeof KlesiaRpcResponseSchema>;
 /**
  * Private Credential types
  */
-export type StoredCredential = z.infer<typeof StoredCredentialSchema>;
+export type StoredPrivateCredential = z.infer<typeof StoredCredentialSchema>;
