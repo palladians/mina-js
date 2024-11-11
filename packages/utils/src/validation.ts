@@ -240,3 +240,203 @@ export const KlesiaRpcResponseSchema = z.union([
 	]),
 	ErrorSchema,
 ]);
+
+// TODO: Should probably move these validations to a separate file
+
+interface ProofType {
+	name: string;
+	publicInput: SerializedType;
+	publicOutput: SerializedType;
+	maxProofsVerified: number;
+	featureFlags: Record<string, unknown>;
+}
+
+interface SerializedType {
+	_type?: string;
+	// TODO: update based on mina-credentials
+	type?: "Constant";
+	value?: string;
+	size?: number;
+	proof?: ProofType;
+	innerType?: SerializedType;
+	[key: string]: SerializedType | string | number | ProofType | undefined;
+}
+
+// Private Credentials: Serialized Type and Value Schemas
+
+const SerializedValueSchema = z
+	.object({
+		_type: z.string(),
+		value: JsonSchema,
+		properties: z.record(z.any()).optional(),
+	})
+	.strict();
+
+const ProofTypeSchema: z.ZodType<ProofType> = z.lazy(() =>
+	z
+		.object({
+			name: z.string(),
+			publicInput: SerializedTypeSchema,
+			publicOutput: SerializedTypeSchema,
+			maxProofsVerified: z.number(),
+			featureFlags: z.record(z.any()),
+		})
+		.strict(),
+);
+
+const SerializedTypeSchema: z.ZodType<SerializedType> = z.lazy(() =>
+	z.union([
+		// Basic type
+		z
+			.object({
+				_type: z.string(),
+			})
+			.strict(),
+		// Constant type
+		z
+			.object({
+				type: z.literal("Constant"),
+				value: z.string(),
+			})
+			.strict(),
+		// Bytes type
+		z
+			.object({
+				_type: z.literal("Bytes"),
+				size: z.number(),
+			})
+			.strict(),
+		// Proof type
+		z
+			.object({
+				_type: z.literal("Proof"),
+				proof: ProofTypeSchema,
+			})
+			.strict(),
+		// Array type
+		z
+			.object({
+				_type: z.literal("Array"),
+				innerType: SerializedTypeSchema,
+				size: z.number(),
+			})
+			.strict(),
+		// Allow records of nested types for Struct
+		z.record(SerializedTypeSchema),
+	]),
+);
+
+const SerializedFieldSchema = z
+	.object({
+		_type: z.literal("Field"),
+		value: z.string(),
+	})
+	.strict();
+
+const SerializedPublicKeySchema = z
+	.object({
+		_type: z.literal("PublicKey"),
+		value: z.string(),
+	})
+	.strict();
+
+const SerializedPublicKeyTypeSchema = z
+	.object({
+		_type: z.literal("PublicKey"),
+	})
+	.strict();
+
+const SerializedSignatureSchema = z
+	.object({
+		_type: z.literal("Signature"),
+		value: z.object({
+			r: z.string(),
+			s: z.string(),
+		}),
+	})
+	.strict();
+
+// Private Credentials: Witness Schemas
+
+const SimpleWitnessSchema = z
+	.object({
+		type: z.literal("simple"),
+		issuer: SerializedPublicKeySchema,
+		issuerSignature: SerializedSignatureSchema,
+	})
+	.strict();
+
+const RecursiveWitnessSchema = z
+	.object({
+		type: z.literal("recursive"),
+		vk: z
+			.object({
+				data: z.string(),
+				hash: SerializedFieldSchema,
+			})
+			.strict(),
+		proof: z
+			.object({
+				_type: z.literal("Proof"),
+				value: z
+					.object({
+						publicInput: JsonSchema,
+						publicOutput: JsonSchema,
+						maxProofsVerified: z.number().min(0).max(2),
+						proof: z.string(),
+					})
+					.strict(),
+			})
+			.strict(),
+	})
+	.strict();
+
+const UnsignedWitnessSchema = z
+	.object({
+		type: z.literal("unsigned"),
+	})
+	.strict();
+
+const WitnessSchema = z.discriminatedUnion("type", [
+	SimpleWitnessSchema,
+	RecursiveWitnessSchema,
+	UnsignedWitnessSchema,
+]);
+
+// Private Credentials: Credential Schemas
+
+const SimpleCredentialSchema = z
+	.object({
+		owner: SerializedPublicKeySchema,
+		data: z.record(SerializedValueSchema),
+	})
+	.strict();
+
+const StructCredentialSchema = z
+	.object({
+		_type: z.literal("Struct"),
+		properties: z
+			.object({
+				owner: SerializedPublicKeyTypeSchema,
+				data: JsonSchema,
+			})
+			.strict(),
+		value: z
+			.object({
+				owner: PublicKeySchema,
+				data: JsonSchema,
+			})
+			.strict(),
+	})
+	.strict();
+
+// Private Credentials: Stored Credential Schema
+
+export const StoredCredentialSchema = z
+	.object({
+		version: z.literal("v0"),
+		witness: WitnessSchema,
+		metadata: JsonSchema.optional(),
+		credential: z.union([SimpleCredentialSchema, StructCredentialSchema]),
+	})
+	.strict();

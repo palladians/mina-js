@@ -12,6 +12,7 @@ import type {
 	SignedFieldsSchema,
 	SignedMessageSchema,
 	SignedTransactionSchema,
+	StoredCredentialSchema,
 	TransactionBodySchema,
 	TransactionPayloadSchema,
 	TransactionReceiptSchema,
@@ -48,3 +49,8 @@ export type TransactionReceipt = z.infer<typeof TransactionReceiptSchema>;
 export type KlesiaRpcMethodType = z.infer<typeof KlesiaRpcMethod>;
 export type KlesiaRpcRequestType = z.infer<typeof KlesiaRpcMethodSchema>;
 export type KlesiaRpcResponseType = z.infer<typeof KlesiaRpcResponseSchema>;
+
+/**
+ * Private Credential types
+ */
+export type StoredPrivateCredential = z.infer<typeof StoredCredentialSchema>;

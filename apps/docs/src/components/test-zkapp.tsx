@@ -5,6 +5,36 @@ import { useState, useSyncExternalStore } from "react";
 
 const store = createStore();
 
+const sampleCredential = {
+	version: "v0",
+	witness: {
+		type: "simple",
+		issuer: {
+			_type: "PublicKey",
+			value: "B62qqMxueXzenrchT5CKC5eCSmfcbHic9wJd9GEdHVcd9uCWrjPJjHS",
+		},
+		issuerSignature: {
+			_type: "Signature",
+			value: {
+				r: "27355434072539307953235904941558417174103383443074165997458891331674091021280",
+				s: "22156398191479529717864137276005168653180340733374387165875910835098679659803",
+			},
+		},
+	},
+	credential: {
+		owner: {
+			_type: "PublicKey",
+			value: "B62qqCMx9YvvjhMFVcRXBqHtAbjWWUhyA9HmgpYCehLHTGKgXsxiZpz",
+		},
+		data: {
+			age: {
+				_type: "Field",
+				value: "25",
+			},
+		},
+	},
+};
+
 export const TestZkApp = () => {
 	const [currentProvider, setCurrentProvider] = useLocalStorage(
 		"minajs:provider",
@@ -12,6 +42,9 @@ export const TestZkApp = () => {
 	);
 	const [message, setMessage] = useState("A message to sign");
 	const [fields, setFields] = useState('["1", "2", "3"]');
+	const [credentialInput, setCredentialInput] = useState(
+		JSON.stringify(sampleCredential, null, 2),
+	);
 	const [transactionBody, setTransactionBody] = useObjectState({
 		to: "B62qnVUL6A53E4ZaGd3qbTr6RCtEZYTu3kTijVrrquNpPo4d3MuJ3nb",
 		amount: "3000000000",
@@ -27,11 +60,31 @@ export const TestZkApp = () => {
 		mina_signFields: "",
 		mina_signTransaction: "",
 		mina_switchChain: "",
+		mina_storePrivateCredential: "",
 	});
 	const providers = useSyncExternalStore(store.subscribe, store.getProviders);
 	const provider = providers.find(
 		(p) => p.info.slug === currentProvider,
 	)?.provider;
+
+	const storePrivateCredential = async () => {
+		if (!provider) return;
+		try {
+			const parsedCredential = JSON.parse(credentialInput);
+			const { result } = await provider.request({
+				method: "mina_storePrivateCredential",
+				params: [parsedCredential],
+			});
+			setResults(() => ({
+				mina_storePrivateCredential: JSON.stringify(result, null, 2),
+			}));
+		} catch (error) {
+			setResults(() => ({
+				mina_storePrivateCredential: `Error: ${error.message}`,
+			}));
+		}
+	};
+
 	const fetchAccounts = async () => {
 		if (!provider) return;
 		const { result } = await provider.request({
@@ -393,6 +446,35 @@ export const TestZkApp = () => {
 						<textarea
 							value={results.mina_signTransaction}
 							className="textarea textarea-bordered h-48 resize-none"
+						/>
+					</div>
+				</div>
+			</section>
+			<section className="card bg-neutral">
+				<div className="card-body gap-4">
+					<h2 className="card-title">Store Private Credential</h2>
+					<p>mina_storePrivateCredential</p>
+					<div className="flex flex-col gap-2">
+						<div className="flex flex-col gap-4">
+							<textarea
+								value={credentialInput}
+								onChange={(event) => setCredentialInput(event.target.value)}
+								className="textarea textarea-bordered h-48 font-mono text-sm"
+								placeholder="Enter credential JSON..."
+							/>
+							<button
+								type="button"
+								className="btn btn-primary"
+								onClick={storePrivateCredential}
+							>
+								Store Private Credential
+							</button>
+						</div>
+						<label>Result</label>
+						<textarea
+							value={results.mina_storePrivateCredential}
+							readOnly
+							className="textarea textarea-bordered h-24 resize-none font-mono"
 						/>
 					</div>
 				</div>
