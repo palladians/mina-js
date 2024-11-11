@@ -3,7 +3,6 @@ import {
 	JsonSchema,
 	NetworkId,
 	NullifierSchema,
-	// PresentationRequestSchema,
 	PublicKeySchema,
 	SignedFieldsSchema,
 	SignedMessageSchema,
@@ -92,10 +91,6 @@ export const StorePrivateCredentialRequestParamsSchema =
 		method: z.literal("mina_storePrivateCredential"),
 		params: z.array(StoredCredentialSchema),
 	}).strict();
-// export const PresentationRequestParamsSchema = RequestWithContext.extend({
-// 	method: z.literal("mina_requestPresentation"),
-// 	params: z.array(PresentationRequestSchema),
-// }).strict();
 
 // Returns
 export const AccountsRequestReturnSchema = z
@@ -223,7 +218,6 @@ export const ProviderRequestParamsUnion = z.discriminatedUnion("method", [
 	SetStateRequestParamsSchema,
 	GetStateRequestParamsSchema,
 	StorePrivateCredentialRequestParamsSchema,
-	// PresentationRequestParamsSchema
 ]);
 export type RpcReturnTypesUnionType = z.infer<typeof RpcReturnTypesUnion>;
 export type ResultType<M extends string> = {
