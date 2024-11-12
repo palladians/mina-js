@@ -251,7 +251,7 @@ interface ProofType {
 	featureFlags: Record<string, unknown>;
 }
 
-interface SerializedType {
+export interface SerializedType {
 	_type?: string;
 	// TODO: update based on mina-credentials
 	type?: "Constant";
@@ -358,7 +358,7 @@ const SerializedSignatureSchema = z
 
 // Private Credentials: Node schemas
 
-type Node =
+export type Node =
 	| { type: "owner" }
 	| { type: "issuer"; credentialKey: string }
 	| { type: "constant"; data: z.infer<typeof SerializedValueSchema> }
