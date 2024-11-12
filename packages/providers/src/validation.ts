@@ -3,6 +3,7 @@ import {
 	JsonSchema,
 	NetworkId,
 	NullifierSchema,
+	PresentationRequestSchema,
 	PublicKeySchema,
 	SignedFieldsSchema,
 	SignedMessageSchema,
@@ -12,7 +13,6 @@ import {
 	TransactionReceiptSchema,
 	TypedSendableSchema,
 	ZkAppCommandPayload,
-	PresentationRequestSchema
 } from "@mina-js/utils";
 import { z } from "zod";
 
@@ -188,6 +188,12 @@ export const StorePrivateCredentialReturnSchema = z
 		result: z.object({ success: z.boolean() }).strict(),
 	})
 	.strict();
+export const PresentationRequestReturnSchema = z
+	.object({
+		method: z.literal("mina_requestPresentation"),
+		result: z.object({ presentation: z.string() }).strict(),
+	})
+	.strict();
 
 export const RpcReturnTypesUnion = z.discriminatedUnion("method", [
 	AccountsRequestReturnSchema,
@@ -205,6 +211,7 @@ export const RpcReturnTypesUnion = z.discriminatedUnion("method", [
 	SetStateRequestReturnSchema,
 	GetStateRequestReturnSchema,
 	StorePrivateCredentialReturnSchema,
+	PresentationRequestReturnSchema,
 ]);
 
 export const ProviderRequestParamsUnion = z.discriminatedUnion("method", [
@@ -223,6 +230,7 @@ export const ProviderRequestParamsUnion = z.discriminatedUnion("method", [
 	SetStateRequestParamsSchema,
 	GetStateRequestParamsSchema,
 	StorePrivateCredentialRequestParamsSchema,
+	PresentationRequestParamsSchema,
 ]);
 export type RpcReturnTypesUnionType = z.infer<typeof RpcReturnTypesUnion>;
 export type ResultType<M extends string> = {
