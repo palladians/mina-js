@@ -2,38 +2,9 @@ import { createStore } from "@mina-js/connect";
 import { useLocalStorage, useObjectState } from "@uidotdev/usehooks";
 import { clsx } from "clsx";
 import { useState, useSyncExternalStore } from "react";
+import { sampleCredential, samplePresentationRequest } from "./sample-data";
 
 const store = createStore();
-
-const sampleCredential = {
-	version: "v0",
-	witness: {
-		type: "simple",
-		issuer: {
-			_type: "PublicKey",
-			value: "B62qqMxueXzenrchT5CKC5eCSmfcbHic9wJd9GEdHVcd9uCWrjPJjHS",
-		},
-		issuerSignature: {
-			_type: "Signature",
-			value: {
-				r: "27355434072539307953235904941558417174103383443074165997458891331674091021280",
-				s: "22156398191479529717864137276005168653180340733374387165875910835098679659803",
-			},
-		},
-	},
-	credential: {
-		owner: {
-			_type: "PublicKey",
-			value: "B62qqCMx9YvvjhMFVcRXBqHtAbjWWUhyA9HmgpYCehLHTGKgXsxiZpz",
-		},
-		data: {
-			age: {
-				_type: "Field",
-				value: "25",
-			},
-		},
-	},
-};
 
 export const TestZkApp = () => {
 	const [currentProvider, setCurrentProvider] = useLocalStorage(
@@ -44,6 +15,9 @@ export const TestZkApp = () => {
 	const [fields, setFields] = useState('["1", "2", "3"]');
 	const [credentialInput, setCredentialInput] = useState(
 		JSON.stringify(sampleCredential, null, 2),
+	);
+	const [presentationRequest, setPresentationRequest] = useState(
+		JSON.stringify(samplePresentationRequest, null, 2),
 	);
 	const [transactionBody, setTransactionBody] = useObjectState({
 		to: "B62qnVUL6A53E4ZaGd3qbTr6RCtEZYTu3kTijVrrquNpPo4d3MuJ3nb",
@@ -61,6 +35,7 @@ export const TestZkApp = () => {
 		mina_signTransaction: "",
 		mina_switchChain: "",
 		mina_storePrivateCredential: "",
+		mina_requestPresentation: "",
 	});
 	const providers = useSyncExternalStore(store.subscribe, store.getProviders);
 	const provider = providers.find(
@@ -81,6 +56,24 @@ export const TestZkApp = () => {
 		} catch (error) {
 			setResults(() => ({
 				mina_storePrivateCredential: `Error: ${error.message}`,
+			}));
+		}
+	};
+
+	const requestPresentation = async () => {
+		if (!provider) return;
+		try {
+			const parsedRequest = JSON.parse(presentationRequest);
+			const { result } = await provider.request({
+				method: "mina_requestPresentation",
+				params: [parsedRequest],
+			});
+			setResults(() => ({
+				mina_requestPresentation: JSON.stringify(result, null, 2),
+			}));
+		} catch (error) {
+			setResults(() => ({
+				mina_requestPresentation: `Error: ${error.message}`,
 			}));
 		}
 	};
@@ -473,6 +466,35 @@ export const TestZkApp = () => {
 						<label>Result</label>
 						<textarea
 							value={results.mina_storePrivateCredential}
+							readOnly
+							className="textarea textarea-bordered h-24 resize-none font-mono"
+						/>
+					</div>
+				</div>
+			</section>
+			<section className="card bg-neutral">
+				<div className="card-body gap-4">
+					<h2 className="card-title">Request Presentation</h2>
+					<p>mina_requestPresentation</p>
+					<div className="flex flex-col gap-2">
+						<div className="flex flex-col gap-4">
+							<textarea
+								value={presentationRequest}
+								onChange={(event) => setPresentationRequest(event.target.value)}
+								className="textarea textarea-bordered h-48 font-mono text-sm"
+								placeholder="Enter presentation request JSON..."
+							/>
+							<button
+								type="button"
+								className="btn btn-primary"
+								onClick={requestPresentation}
+							>
+								Request Presentation
+							</button>
+						</div>
+						<label>Result</label>
+						<textarea
+							value={results.mina_requestPresentation}
 							readOnly
 							className="textarea textarea-bordered h-24 resize-none font-mono"
 						/>
