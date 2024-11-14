@@ -28,6 +28,25 @@ export const sampleCredential = {
 	},
 };
 
+export const sampleCredential1 = {
+	version: "v0",
+	witness: { type: "unsigned" },
+	credential: {
+		owner: {
+			_type: "PublicKey",
+			value: "B62qiVGZQdBJJrxnzhvqp7LKe6jDiFcpU3cF5xHoZof5Pz9qiL85KLx",
+		},
+		data: {
+			age: { _type: "Field", value: "42" },
+			name: {
+				_type: "Bytes",
+				value:
+					"416c696365000000000000000000000000000000000000000000000000000000",
+			},
+		},
+	},
+};
+
 export const samplePresentationRequest = {
 	type: "zk-app",
 	spec: {
