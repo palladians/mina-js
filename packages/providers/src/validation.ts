@@ -1,5 +1,6 @@
 import {
 	FieldSchema,
+	FieldsAndPassphraseSchema,
 	JsonSchema,
 	NetworkId,
 	NullifierSchema,
@@ -59,6 +60,10 @@ export const SignFieldsRequestParamsSchema = RequestWithContext.extend({
 	method: z.literal("mina_signFields"),
 	params: z.array(z.array(FieldSchema)),
 }).strict();
+export const signFieldsWithPassphraseParamsSchema = RequestWithContext.extend({
+	method: z.literal("mina_signFieldsWithPassphrase"),
+	params: z.array(FieldsAndPassphraseSchema),
+});
 export const SignTransactionRequestParamsSchema = RequestWithContext.extend({
 	method: z.literal("mina_signTransaction"),
 	params: z.array(z.union([TransactionPayloadSchema, ZkAppCommandPayload])),
@@ -140,6 +145,10 @@ export const SignFieldsRequestReturnSchema = z
 		result: SignedFieldsSchema,
 	})
 	.strict();
+export const signFieldsWithPassphraseRequestReturnSchema = z.object({
+	method: z.literal("mina_signFieldsWithPassphrase"),
+	result: SignedFieldsSchema,
+});
 export const SignTransactionRequestReturnSchema = z
 	.object({
 		method: z.literal("mina_signTransaction"),
@@ -212,6 +221,7 @@ export const RpcReturnTypesUnion = z.discriminatedUnion("method", [
 	GetStateRequestReturnSchema,
 	StorePrivateCredentialReturnSchema,
 	PresentationRequestReturnSchema,
+	signFieldsWithPassphraseRequestReturnSchema,
 ]);
 
 export const ProviderRequestParamsUnion = z.discriminatedUnion("method", [
@@ -231,6 +241,7 @@ export const ProviderRequestParamsUnion = z.discriminatedUnion("method", [
 	GetStateRequestParamsSchema,
 	StorePrivateCredentialRequestParamsSchema,
 	PresentationRequestParamsSchema,
+	signFieldsWithPassphraseParamsSchema,
 ]);
 export type RpcReturnTypesUnionType = z.infer<typeof RpcReturnTypesUnion>;
 export type ResultType<M extends string> = {

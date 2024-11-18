@@ -79,6 +79,13 @@ export const ZkAppCommandPayload = z
 	})
 	.strict();
 
+export const FieldsAndPassphraseSchema = z
+	.object({
+		fields: z.array(FieldSchema),
+		passphrase: z.string(),
+	})
+	.strict();
+
 /**
  * Return type schemas
  */

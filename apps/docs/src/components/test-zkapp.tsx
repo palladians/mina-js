@@ -2,7 +2,7 @@ import { createStore } from "@mina-js/connect";
 import { useLocalStorage, useObjectState } from "@uidotdev/usehooks";
 import { clsx } from "clsx";
 import { useState, useSyncExternalStore } from "react";
-import { sampleCredential1, samplePresentationRequest } from "./sample-data";
+import { sampleCredential, samplePresentationRequest } from "./sample-data";
 
 const store = createStore();
 
@@ -14,7 +14,7 @@ export const TestZkApp = () => {
 	const [message, setMessage] = useState("A message to sign");
 	const [fields, setFields] = useState('["1", "2", "3"]');
 	const [credentialInput, setCredentialInput] = useState(
-		JSON.stringify(sampleCredential1, null, 2),
+		JSON.stringify(sampleCredential, null, 2),
 	);
 	const [presentationRequest, setPresentationRequest] = useState(
 		JSON.stringify(samplePresentationRequest, null, 2),
