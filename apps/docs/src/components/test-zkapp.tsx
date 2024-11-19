@@ -6,6 +6,15 @@ import { sampleCredential, samplePresentationRequest } from "./sample-data";
 
 const store = createStore();
 
+const sampleSignFieldsWithPassphrase = {
+	fields: [
+		"15194438335254979123992673494772742932886141479807135737958843785282001151979",
+		"13058445919007356413345300070030973942059862825965583483176167800381508277987",
+		"26067489438851605530938171293652363087823200555042082718868551789908955769071",
+	],
+	passphrase: "1234",
+};
+
 export const TestZkApp = () => {
 	const [currentProvider, setCurrentProvider] = useLocalStorage(
 		"minajs:provider",
@@ -13,6 +22,8 @@ export const TestZkApp = () => {
 	);
 	const [message, setMessage] = useState("A message to sign");
 	const [fields, setFields] = useState('["1", "2", "3"]');
+	const [signFieldsWithPassphraseInput, setSignFieldsWithPassphraseInput] =
+		useState(JSON.stringify(sampleSignFieldsWithPassphrase, null, 2));
 	const [credentialInput, setCredentialInput] = useState(
 		JSON.stringify(sampleCredential, null, 2),
 	);
@@ -32,6 +43,7 @@ export const TestZkApp = () => {
 		mina_getBalance: "",
 		mina_sign: "",
 		mina_signFields: "",
+		mina_signFieldsWithPassphrase: "",
 		mina_signTransaction: "",
 		mina_switchChain: "",
 		mina_storePrivateCredential: "",
@@ -124,6 +136,23 @@ export const TestZkApp = () => {
 		setResults(() => ({
 			mina_signFields: JSON.stringify(result, undefined, "\t"),
 		}));
+	};
+	const signFieldsWithPassphrase = async () => {
+		if (!provider) return;
+		try {
+			const parsedInput = JSON.parse(signFieldsWithPassphraseInput);
+			const { result } = await provider.request({
+				method: "mina_signFieldsWithPassphrase",
+				params: [parsedInput],
+			});
+			setResults(() => ({
+				mina_signFieldsWithPassphrase: JSON.stringify(result, null, 2),
+			}));
+		} catch (error) {
+			setResults(() => ({
+				mina_signFieldsWithPassphrase: `Error: ${error.message}`,
+			}));
+		}
 	};
 	const createNullifier = async () => {
 		if (!provider) return;
@@ -495,6 +524,37 @@ export const TestZkApp = () => {
 						<label>Result</label>
 						<textarea
 							value={results.mina_requestPresentation}
+							readOnly
+							className="textarea textarea-bordered h-24 resize-none font-mono"
+						/>
+					</div>
+				</div>
+			</section>
+			<section className="card bg-neutral">
+				<div className="card-body gap-4">
+					<h2 className="card-title">Sign Fields With Passphrase</h2>
+					<p>mina_signFieldsWithPassphrase</p>
+					<div className="flex flex-col gap-2">
+						<div className="flex flex-col gap-4">
+							<textarea
+								value={signFieldsWithPassphraseInput}
+								onChange={(event) =>
+									setSignFieldsWithPassphraseInput(event.target.value)
+								}
+								className="textarea textarea-bordered h-48 font-mono text-sm"
+								placeholder="Enter fields and passphrase JSON..."
+							/>
+							<button
+								type="button"
+								className="btn btn-primary"
+								onClick={signFieldsWithPassphrase}
+							>
+								Sign Fields With Passphrase
+							</button>
+						</div>
+						<label>Result</label>
+						<textarea
+							value={results.mina_signFieldsWithPassphrase}
 							readOnly
 							className="textarea textarea-bordered h-24 resize-none font-mono"
 						/>
