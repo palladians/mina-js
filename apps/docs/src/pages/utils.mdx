@@ -1,0 +1,74 @@
+# Utils [Don't waste time on implementing these yourself.]
+
+We've implemented some utilities that you might find useful. You can find them in the `@mina-js/utils` package.
+
+## Units
+
+Utils library provides functions for unit conversion.
+
+### formatMina
+
+Formats micro-Mina to human-readable Mina value.
+
+```typescript twoslash
+import { formatMina } from '@mina-js/utils'
+
+const mina = formatMina(5_000_000_000n)
+// -> "5"
+```
+
+### parseMina
+
+Parses human-readable Mina value to micro-Mina.
+
+```typescript twoslash
+import { parseMina } from '@mina-js/utils'
+
+const mina = parseMina('5')
+// -> 5_000_000_000n
+```
+
+### formatUnit
+
+```typescript twoslash
+import { formatUnits } from '@mina-js/utils'
+
+const formatted = formatUnits(4200000000000n, 10)
+// -> "420"
+```
+
+### parseUnits
+
+```typescript twoslash
+import { parseUnits } from '@mina-js/utils'
+
+const parsed = parseUnits("420", 10)
+// -> 4200000000000n
+```
+
+## Web Workers
+
+Proof related computations can be heavy and can block the main thread. To avoid this, you can use Web Workers to run these computations in a separate thread. We've prepared a JSON-RPC protocol to easily connect the dots.
+
+```typescript twoslash
+// @filename: worker.ts
+import { createRpcHandler } from "@mina-js/utils";
+
+const { messageHandler } = createRpcHandler({
+  methods: {
+    ping: async () => 'pong',
+  }
+})
+
+self.onmessage = messageHandler
+
+// @filename: index.ts
+import { createRpc } from "@mina-js/utils";
+
+const worker = new Worker(new URL('./worker.ts', import.meta.url))
+const rpc = createRpc({ worker })
+const response = await rpc.request({
+  method: 'ping',
+  params: [],
+})
+```
