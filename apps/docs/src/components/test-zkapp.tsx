@@ -2,16 +2,12 @@ import { createStore } from "@mina-js/connect";
 import { useLocalStorage, useObjectState } from "@uidotdev/usehooks";
 import { clsx } from "clsx";
 import { useState, useSyncExternalStore } from "react";
-import { sampleCredential, samplePresentationRequest } from "./sample-data";
+import { sampleCredential3, samplePresentationRequest1 } from "./sample-data";
 
 const store = createStore();
 
 const sampleSignFieldsWithPassphrase = {
-	fields: [
-		"15194438335254979123992673494772742932886141479807135737958843785282001151979",
-		"13058445919007356413345300070030973942059862825965583483176167800381508277987",
-		"26067489438851605530938171293652363087823200555042082718868551789908955769071",
-	],
+	fields: ["1", "2", "3"],
 	passphrase: "1234",
 };
 
@@ -25,10 +21,10 @@ export const TestZkApp = () => {
 	const [signFieldsWithPassphraseInput, setSignFieldsWithPassphraseInput] =
 		useState(JSON.stringify(sampleSignFieldsWithPassphrase, null, 2));
 	const [credentialInput, setCredentialInput] = useState(
-		JSON.stringify(sampleCredential, null, 2),
+		JSON.stringify(sampleCredential3, null, 2),
 	);
 	const [presentationRequest, setPresentationRequest] = useState(
-		JSON.stringify(samplePresentationRequest, null, 2),
+		JSON.stringify(samplePresentationRequest1, null, 2),
 	);
 	const [transactionBody, setTransactionBody] = useObjectState({
 		to: "B62qnVUL6A53E4ZaGd3qbTr6RCtEZYTu3kTijVrrquNpPo4d3MuJ3nb",
