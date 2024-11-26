@@ -77,7 +77,7 @@ export const TestZkApp = () => {
 				params: [parsedRequest],
 			});
 			setResults(() => ({
-				mina_requestPresentation: JSON.stringify(result, null, 2),
+				mina_requestPresentation: result,
 			}));
 		} catch (error) {
 			setResults(() => ({
