@@ -279,6 +279,13 @@ const SerializedValueSchema = z
 	})
 	.strict();
 
+const SerializedDataValueSchema = z.union([
+	SerializedValueSchema,
+	z.string(),
+	z.number(),
+	z.boolean(),
+]);
+
 const ProofTypeSchema: z.ZodType<ProofType> = z.lazy(() =>
 	z
 		.object({
@@ -666,7 +673,7 @@ const WitnessSchema = z.discriminatedUnion("type", [
 const SimpleCredentialSchema = z
 	.object({
 		owner: SerializedPublicKeySchema,
-		data: z.record(SerializedValueSchema),
+		data: z.record(SerializedDataValueSchema),
 	})
 	.strict();
 
