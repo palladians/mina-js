@@ -335,6 +335,12 @@ const SerializedTypeSchema: z.ZodType<SerializedType> = z.lazy(() =>
 				size: z.number(),
 			})
 			.strict(),
+			z
+      .object({
+        _type: z.literal('Struct'),
+        properties: z.record(SerializedTypeSchema),
+      })
+      .strict(),
 		// Allow records of nested types for Struct
 		z.record(SerializedTypeSchema),
 	]),

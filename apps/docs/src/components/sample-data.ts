@@ -592,3 +592,137 @@ export const samplePresentationRequestHttps = {
 		action: "POST /api/verify",
 	},
 };
+
+export const samplePresentationRequestHttpsRecrusiveNoContext = {
+	type: "no-context",
+	spec: {
+		inputs: {
+			provedData: {
+				type: "credential",
+				credentialType: "recursive",
+				witness: {
+					type: { type: "Constant", value: "recursive" },
+					vk: { _type: "VerificationKey" },
+					proof: {
+						_type: "Proof",
+						proof: {
+							name: "InputProof",
+							publicInput: {
+								_type: "Struct",
+								properties: {
+									context: { _type: "Field" },
+									claims: {
+										inputOwner: { _type: "PublicKey" },
+										data: {
+											age: { _type: "Field" },
+											name: { _type: "Bytes", size: 32 },
+										},
+									},
+								},
+							},
+							publicOutput: {
+								_type: "Struct",
+								properties: {
+									owner: { _type: "PublicKey" },
+									data: {
+										age: { _type: "Field" },
+										name: { _type: "Bytes", size: 32 },
+									},
+								},
+							},
+							maxProofsVerified: 0,
+							featureFlags: {
+								rangeCheck0: false,
+								rangeCheck1: false,
+								foreignFieldAdd: false,
+								foreignFieldMul: false,
+								xor: false,
+								rot: false,
+								lookup: false,
+								runtimeTables: false,
+							},
+						},
+					},
+				},
+				data: {
+					_type: "Struct",
+					properties: {
+						age: { _type: "Field" },
+						name: { _type: "Bytes", size: 32 },
+					},
+				},
+			},
+			targetAge: { type: "claim", data: { _type: "Field" } },
+			targetName: {
+				type: "constant",
+				data: { _type: "Bytes", size: 32 },
+				value:
+					"416c696365000000000000000000000000000000000000000000000000000000",
+			},
+		},
+		logic: {
+			assert: {
+				type: "and",
+				inputs: [
+					{
+						type: "equals",
+						left: {
+							type: "property",
+							key: "age",
+							inner: {
+								type: "property",
+								key: "data",
+								inner: {
+									type: "property",
+									key: "provedData",
+									inner: { type: "root" },
+								},
+							},
+						},
+						right: {
+							type: "property",
+							key: "targetAge",
+							inner: { type: "root" },
+						},
+					},
+					{
+						type: "equals",
+						left: {
+							type: "property",
+							key: "name",
+							inner: {
+								type: "property",
+								key: "data",
+								inner: {
+									type: "property",
+									key: "provedData",
+									inner: { type: "root" },
+								},
+							},
+						},
+						right: {
+							type: "property",
+							key: "targetName",
+							inner: { type: "root" },
+						},
+					},
+				],
+			},
+			outputClaim: {
+				type: "property",
+				key: "age",
+				inner: {
+					type: "property",
+					key: "data",
+					inner: {
+						type: "property",
+						key: "provedData",
+						inner: { type: "root" },
+					},
+				},
+			},
+		},
+	},
+	claims: { targetAge: { _type: "Field", value: "18" } },
+	inputContext: null,
+};
