@@ -78,7 +78,7 @@ const networkId = async () => {
     `,
 		{},
 	);
-	return data.networkID;
+	return data.networkID === "mina:testnet" ? "mina:devnet" : data.networkID;
 };
 
 const sendTransaction = async ({
