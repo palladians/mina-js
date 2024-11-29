@@ -18,6 +18,7 @@
 	},
 	"dependencies": {
 		"mina-signer": "3.0.7",
+		"serialize-error": "^11.0.3",
 		"superjson": "2.2.1"
 	},
 	"devDependencies": {
