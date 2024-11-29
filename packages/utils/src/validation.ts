@@ -250,6 +250,12 @@ export const KlesiaRpcResponseSchema = z.union([
 
 // TODO: Should probably move these validations to a separate file
 
+interface SerializedValue {
+	_type: string;
+	value: Json;
+	properties?: Record<string, unknown>;
+}
+
 interface ProofType {
 	name: string;
 	publicInput: SerializedType;
@@ -258,16 +264,79 @@ interface ProofType {
 	featureFlags: Record<string, unknown>;
 }
 
-export interface SerializedType {
-	_type?: string;
-	// TODO: update based on mina-credentials
-	type?: "Constant";
+interface DynamicString {
+	_type: "DynamicString";
+	_isFactory: true;
+	maxLength: number;
 	value?: string;
-	size?: number;
-	proof?: ProofType;
-	innerType?: SerializedType;
-	[key: string]: SerializedType | string | number | ProofType | undefined;
 }
+
+interface DynamicArray {
+	_type: "DynamicArray";
+	_isFactory: true;
+	maxLength: number;
+	innerType: SerializedType;
+	value?: SerializedValue[];
+}
+
+interface DynamicRecord {
+	_type: "DynamicRecord";
+	_isFactory: true;
+	maxEntries: number;
+	knownShape: Record<string, SerializedType>;
+	value?: Record<string, SerializedValue>;
+}
+
+interface DynamicBytes {
+	_type: "DynamicBytes";
+	_isFactory: true;
+	maxLength: number;
+	value?: string; // hex string
+}
+
+interface BasicType {
+	_type: string;
+}
+
+// TODO: type?
+interface ConstantType {
+	type: "Constant";
+	value: string;
+}
+
+interface BytesType {
+	_type: "Bytes";
+	size: number;
+}
+
+interface ProofTypeWrapper {
+	_type: "Proof";
+	proof: ProofType;
+}
+
+interface ArrayType {
+	_type: "Array";
+	innerType: SerializedType;
+	size: number;
+}
+
+interface StructType {
+	_type: "Struct";
+	properties: { [key: string]: SerializedType };
+}
+
+export type SerializedType =
+	| BasicType
+	| ConstantType
+	| BytesType
+	| ProofTypeWrapper
+	| ArrayType
+	| StructType
+	| DynamicString
+	| DynamicArray
+	| DynamicRecord
+	| DynamicBytes
+	| { [key: string]: SerializedType };
 
 // Private Credentials: Serialized Type and Value Schemas
 
@@ -285,6 +354,38 @@ const SerializedDataValueSchema = z.union([
 	z.number(),
 	z.boolean(),
 ]);
+
+// Dynamic type schemas
+const DynamicTypeBaseSchema = z.object({
+	_type: z.string(),
+	_isFactory: z.literal(true),
+});
+
+const DynamicStringSchema = DynamicTypeBaseSchema.extend({
+	_type: z.literal("DynamicString"),
+	maxLength: z.number(),
+	value: z.string().optional(),
+}).strict();
+
+const DynamicArraySchema = DynamicTypeBaseSchema.extend({
+	_type: z.literal("DynamicArray"),
+	maxLength: z.number(),
+	innerType: z.lazy(() => SerializedTypeSchema),
+	value: z.array(SerializedValueSchema).optional(),
+}).strict();
+
+const DynamicRecordSchema = DynamicTypeBaseSchema.extend({
+	_type: z.literal("DynamicRecord"),
+	maxEntries: z.number(),
+	knownShape: z.record(z.lazy(() => SerializedTypeSchema)),
+	value: z.record(SerializedValueSchema).optional(),
+}).strict();
+
+const DynamicBytesSchema = DynamicTypeBaseSchema.extend({
+	_type: z.literal("DynamicBytes"),
+	maxLength: z.number(),
+	value: z.string().optional(), // hex string
+}).strict();
 
 const ProofTypeSchema: z.ZodType<ProofType> = z.lazy(() =>
 	z
@@ -335,12 +436,18 @@ const SerializedTypeSchema: z.ZodType<SerializedType> = z.lazy(() =>
 				size: z.number(),
 			})
 			.strict(),
-			z
-      .object({
-        _type: z.literal('Struct'),
-        properties: z.record(SerializedTypeSchema),
-      })
-      .strict(),
+		// Struct type
+		z
+			.object({
+				_type: z.literal("Struct"),
+				properties: z.record(SerializedTypeSchema),
+			})
+			.strict(),
+		// Dynamic types
+		DynamicStringSchema,
+		DynamicArraySchema,
+		DynamicRecordSchema,
+		DynamicBytesSchema,
 		// Allow records of nested types for Struct
 		z.record(SerializedTypeSchema),
 	]),
