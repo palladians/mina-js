@@ -726,3 +726,206 @@ export const samplePresentationRequestHttpsRecrusiveNoContext = {
 	claims: { targetAge: { _type: "Field", value: "18" } },
 	inputContext: null,
 };
+
+export const samplePresentationRequestHttpsFromExample = {
+	type: "https",
+	spec: {
+		inputs: {
+			credential: {
+				type: "credential",
+				credentialType: "simple",
+				witness: {
+					type: { type: "Constant", value: "simple" },
+					issuer: { _type: "PublicKey" },
+					issuerSignature: { _type: "Signature" },
+				},
+				data: {
+					_type: "DynamicRecord",
+					maxEntries: 20,
+					knownShape: {
+						nationality: {
+							_type: "DynamicString",
+							maxLength: 50,
+							_isFactory: true,
+						},
+						expiresAt: { _type: "UInt64" },
+						id: { _type: "Bytes", size: 16 },
+					},
+					_isFactory: true,
+				},
+			},
+			acceptedNations: {
+				type: "claim",
+				data: {
+					_type: "DynamicArray",
+					maxLength: 100,
+					innerType: { _type: "Field" },
+					_isFactory: true,
+				},
+			},
+			acceptedIssuers: {
+				type: "claim",
+				data: {
+					_type: "DynamicArray",
+					maxLength: 100,
+					innerType: { _type: "Field" },
+					_isFactory: true,
+				},
+			},
+			currentDate: { type: "claim", data: { _type: "UInt64" } },
+			appId: {
+				type: "claim",
+				data: { _type: "DynamicString", maxLength: 50, _isFactory: true },
+			},
+		},
+		logic: {
+			assert: {
+				type: "and",
+				inputs: [
+					{
+						type: "equalsOneOf",
+						input: {
+							type: "hash",
+							inputs: [
+								{
+									type: "property",
+									key: "nationality",
+									inner: {
+										type: "property",
+										key: "data",
+										inner: {
+											type: "property",
+											key: "credential",
+											inner: { type: "root" },
+										},
+									},
+								},
+							],
+							prefix: null,
+						},
+						options: {
+							type: "property",
+							key: "acceptedNations",
+							inner: { type: "root" },
+						},
+					},
+					{
+						type: "equalsOneOf",
+						input: { type: "issuer", credentialKey: "credential" },
+						options: {
+							type: "property",
+							key: "acceptedIssuers",
+							inner: { type: "root" },
+						},
+					},
+					{
+						type: "lessThanEq",
+						left: {
+							type: "property",
+							key: "currentDate",
+							inner: { type: "root" },
+						},
+						right: {
+							type: "property",
+							key: "expiresAt",
+							inner: {
+								type: "property",
+								key: "data",
+								inner: {
+									type: "property",
+									key: "credential",
+									inner: { type: "root" },
+								},
+							},
+						},
+					},
+				],
+			},
+			outputClaim: {
+				type: "record",
+				data: {
+					nullifier: {
+						type: "hash",
+						inputs: [
+							{
+								type: "property",
+								key: "data",
+								inner: {
+									type: "property",
+									key: "credential",
+									inner: { type: "root" },
+								},
+							},
+							{ type: "property", key: "appId", inner: { type: "root" } },
+						],
+						prefix: null,
+					},
+				},
+			},
+		},
+	},
+	claims: {
+		acceptedNations: {
+			_type: "DynamicArray",
+			maxLength: 100,
+			innerType: { _type: "Field" },
+			value: [
+				{
+					_type: "Field",
+					value:
+						"1535750191209038276491867256345743424918048468505871420482779334664484555622",
+				},
+				{
+					_type: "Field",
+					value:
+						"22047996538609280301110666364818369992447508174403408199422649676981322383447",
+				},
+				{
+					_type: "Field",
+					value:
+						"24056497251096418057564183210090983888753346776669738257197194846336719337693",
+				},
+			],
+			_isFactory: true,
+		},
+		acceptedIssuers: {
+			_type: "DynamicArray",
+			maxLength: 100,
+			innerType: { _type: "Field" },
+			value: [
+				{
+					_type: "Field",
+					value:
+						"12721880551833204308487376247855347855790506166116961306534826352805011774780",
+				},
+				{
+					_type: "Field",
+					value:
+						"14011147948370197888490875477632505454498830613719602230257743256058116866364",
+				},
+				{
+					_type: "Field",
+					value:
+						"12498773385156582227269558551700003644817354734729096400197136620414501375034",
+				},
+			],
+			_isFactory: true,
+		},
+		currentDate: { _type: "UInt64", value: "1732870602397" },
+		appId: {
+			_type: "DynamicString",
+			maxLength: 50,
+			value: "my-app-id:123",
+			_isFactory: true,
+		},
+	},
+	inputContext: {
+		type: "https",
+		serverNonce: {
+			_type: "Field",
+			value:
+				"26728896938537336683532437476445371665825629206045543918420915145390235358247",
+		},
+		action: "my-app-id:123:authenticate",
+	},
+};
