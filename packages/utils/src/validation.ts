@@ -729,7 +729,15 @@ export const PresentationRequestSchema = z
 					.strict(),
 			})
 			.strict(),
-		claims: z.record(SerializedValueSchema),
+		claims: z.record(
+			z.union([
+				SerializedValueSchema,
+				DynamicStringSchema,
+				DynamicArraySchema,
+				DynamicRecordSchema,
+				DynamicBytesSchema,
+			]),
+		),
 		inputContext: z.union([ContextSchema, z.null()]),
 	})
 	.strict();

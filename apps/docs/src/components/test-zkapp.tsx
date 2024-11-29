@@ -4,7 +4,7 @@ import { clsx } from "clsx";
 import { useState, useSyncExternalStore } from "react";
 import {
 	sampleCredentialSimple,
-	samplePresentationRequestHttpsRecrusiveNoContext,
+	samplePresentationRequestHttpsFromExample,
 } from "./sample-data";
 
 const store = createStore();
@@ -27,7 +27,7 @@ export const TestZkApp = () => {
 		JSON.stringify(sampleCredentialSimple, null, 2),
 	);
 	const [presentationRequest, setPresentationRequest] = useState(
-		JSON.stringify(samplePresentationRequestHttpsRecrusiveNoContext, null, 2),
+		JSON.stringify(samplePresentationRequestHttpsFromExample, null, 2),
 	);
 	const [transactionBody, setTransactionBody] = useObjectState({
 		to: "B62qnVUL6A53E4ZaGd3qbTr6RCtEZYTu3kTijVrrquNpPo4d3MuJ3nb",
