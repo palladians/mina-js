@@ -184,26 +184,26 @@ export const sampleCredentialSimpleFromExample = {
 		type: "simple",
 		issuer: {
 			_type: "PublicKey",
-			value: "B62qnCcWivkcre9fLEWzecUeGNVTcBr3KSWVYEz1iwGyowUJPKD1FMn",
+			value: "B62qq6oPcoE9zrGW6uEQFtsYZHoex456Y6MK2LPNqZW9XmypWJU6KMa",
 		},
 		issuerSignature: {
 			_type: "Signature",
 			value: {
-				r: "45933576571695220977956462912717410478181576785375016603949080470451252394",
-				s: "13645517122755792397473376118269828188043766304279817726230650052276347281328",
+				r: "9030273782322014675499193864592518852168865919242204358702036012638305849619",
+				s: "23670605160285433709733021087204389001180791213413334749153106329466229044706",
 			},
 		},
 	},
 	credential: {
 		owner: {
 			_type: "PublicKey",
-			value: "B62qkygKmsiqvco3r6F2S6LNaBvH22zSJfyq8i7Kd3NDY64gpUFRfqy",
+			value: "B62qrVPwPbeogxQKzPcV5dTSTmNo39g1T2hAM19cJ5Dtwk1p4STmKAE",
 		},
 		data: {
 			nationality: "United States of America",
 			name: "John Doe",
 			birthDate: { _type: "UInt64", value: "633830400000" },
-			id: { _type: "Bytes", value: "7fdccf15e37eb8202b92fc85b0f83621" },
+			id: { _type: "Bytes", value: "9fef98a68c7e953e538853e6a19e0a85" },
 			expiresAt: { _type: "UInt64", value: "1848700800000" },
 		},
 	},
@@ -896,22 +896,22 @@ export const samplePresentationRequestHttpsFromExample = {
 				{
 					_type: "Field",
 					value:
-						"12721880551833204308487376247855347855790506166116961306534826352805011774780",
+						"22082189595001837884155357954513940807511340516883967417732126879116249560446",
 				},
 				{
 					_type: "Field",
 					value:
-						"14011147948370197888490875477632505454498830613719602230257743256058116866364",
+						"14379306716720988239391174911726766627815364252811450729810497452764493702952",
 				},
 				{
 					_type: "Field",
 					value:
-						"12498773385156582227269558551700003644817354734729096400197136620414501375034",
+						"13289235255715902058177069443910799078901994677003173861989269088691152237602",
 				},
 			],
 			_isFactory: true,
 		},
-		currentDate: { _type: "UInt64", value: "1732870602397" },
+		currentDate: { _type: "UInt64", value: "1732881510253" },
 		appId: {
 			_type: "DynamicString",
 			maxLength: 50,
@@ -924,7 +924,7 @@ export const samplePresentationRequestHttpsFromExample = {
 		serverNonce: {
 			_type: "Field",
 			value:
-				"26728896938537336683532437476445371665825629206045543918420915145390235358247",
+				"19727979349943398352101580661888473094612414811013987113443744841719874732783",
 		},
 		action: "my-app-id:123:authenticate",
 	},

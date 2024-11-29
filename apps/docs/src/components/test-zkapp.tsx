@@ -3,7 +3,7 @@ import { useLocalStorage, useObjectState } from "@uidotdev/usehooks";
 import { clsx } from "clsx";
 import { useState, useSyncExternalStore } from "react";
 import {
-	sampleCredentialSimple,
+	sampleCredentialSimpleFromExample,
 	samplePresentationRequestHttpsFromExample,
 } from "./sample-data";
 
@@ -24,7 +24,7 @@ export const TestZkApp = () => {
 	const [signFieldsWithPassphraseInput, setSignFieldsWithPassphraseInput] =
 		useState(JSON.stringify(sampleSignFieldsWithPassphrase, null, 2));
 	const [credentialInput, setCredentialInput] = useState(
-		JSON.stringify(sampleCredentialSimple, null, 2),
+		JSON.stringify(sampleCredentialSimpleFromExample, null, 2),
 	);
 	const [presentationRequest, setPresentationRequest] = useState(
 		JSON.stringify(samplePresentationRequestHttpsFromExample, null, 2),
