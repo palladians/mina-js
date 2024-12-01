@@ -29,9 +29,14 @@ export function privateKeyToAccount({
 		async signMessage({ message }) {
 			return SignedMessageSchema.parse(client.signMessage(message, privateKey));
 		},
-		async signTransaction({ transaction }) {
+		async signTransaction(signable) {
+			if ("transaction" in signable) {
+				return SignedTransactionSchema.parse(
+					client.signTransaction(signable.transaction, privateKey),
+				);
+			}
 			return SignedTransactionSchema.parse(
-				client.signTransaction(transaction, privateKey),
+				client.signTransaction(signable.command as never, privateKey),
 			);
 		},
 		async createNullifier({ message }) {
