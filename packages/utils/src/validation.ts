@@ -79,6 +79,11 @@ export const ZkAppCommandPayload = z
 	})
 	.strict();
 
+export const TransactionOrZkAppCommandSchema = z.union([
+	TransactionPayloadSchema,
+	ZkAppCommandPayload,
+]);
+
 /**
  * Return type schemas
  */
@@ -122,7 +127,7 @@ export const NullifierSchema = z
 
 export const SignedTransactionSchema = z
 	.object({
-		signature: SignatureSchema,
+		signature: z.union([SignatureSchema, z.string()]),
 		publicKey: PublicKeySchema,
 		data: z.union([TransactionBodySchema, ZkAppCommandBodySchema]),
 	})

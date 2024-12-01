@@ -4,6 +4,7 @@ import type {
 	SignedFields,
 	SignedMessage,
 	SignedTransaction,
+	TransactionOrZkAppCommandProperties,
 } from "@mina-js/utils";
 import type { HDKey } from "@scure/bip32";
 import type { Simplify } from "type-fest";
@@ -12,7 +13,6 @@ import type {
 	CreateNullifierParamsSchema,
 	SignFieldsParamsSchema,
 	SignMessageParamsSchema,
-	SignTransactionParamsSchema,
 } from "./validation";
 
 export enum MinaKeyConst {
@@ -81,7 +81,6 @@ export type { HDKey };
 export type SignFieldsParams = z.infer<typeof SignFieldsParamsSchema>;
 export type SignMessageParams = z.infer<typeof SignMessageParamsSchema>;
 export type CreateNullifierParams = z.infer<typeof CreateNullifierParamsSchema>;
-export type SignTransactionParams = z.infer<typeof SignTransactionParamsSchema>;
 
 /**
  * Signer methods
@@ -92,5 +91,5 @@ export type CreateNullifier = (
 	params: CreateNullifierParams,
 ) => Promise<Nullifier>;
 export type SignTransaction = (
-	params: SignTransactionParams,
+	params: TransactionOrZkAppCommandProperties,
 ) => Promise<SignedTransaction>;
