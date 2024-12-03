@@ -14,6 +14,7 @@ import {
 	TransactionReceiptSchema,
 	TypedSendableSchema,
 	ZkAppCommandPayload,
+	zkAppAccountSchema,
 } from "@mina-js/utils";
 import { z } from "zod";
 
@@ -100,7 +101,12 @@ export const StorePrivateCredentialRequestParamsSchema =
 	}).strict();
 export const PresentationRequestParamsSchema = RequestWithContext.extend({
 	method: z.literal("mina_requestPresentation"),
-	params: z.array(PresentationRequestSchema),
+	params: z.array(
+		z.object({
+			presentationRequest: PresentationRequestSchema,
+			zkAppAccount: zkAppAccountSchema.optional(),
+		}).strict(),
+	),
 }).strict();
 
 // Returns

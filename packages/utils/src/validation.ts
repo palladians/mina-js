@@ -33,6 +33,8 @@ export const NetworkId = z.string().regex(networkPattern);
 
 export const KlesiaNetwork = z.enum(["devnet", "mainnet", "zeko_devnet"]);
 
+export const MinaScanNetwork = z.enum(["devnet", "mainnet"]);
+
 export const FeePayerSchema = z
 	.object({
 		feePayer: PublicKeySchema,
@@ -741,6 +743,12 @@ export const PresentationRequestSchema = z
 		inputContext: z.union([ContextSchema, z.null()]),
 	})
 	.strict();
+
+export const zkAppAccountSchema = z.object({
+	address: PublicKeySchema,
+	tokenId: z.string(),
+	network: MinaScanNetwork,
+});
 
 // Private Credentials: Witness Schemas
 
