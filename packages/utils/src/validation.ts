@@ -33,6 +33,8 @@ export const NetworkId = z.string().regex(networkPattern);
 
 export const KlesiaNetwork = z.enum(["devnet", "mainnet", "zeko_devnet"]);
 
+export const MinaScanNetwork = z.enum(["devnet", "mainnet"]);
+
 export const FeePayerSchema = z
 	.object({
 		feePayer: PublicKeySchema,
@@ -79,6 +81,12 @@ export const ZkAppCommandPayload = z
 	})
 	.strict();
 
+export const FieldsAndPassphraseSchema = z
+	.object({
+		fields: z.array(FieldSchema),
+		passphrase: z.string(),
+	})
+	.strict();
 export const TransactionOrZkAppCommandSchema = z.union([
 	TransactionPayloadSchema,
 	ZkAppCommandPayload,
@@ -248,6 +256,12 @@ export const KlesiaRpcResponseSchema = z.union([
 
 // TODO: Should probably move these validations to a separate file
 
+interface SerializedValue {
+	_type: string;
+	value: Json;
+	properties?: Record<string, unknown>;
+}
+
 interface ProofType {
 	name: string;
 	publicInput: SerializedType;
@@ -256,16 +270,79 @@ interface ProofType {
 	featureFlags: Record<string, unknown>;
 }
 
-interface SerializedType {
-	_type?: string;
-	// TODO: update based on mina-credentials
-	type?: "Constant";
+interface DynamicString {
+	_type: "DynamicString";
+	_isFactory: true;
+	maxLength: number;
 	value?: string;
-	size?: number;
-	proof?: ProofType;
-	innerType?: SerializedType;
-	[key: string]: SerializedType | string | number | ProofType | undefined;
 }
+
+interface DynamicArray {
+	_type: "DynamicArray";
+	_isFactory: true;
+	maxLength: number;
+	innerType: SerializedType;
+	value?: SerializedValue[];
+}
+
+interface DynamicRecord {
+	_type: "DynamicRecord";
+	_isFactory: true;
+	maxEntries: number;
+	knownShape: Record<string, SerializedType>;
+	value?: Record<string, SerializedValue>;
+}
+
+interface DynamicBytes {
+	_type: "DynamicBytes";
+	_isFactory: true;
+	maxLength: number;
+	value?: string; // hex string
+}
+
+interface BasicType {
+	_type: string;
+}
+
+// TODO: type?
+interface ConstantType {
+	type: "Constant";
+	value: string;
+}
+
+interface BytesType {
+	_type: "Bytes";
+	size: number;
+}
+
+interface ProofTypeWrapper {
+	_type: "Proof";
+	proof: ProofType;
+}
+
+interface ArrayType {
+	_type: "Array";
+	innerType: SerializedType;
+	size: number;
+}
+
+interface StructType {
+	_type: "Struct";
+	properties: { [key: string]: SerializedType };
+}
+
+export type SerializedType =
+	| BasicType
+	| ConstantType
+	| BytesType
+	| ProofTypeWrapper
+	| ArrayType
+	| StructType
+	| DynamicString
+	| DynamicArray
+	| DynamicRecord
+	| DynamicBytes
+	| { [key: string]: SerializedType };
 
 // Private Credentials: Serialized Type and Value Schemas
 
@@ -276,6 +353,45 @@ const SerializedValueSchema = z
 		properties: z.record(z.any()).optional(),
 	})
 	.strict();
+
+const SerializedDataValueSchema = z.union([
+	SerializedValueSchema,
+	z.string(),
+	z.number(),
+	z.boolean(),
+]);
+
+// Dynamic type schemas
+const DynamicTypeBaseSchema = z.object({
+	_type: z.string(),
+	_isFactory: z.literal(true),
+});
+
+const DynamicStringSchema = DynamicTypeBaseSchema.extend({
+	_type: z.literal("DynamicString"),
+	maxLength: z.number(),
+	value: z.string().optional(),
+}).strict();
+
+const DynamicArraySchema = DynamicTypeBaseSchema.extend({
+	_type: z.literal("DynamicArray"),
+	maxLength: z.number(),
+	innerType: z.lazy(() => SerializedTypeSchema),
+	value: z.array(SerializedValueSchema).optional(),
+}).strict();
+
+const DynamicRecordSchema = DynamicTypeBaseSchema.extend({
+	_type: z.literal("DynamicRecord"),
+	maxEntries: z.number(),
+	knownShape: z.record(z.lazy(() => SerializedTypeSchema)),
+	value: z.record(SerializedValueSchema).optional(),
+}).strict();
+
+const DynamicBytesSchema = DynamicTypeBaseSchema.extend({
+	_type: z.literal("DynamicBytes"),
+	maxLength: z.number(),
+	value: z.string().optional(), // hex string
+}).strict();
 
 const ProofTypeSchema: z.ZodType<ProofType> = z.lazy(() =>
 	z
@@ -326,6 +442,18 @@ const SerializedTypeSchema: z.ZodType<SerializedType> = z.lazy(() =>
 				size: z.number(),
 			})
 			.strict(),
+		// Struct type
+		z
+			.object({
+				_type: z.literal("Struct"),
+				properties: z.record(SerializedTypeSchema),
+			})
+			.strict(),
+		// Dynamic types
+		DynamicStringSchema,
+		DynamicArraySchema,
+		DynamicRecordSchema,
+		DynamicBytesSchema,
 		// Allow records of nested types for Struct
 		z.record(SerializedTypeSchema),
 	]),
@@ -360,6 +488,271 @@ const SerializedSignatureSchema = z
 		}),
 	})
 	.strict();
+
+// Private Credentials: Node schemas
+
+export type Node =
+	| { type: "owner" }
+	| { type: "issuer"; credentialKey: string }
+	| { type: "constant"; data: z.infer<typeof SerializedValueSchema> }
+	| { type: "root" }
+	| { type: "property"; key: string; inner: Node }
+	| { type: "record"; data: Record<string, Node> }
+	| { type: "equals"; left: Node; right: Node }
+	| { type: "equalsOneOf"; input: Node; options: Node[] | Node }
+	| { type: "lessThan"; left: Node; right: Node }
+	| { type: "lessThanEq"; left: Node; right: Node }
+	| { type: "add"; left: Node; right: Node }
+	| { type: "sub"; left: Node; right: Node }
+	| { type: "mul"; left: Node; right: Node }
+	| { type: "div"; left: Node; right: Node }
+	| { type: "and"; inputs: Node[] }
+	| { type: "or"; left: Node; right: Node }
+	| { type: "not"; inner: Node }
+	| { type: "hash"; inputs: Node[]; prefix?: string | null }
+	| { type: "ifThenElse"; condition: Node; thenNode: Node; elseNode: Node };
+
+const NodeSchema: z.ZodType<Node> = z.lazy(() =>
+	z.discriminatedUnion("type", [
+		z
+			.object({
+				type: z.literal("owner"),
+			})
+			.strict(),
+
+		z
+			.object({
+				type: z.literal("issuer"),
+				credentialKey: z.string(),
+			})
+			.strict(),
+
+		z
+			.object({
+				type: z.literal("constant"),
+				data: SerializedValueSchema,
+			})
+			.strict(),
+
+		z
+			.object({
+				type: z.literal("root"),
+			})
+			.strict(),
+
+		z
+			.object({
+				type: z.literal("property"),
+				key: z.string(),
+				inner: NodeSchema,
+			})
+			.strict(),
+
+		z
+			.object({
+				type: z.literal("record"),
+				data: z.record(NodeSchema),
+			})
+			.strict(),
+
+		z
+			.object({
+				type: z.literal("equals"),
+				left: NodeSchema,
+				right: NodeSchema,
+			})
+			.strict(),
+
+		z
+			.object({
+				type: z.literal("equalsOneOf"),
+				input: NodeSchema,
+				options: z.union([
+					z.array(NodeSchema), // For array of nodes case
+					NodeSchema,
+				]),
+			})
+			.strict(),
+
+		z
+			.object({
+				type: z.literal("lessThan"),
+				left: NodeSchema,
+				right: NodeSchema,
+			})
+			.strict(),
+
+		z
+			.object({
+				type: z.literal("lessThanEq"),
+				left: NodeSchema,
+				right: NodeSchema,
+			})
+			.strict(),
+
+		z
+			.object({
+				type: z.literal("add"),
+				left: NodeSchema,
+				right: NodeSchema,
+			})
+			.strict(),
+
+		z
+			.object({
+				type: z.literal("sub"),
+				left: NodeSchema,
+				right: NodeSchema,
+			})
+			.strict(),
+
+		z
+			.object({
+				type: z.literal("mul"),
+				left: NodeSchema,
+				right: NodeSchema,
+			})
+			.strict(),
+
+		z
+			.object({
+				type: z.literal("div"),
+				left: NodeSchema,
+				right: NodeSchema,
+			})
+			.strict(),
+
+		z
+			.object({
+				type: z.literal("and"),
+				inputs: z.array(NodeSchema),
+			})
+			.strict(),
+
+		z
+			.object({
+				type: z.literal("or"),
+				left: NodeSchema,
+				right: NodeSchema,
+			})
+			.strict(),
+
+		z
+			.object({
+				type: z.literal("not"),
+				inner: NodeSchema,
+			})
+			.strict(),
+
+		z
+			.object({
+				type: z.literal("hash"),
+				inputs: z.array(NodeSchema),
+				prefix: z.union([z.string(), z.null()]).optional(),
+			})
+			.strict(),
+
+		z
+			.object({
+				type: z.literal("ifThenElse"),
+				condition: NodeSchema,
+				thenNode: NodeSchema,
+				elseNode: NodeSchema,
+			})
+			.strict(),
+	]),
+);
+
+// Private Credentials: Input Schema
+
+const InputSchema = z.discriminatedUnion("type", [
+	z
+		.object({
+			type: z.literal("credential"),
+			credentialType: z.union([
+				z.literal("simple"),
+				z.literal("unsigned"),
+				z.literal("recursive"),
+			]),
+			witness: z.union([z.record(SerializedTypeSchema), SerializedTypeSchema]),
+			data: z.union([z.record(SerializedTypeSchema), SerializedTypeSchema]),
+		})
+		.strict(),
+
+	z
+		.object({
+			type: z.literal("constant"),
+			data: SerializedTypeSchema,
+			value: z.union([z.string(), z.record(z.string())]),
+		})
+		.strict(),
+
+	z
+		.object({
+			type: z.literal("claim"),
+			data: z.union([z.record(SerializedTypeSchema), SerializedTypeSchema]),
+		})
+		.strict(),
+]);
+
+// Private Credentials: Context schemas
+
+const HttpsContextSchema = z
+	.object({
+		type: z.literal("https"),
+		action: z.string(),
+		serverNonce: SerializedFieldSchema,
+	})
+	.strict();
+
+const ZkAppContextSchema = z
+	.object({
+		type: z.literal("zk-app"),
+		action: SerializedFieldSchema,
+		serverNonce: SerializedFieldSchema,
+	})
+	.strict();
+
+const ContextSchema = z.union([HttpsContextSchema, ZkAppContextSchema]);
+
+// Private Credentials: PresentationRequestSchema
+
+export const PresentationRequestSchema = z
+	.object({
+		type: z.union([
+			z.literal("no-context"),
+			z.literal("zk-app"),
+			z.literal("https"),
+		]),
+		spec: z
+			.object({
+				inputs: z.record(InputSchema),
+				logic: z
+					.object({
+						assert: NodeSchema,
+						outputClaim: NodeSchema,
+					})
+					.strict(),
+			})
+			.strict(),
+		claims: z.record(
+			z.union([
+				SerializedValueSchema,
+				DynamicStringSchema,
+				DynamicArraySchema,
+				DynamicRecordSchema,
+				DynamicBytesSchema,
+			]),
+		),
+		inputContext: z.union([ContextSchema, z.null()]),
+	})
+	.strict();
+
+export const zkAppAccountSchema = z.object({
+	address: PublicKeySchema,
+	tokenId: z.string(),
+	network: MinaScanNetwork,
+});
 
 // Private Credentials: Witness Schemas
 
@@ -413,7 +806,7 @@ const WitnessSchema = z.discriminatedUnion("type", [
 const SimpleCredentialSchema = z
 	.object({
 		owner: SerializedPublicKeySchema,
-		data: z.record(SerializedValueSchema),
+		data: z.record(SerializedDataValueSchema),
 	})
 	.strict();
 

@@ -1,8 +1,10 @@
 import {
 	FieldSchema,
+	FieldsAndPassphraseSchema,
 	JsonSchema,
 	NetworkId,
 	NullifierSchema,
+	PresentationRequestSchema,
 	PublicKeySchema,
 	SignedFieldsSchema,
 	SignedMessageSchema,
@@ -12,6 +14,7 @@ import {
 	TransactionReceiptSchema,
 	TypedSendableSchema,
 	ZkAppCommandPayload,
+	zkAppAccountSchema,
 } from "@mina-js/utils";
 import { z } from "zod";
 
@@ -58,6 +61,11 @@ export const SignFieldsRequestParamsSchema = RequestWithContext.extend({
 	method: z.literal("mina_signFields"),
 	params: z.array(z.array(FieldSchema)),
 }).strict();
+export const signFieldsWithPassphraseRequestParamsSchema =
+	RequestWithContext.extend({
+		method: z.literal("mina_signFieldsWithPassphrase"),
+		params: z.array(FieldsAndPassphraseSchema),
+	});
 export const SignTransactionRequestParamsSchema = RequestWithContext.extend({
 	method: z.literal("mina_signTransaction"),
 	params: z.array(z.union([TransactionPayloadSchema, ZkAppCommandPayload])),
@@ -91,6 +99,17 @@ export const StorePrivateCredentialRequestParamsSchema =
 		method: z.literal("mina_storePrivateCredential"),
 		params: z.array(StoredCredentialSchema),
 	}).strict();
+export const PresentationRequestParamsSchema = RequestWithContext.extend({
+	method: z.literal("mina_requestPresentation"),
+	params: z.array(
+		z
+			.object({
+				presentationRequest: PresentationRequestSchema,
+				zkAppAccount: zkAppAccountSchema.optional(),
+			})
+			.strict(),
+	),
+}).strict();
 
 // Returns
 export const AccountsRequestReturnSchema = z
@@ -135,6 +154,10 @@ export const SignFieldsRequestReturnSchema = z
 		result: SignedFieldsSchema,
 	})
 	.strict();
+export const signFieldsWithPassphraseRequestReturnSchema = z.object({
+	method: z.literal("mina_signFieldsWithPassphrase"),
+	result: SignedFieldsSchema,
+});
 export const SignTransactionRequestReturnSchema = z
 	.object({
 		method: z.literal("mina_signTransaction"),
@@ -183,6 +206,12 @@ export const StorePrivateCredentialReturnSchema = z
 		result: z.object({ success: z.boolean() }).strict(),
 	})
 	.strict();
+export const PresentationRequestReturnSchema = z
+	.object({
+		method: z.literal("mina_requestPresentation"),
+		result: z.object({ presentation: z.string() }).strict(),
+	})
+	.strict();
 
 export const RpcReturnTypesUnion = z.discriminatedUnion("method", [
 	AccountsRequestReturnSchema,
@@ -200,6 +229,8 @@ export const RpcReturnTypesUnion = z.discriminatedUnion("method", [
 	SetStateRequestReturnSchema,
 	GetStateRequestReturnSchema,
 	StorePrivateCredentialReturnSchema,
+	PresentationRequestReturnSchema,
+	signFieldsWithPassphraseRequestReturnSchema,
 ]);
 
 export const ProviderRequestParamsUnion = z.discriminatedUnion("method", [
@@ -218,6 +249,8 @@ export const ProviderRequestParamsUnion = z.discriminatedUnion("method", [
 	SetStateRequestParamsSchema,
 	GetStateRequestParamsSchema,
 	StorePrivateCredentialRequestParamsSchema,
+	PresentationRequestParamsSchema,
+	signFieldsWithPassphraseRequestParamsSchema,
 ]);
 export type RpcReturnTypesUnionType = z.infer<typeof RpcReturnTypesUnion>;
 export type ResultType<M extends string> = {
