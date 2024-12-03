@@ -102,10 +102,12 @@ export const StorePrivateCredentialRequestParamsSchema =
 export const PresentationRequestParamsSchema = RequestWithContext.extend({
 	method: z.literal("mina_requestPresentation"),
 	params: z.array(
-		z.object({
-			presentationRequest: PresentationRequestSchema,
-			zkAppAccount: zkAppAccountSchema.optional(),
-		}).strict(),
+		z
+			.object({
+				presentationRequest: PresentationRequestSchema,
+				zkAppAccount: zkAppAccountSchema.optional(),
+			})
+			.strict(),
 	),
 }).strict();
 

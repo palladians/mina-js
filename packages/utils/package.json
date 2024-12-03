@@ -17,7 +17,9 @@
 		"cleanup": "rimraf dist .turbo"
 	},
 	"dependencies": {
-		"mina-signer": "3.0.7"
+		"mina-signer": "3.0.7",
+		"serialize-error": "^11.0.3",
+		"superjson": "2.2.1"
 	},
 	"devDependencies": {
 		"zod": "3.23.8"

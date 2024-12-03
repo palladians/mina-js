@@ -53,3 +53,32 @@ exports[`signs fields 1`] = `
   "signature": "7mXCUvhLhFvG9ptrdfNceCrpThkCUyg1ct2z8uwY7eQbKz7UNmhv33TbuDjTznaypJtXRiMJyQWDnf27TH1FSXG7uJHTKAd9",
 }
 `;
+
+exports[`signs a zkapp command 1`] = `
+{
+  "data": {
+    "feePayer": {
+      "fee": "100000000",
+      "feePayer": "B62qmWKtvNQTtUqo1LxfEEDLyWMg59cp6U7c4uDC7aqgaCEijSc3Hx5",
+      "memo": "Test",
+      "nonce": "0",
+      "validUntil": "null",
+    },
+    "zkappCommand": {
+      "accountUpdates": [],
+      "feePayer": {
+        "authorization": "7mXWqNfmqMTM5uSCS2xLfsRBLTjGZKTtpEakdsrdQz1EUgYXogSvKxxtfGbBkqQ2mZRMA3uPAM8riaCF56pkqpZBLr2kNBLa",
+        "body": {
+          "fee": "100000000",
+          "nonce": "0",
+          "publicKey": "B62qmWKtvNQTtUqo1LxfEEDLyWMg59cp6U7c4uDC7aqgaCEijSc3Hx5",
+          "validUntil": null,
+        },
+      },
+      "memo": "E4YVT4x3A9rUhmjkjGn8ZYBLZn7zK4cfvnMtBYZFdWkg37n2s3nrP",
+    },
+  },
+  "publicKey": "B62qmWKtvNQTtUqo1LxfEEDLyWMg59cp6U7c4uDC7aqgaCEijSc3Hx5",
+  "signature": "7mXWqNfmqMTM5uSCS2xLfsRBLTjGZKTtpEakdsrdQz1EUgYXogSvKxxtfGbBkqQ2mZRMA3uPAM8riaCF56pkqpZBLr2kNBLa",
+}
+`;
