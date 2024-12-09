@@ -6,14 +6,12 @@ import type {
 	LiteralSchema,
 	NullifierSchema,
 	PartialTransactionSchema,
-	PresentationRequestSchema,
 	PrivateKeySchema,
 	PublicKeySchema,
 	SendableSchema,
 	SignedFieldsSchema,
 	SignedMessageSchema,
 	SignedTransactionSchema,
-	StoredCredentialSchema,
 	TransactionBodySchema,
 	TransactionOrZkAppCommandSchema,
 	TransactionPayloadSchema,
@@ -58,5 +56,3 @@ export type KlesiaRpcResponseType = z.infer<typeof KlesiaRpcResponseSchema>;
 /**
  * Private Credential types
  */
-export type StoredPrivateCredential = z.infer<typeof StoredCredentialSchema>;
-export type PresentationRequest = z.infer<typeof PresentationRequestSchema>;

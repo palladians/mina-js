@@ -4,12 +4,10 @@ import {
 	JsonSchema,
 	NetworkId,
 	NullifierSchema,
-	PresentationRequestSchema,
 	PublicKeySchema,
 	SignedFieldsSchema,
 	SignedMessageSchema,
 	SignedTransactionSchema,
-	StoredCredentialSchema,
 	TransactionPayloadSchema,
 	TransactionReceiptSchema,
 	TypedSendableSchema,
@@ -17,6 +15,11 @@ import {
 	zkAppAccountSchema,
 } from "@mina-js/utils";
 import { z } from "zod";
+
+import {
+	PresentationRequestSchema,
+	StoredCredentialSchema,
+} from "mina-credentials";
 
 export const SwitchChainRequestParams = z
 	.object({
@@ -97,14 +100,16 @@ export const GetStateRequestParamsSchema = RequestWithContext.extend({
 export const StorePrivateCredentialRequestParamsSchema =
 	RequestWithContext.extend({
 		method: z.literal("mina_storePrivateCredential"),
-		params: z.array(StoredCredentialSchema),
+		// biome-ignore lint/suspicious/noExplicitAny: nested types from mina-credentials
+		params: z.array(StoredCredentialSchema as z.ZodType<any>),
 	}).strict();
 export const PresentationRequestParamsSchema = RequestWithContext.extend({
 	method: z.literal("mina_requestPresentation"),
 	params: z.array(
 		z
 			.object({
-				presentationRequest: PresentationRequestSchema,
+				// biome-ignore lint/suspicious/noExplicitAny: nested types from mina-credentials
+				presentationRequest: PresentationRequestSchema as z.ZodType<any>,
 				zkAppAccount: zkAppAccountSchema.optional(),
 			})
 			.strict(),
