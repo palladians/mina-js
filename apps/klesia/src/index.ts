@@ -27,7 +27,7 @@ api.use(
 			c.req.header("x-forwarded-for") ??
 			getConnInfo(c).remote.address ??
 			nanoid(),
-		limit: 10,
+		limit: 100,
 	}),
 );
 api.use("/api", cors({ origin: "*" }));
