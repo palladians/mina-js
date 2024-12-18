@@ -19,7 +19,7 @@ import { z } from "zod";
 import {
 	PresentationRequestSchema,
 	StoredCredentialSchema,
-} from "mina-credentials";
+} from "mina-credentials/validation";
 
 export const SwitchChainRequestParams = z
 	.object({
