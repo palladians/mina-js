@@ -53,6 +53,6 @@ describe("Mina Devnet RPC", () => {
 		// biome-ignore lint/suspicious/noExplicitAny: TODO
 		const { result } = (await response.json()) as any;
 		expect(BigInt(result.nonce)).toBeGreaterThanOrEqual(0);
-		expect(BigInt(result.balance)).toBeGreaterThanOrEqual(0);
+		expect(BigInt(result.balance.total)).toBeGreaterThanOrEqual(0);
 	});
 });

@@ -150,23 +150,61 @@ const getAccount = async ({ publicKey }: { publicKey: string }) => {
 			gql`
       query {
         account(publicKey: $publicKey) {
+          publicKey
+          token
           nonce
           balance {
             total
           }
+          tokenSymbol
+          receiptChainHash
+          timing {
+            initialMinimumBalance
+            cliffTime
+            cliffAmount
+            vestingPeriod
+            vestingIncrement
+          }
+          permissions {
+            editState
+            access
+            send
+            receive
+            setDelegate
+            setPermissions
+            setVerificationKey {
+              auth
+              txnVersion
+            }
+            setZkappUri
+            editActionState
+            setTokenSymbol
+            incrementNonce
+            setVotingFor
+            setTiming
+          }
+          delegateAccount { publicKey }
+          votingFor
+          zkappState
+          verificationKey {
+            verificationKey
+            hash
+          }
+          actionState
+          provedState
+          zkappUri
         }
       }
     `,
 			{ publicKey },
 		);
-		return {
-			nonce: data.account.nonce,
-			balance: data.account.balance.total,
-		};
+		return data.account;
 	} catch {
 		return {
 			nonce: "0",
-			balance: "0",
+			balance: {
+				total: "0",
+			},
 		};
 	}
 };
