@@ -1,6 +1,5 @@
 import {
 	FieldSchema,
-	FieldsAndPassphraseSchema,
 	JsonSchema,
 	NetworkId,
 	NullifierSchema,

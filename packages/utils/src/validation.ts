@@ -80,13 +80,6 @@ export const ZkAppCommandPayload = z
 		command: ZkAppCommandBodySchema,
 	})
 	.strict();
-
-export const FieldsAndPassphraseSchema = z
-	.object({
-		fields: z.array(FieldSchema),
-		passphrase: z.string(),
-	})
-	.strict();
 export const TransactionOrZkAppCommandSchema = z.union([
 	TransactionPayloadSchema,
 	ZkAppCommandPayload,
