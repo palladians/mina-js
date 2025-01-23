@@ -64,11 +64,6 @@ export const SignFieldsRequestParamsSchema = RequestWithContext.extend({
 	method: z.literal("mina_signFields"),
 	params: z.array(z.array(FieldSchema)),
 }).strict();
-export const signFieldsWithPassphraseRequestParamsSchema =
-	RequestWithContext.extend({
-		method: z.literal("mina_signFieldsWithPassphrase"),
-		params: z.array(FieldsAndPassphraseSchema),
-	});
 export const SignTransactionRequestParamsSchema = RequestWithContext.extend({
 	method: z.literal("mina_signTransaction"),
 	params: z.array(z.union([TransactionPayloadSchema, ZkAppCommandPayload])),
@@ -159,10 +154,6 @@ export const SignFieldsRequestReturnSchema = z
 		result: SignedFieldsSchema,
 	})
 	.strict();
-export const signFieldsWithPassphraseRequestReturnSchema = z.object({
-	method: z.literal("mina_signFieldsWithPassphrase"),
-	result: SignedFieldsSchema,
-});
 export const SignTransactionRequestReturnSchema = z
 	.object({
 		method: z.literal("mina_signTransaction"),
