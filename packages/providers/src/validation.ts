@@ -235,7 +235,6 @@ export const RpcReturnTypesUnion = z.discriminatedUnion("method", [
 	GetStateRequestReturnSchema,
 	StorePrivateCredentialReturnSchema,
 	PresentationRequestReturnSchema,
-	signFieldsWithPassphraseRequestReturnSchema,
 ]);
 
 export const ProviderRequestParamsUnion = z.discriminatedUnion("method", [
@@ -255,7 +254,6 @@ export const ProviderRequestParamsUnion = z.discriminatedUnion("method", [
 	GetStateRequestParamsSchema,
 	StorePrivateCredentialRequestParamsSchema,
 	PresentationRequestParamsSchema,
-	signFieldsWithPassphraseRequestParamsSchema,
 ]);
 export type RpcReturnTypesUnionType = z.infer<typeof RpcReturnTypesUnion>;
 export type ResultType<M extends string> = {

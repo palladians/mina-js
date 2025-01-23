@@ -27,11 +27,7 @@ export const TestZkApp = () => {
 		JSON.stringify(sampleCredentialRecursiveUpdated, null, 2),
 	);
 	const [presentationRequest, setPresentationRequest] = useState(
-		JSON.stringify(
-			samplePresentationRequestHttpsFromExampleUpdated,
-			null,
-			2,
-		),
+		JSON.stringify(samplePresentationRequestHttpsFromExampleUpdated, null, 2),
 	);
 	const [transactionBody, setTransactionBody] = useObjectState({
 		to: "B62qnVUL6A53E4ZaGd3qbTr6RCtEZYTu3kTijVrrquNpPo4d3MuJ3nb",
