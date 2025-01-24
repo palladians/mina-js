@@ -20,5 +20,8 @@
 		"typescript": "5.5.4"
 	},
 	"workspaces": ["packages/*", "apps/*"],
-	"packageManager": "bun@1.1.21"
+	"packageManager": "bun@1.1.21",
+	"resolutions": {
+		"zod": "3.23.8"
+	}
 }

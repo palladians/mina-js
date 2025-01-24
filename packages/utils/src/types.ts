@@ -12,7 +12,6 @@ import type {
 	SignedFieldsSchema,
 	SignedMessageSchema,
 	SignedTransactionSchema,
-	StoredCredentialSchema,
 	TransactionBodySchema,
 	TransactionOrZkAppCommandSchema,
 	TransactionPayloadSchema,
@@ -57,4 +56,3 @@ export type KlesiaRpcResponseType = z.infer<typeof KlesiaRpcResponseSchema>;
 /**
  * Private Credential types
  */
-export type StoredPrivateCredential = z.infer<typeof StoredCredentialSchema>;
