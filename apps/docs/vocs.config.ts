@@ -20,30 +20,6 @@ export default defineConfig({
 			light: "#907aa9",
 			dark: "#c4a7e7",
 		},
-		variables: {
-			color: {
-				background: {
-					light: "#fffaf3",
-					dark: "#1f1d2e",
-				},
-				backgroundDark: {
-					light: "#faf4ed",
-					dark: "#191724",
-				},
-				codeBlockBackground: {
-					light: "#faf4ed",
-					dark: "#191724",
-				},
-				codeTitleBackground: {
-					light: "#f2e9e1",
-					dark: "#26233a",
-				},
-				codeInlineBorder: {
-					light: "#9893a5",
-					dark: "#6e6a86",
-				},
-			},
-		},
 	},
 	markdown: {
 		code: {

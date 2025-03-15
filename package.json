@@ -10,15 +10,15 @@
 		"format": "bunx biome check . --write --unsafe"
 	},
 	"devDependencies": {
-		"@biomejs/biome": "1.8.3",
+		"@biomejs/biome": "1.9.4",
 		"@tsconfig/bun": "1.0.7",
-		"@types/bun": "1.1.6",
-		"rimraf": "^6.0.1",
-		"tsup": "8.2.3",
-		"turbo": "^2.0.11",
-		"type-fest": "^4.26.1",
-		"typescript": "5.5.4"
+		"@types/bun": "1.2.5",
+		"rimraf": "6.0.1",
+		"tsup": "8.4.0",
+		"turbo": "2.4.4",
+		"type-fest": "4.37.0",
+		"typescript": "5.8.2"
 	},
 	"workspaces": ["packages/*", "apps/*"],
-	"packageManager": "bun@1.1.21"
+	"packageManager": "bun@1.2.25"
 }

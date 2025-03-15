@@ -9,19 +9,18 @@
 		"cleanup": "rimraf dist .turbo node_modules"
 	},
 	"dependencies": {
-		"@theguild/remark-mermaid": "0.1.3",
+		"@theguild/remark-mermaid": "0.2.0",
 		"@types/react": "latest",
-		"@uidotdev/usehooks": "^2.4.1",
-		"clsx": "^2.1.1",
-		"lucide-react": "0.454.0",
+		"@uidotdev/usehooks": "2.4.1",
+		"clsx": "2.1.1",
+		"lucide-react": "0.482.0",
 		"react": "18.3.1",
 		"react-dom": "18.3.1",
-		"typescript": "5.6.3",
-		"vocs": "1.0.0-alpha.62"
+		"vocs": "1.0.5"
 	},
 	"devDependencies": {
 		"@mina-js/klesia-sdk": "workspace:*",
 		"@mina-js/connect": "workspace:*",
-		"daisyui": "4.12.14"
+		"daisyui": "5.0.4"
 	}
 }
