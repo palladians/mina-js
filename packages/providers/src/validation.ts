@@ -7,13 +7,18 @@ import {
 	SignedFieldsSchema,
 	SignedMessageSchema,
 	SignedTransactionSchema,
-	StoredCredentialSchema,
 	TransactionPayloadSchema,
 	TransactionReceiptSchema,
 	TypedSendableSchema,
 	ZkAppCommandPayload,
+	zkAppAccountSchema,
 } from "@mina-js/utils";
 import { z } from "zod";
+
+import {
+	PresentationRequestSchema,
+	StoredCredentialSchema,
+} from "mina-credentials/validation";
 
 export const SwitchChainRequestParams = z
 	.object({
@@ -89,8 +94,21 @@ export const GetStateRequestParamsSchema = RequestWithContext.extend({
 export const StorePrivateCredentialRequestParamsSchema =
 	RequestWithContext.extend({
 		method: z.literal("mina_storePrivateCredential"),
-		params: z.array(StoredCredentialSchema),
+		// biome-ignore lint/suspicious/noExplicitAny: nested types from mina-credentials
+		params: z.array(StoredCredentialSchema as z.ZodType<any>),
 	}).strict();
+export const PresentationRequestParamsSchema = RequestWithContext.extend({
+	method: z.literal("mina_requestPresentation"),
+	params: z.array(
+		z
+			.object({
+				// biome-ignore lint/suspicious/noExplicitAny: nested types from mina-credentials
+				presentationRequest: PresentationRequestSchema as z.ZodType<any>,
+				zkAppAccount: zkAppAccountSchema.optional(),
+			})
+			.strict(),
+	),
+}).strict();
 
 // Returns
 export const AccountsRequestReturnSchema = z
@@ -183,6 +201,12 @@ export const StorePrivateCredentialReturnSchema = z
 		result: z.object({ success: z.boolean() }).strict(),
 	})
 	.strict();
+export const PresentationRequestReturnSchema = z
+	.object({
+		method: z.literal("mina_requestPresentation"),
+		result: z.object({ presentation: z.string() }).strict(),
+	})
+	.strict();
 
 export const RpcReturnTypesUnion = z.discriminatedUnion("method", [
 	AccountsRequestReturnSchema,
@@ -200,6 +224,7 @@ export const RpcReturnTypesUnion = z.discriminatedUnion("method", [
 	SetStateRequestReturnSchema,
 	GetStateRequestReturnSchema,
 	StorePrivateCredentialReturnSchema,
+	PresentationRequestReturnSchema,
 ]);
 
 export const ProviderRequestParamsUnion = z.discriminatedUnion("method", [
@@ -218,6 +243,7 @@ export const ProviderRequestParamsUnion = z.discriminatedUnion("method", [
 	SetStateRequestParamsSchema,
 	GetStateRequestParamsSchema,
 	StorePrivateCredentialRequestParamsSchema,
+	PresentationRequestParamsSchema,
 ]);
 export type RpcReturnTypesUnionType = z.infer<typeof RpcReturnTypesUnion>;
 export type ResultType<M extends string> = {

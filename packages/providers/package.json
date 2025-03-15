@@ -16,6 +16,9 @@
 		"test": "bun test",
 		"cleanup": "rimraf dist .turbo"
 	},
+	"dependencies": {
+		"mina-credentials": "0.2.6"
+	},
 	"devDependencies": {
 		"@mina-js/utils": "workspace:*"
 	},

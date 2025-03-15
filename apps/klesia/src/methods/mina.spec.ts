@@ -26,5 +26,5 @@ it("should return network id", async () => {
 it("should get account info", async () => {
 	const result = await mina.getAccount({ publicKey: TEST_PKEY });
 	expect(BigInt(result.nonce)).toBeGreaterThanOrEqual(0);
-	expect(BigInt(result.balance)).toBeGreaterThanOrEqual(0);
+	expect(BigInt(result.balance.total)).toBeGreaterThanOrEqual(0);
 });
