@@ -32,20 +32,20 @@ const getTransactionCount = async ({ publicKey }: { publicKey: string }) => {
 	}
 };
 
-const getBalance = async ({ publicKey }: { publicKey: string }) => {
+const getBalance = async ({ publicKey, tokenId }: { publicKey: string, tokenId: string }) => {
 	const client = getNodeClient();
 	try {
 		const { data } = await client.query(
 			gql`
         query {
-          account(publicKey: $publicKey) {
+          account(publicKey: $publicKey, token: $tokenId) {
             balance {
               total
             }
           }
         }
       `,
-			{ publicKey },
+			{ publicKey, tokenId },
 		);
 		return data.account.balance.total;
 	} catch {
@@ -143,13 +143,13 @@ const sendTransaction = async ({
 		.exhaustive();
 };
 
-const getAccount = async ({ publicKey }: { publicKey: string }) => {
+const getAccount = async ({ publicKey, tokenId }: { publicKey: string, tokenId: string }) => {
 	const client = getNodeClient();
 	try {
 		const { data } = await client.query(
 			gql`
       query {
-        account(publicKey: $publicKey) {
+        account(publicKey: $publicKey, token: $tokenId) {
           publicKey
           token
           nonce
@@ -196,7 +196,7 @@ const getAccount = async ({ publicKey }: { publicKey: string }) => {
         }
       }
     `,
-			{ publicKey },
+			{ publicKey, tokenId },
 		);
 		return data.account;
 	} catch {

@@ -179,7 +179,7 @@ export const KlesiaRpcMethodSchema = z.discriminatedUnion("method", [
 	}),
 	z.object({
 		method: z.literal(KlesiaRpcMethod.enum.mina_getBalance),
-		params: PublicKeyParamsSchema,
+		params: z.union([PublicKeyParamsSchema, z.tuple([PublicKeySchema, z.string()])]),
 	}),
 	z.object({
 		method: z.literal(KlesiaRpcMethod.enum.mina_blockHash),
@@ -195,7 +195,7 @@ export const KlesiaRpcMethodSchema = z.discriminatedUnion("method", [
 	}),
 	z.object({
 		method: z.literal(KlesiaRpcMethod.enum.mina_getAccount),
-		params: PublicKeyParamsSchema,
+		params: z.union([PublicKeyParamsSchema, z.tuple([PublicKeySchema, z.string()])]),
 	}),
 ]);
 

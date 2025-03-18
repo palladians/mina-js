@@ -13,6 +13,7 @@ import { nanoid } from "nanoid";
 import { match } from "ts-pattern";
 import { mina } from "./methods/mina";
 import { buildResponse } from "./utils/build-response";
+import { z } from "zod";
 
 export const api = new OpenAPIHono();
 
@@ -81,9 +82,10 @@ export const klesiaRpcRoute = api.openapi(rpcRoute, async ({ req, json }) => {
 		.with(
 			{ method: KlesiaRpcMethod.enum.mina_getBalance },
 			async ({ params }) => {
-				const [publicKey] = params;
+				const [publicKey, tokenId] = params;
 				const result = await mina.getBalance({
 					publicKey: PublicKeySchema.parse(publicKey),
+					tokenId: tokenId !== undefined ? z.string().parse(tokenId) : "1",
 				});
 				return json(buildResponse({ result }), 200);
 			},
@@ -123,9 +125,10 @@ export const klesiaRpcRoute = api.openapi(rpcRoute, async ({ req, json }) => {
 		.with(
 			{ method: KlesiaRpcMethod.enum.mina_getAccount },
 			async ({ params }) => {
-				const [publicKey] = params;
+				const [publicKey, tokenId] = params;
 				const result = await mina.getAccount({
 					publicKey: PublicKeySchema.parse(publicKey),
+					tokenId: tokenId !== undefined ? z.string().parse(tokenId) : "1",
 				});
 				return json(buildResponse({ result }), 200);
 			},
