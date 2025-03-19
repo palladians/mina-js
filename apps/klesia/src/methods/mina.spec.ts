@@ -9,7 +9,7 @@ it("should return transactions count", async () => {
 });
 
 it("should return balance", async () => {
-	const result = await mina.getBalance({ publicKey: TEST_PKEY });
+	const result = await mina.getBalance({ publicKey: TEST_PKEY, tokenId: "1" });
 	expect(BigInt(result)).toBeGreaterThan(0);
 });
 
@@ -24,7 +24,7 @@ it("should return network id", async () => {
 });
 
 it("should get account info", async () => {
-	const result = await mina.getAccount({ publicKey: TEST_PKEY });
+	const result = await mina.getAccount({ publicKey: TEST_PKEY, tokenId: "1" });
 	expect(BigInt(result.nonce)).toBeGreaterThanOrEqual(0);
 	expect(BigInt(result.balance.total)).toBeGreaterThanOrEqual(0);
 });
