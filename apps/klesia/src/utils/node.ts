@@ -1,5 +1,4 @@
-import { KlesiaNetwork } from "@mina-js/utils";
-import { Client, cacheExchange, fetchExchange } from "@urql/core";
+import { KlesiaNetwork } from "@mina-js/klesia-utils";
 import { match } from "ts-pattern";
 import { z } from "zod";
 
@@ -26,10 +25,4 @@ export const getNodeApiUrl = () => {
 		.with("mainnet", () => NODE_API_MAINNET)
 		.with("zeko_devnet", () => NODE_API_ZEKO_DEVNET)
 		.exhaustive();
-};
-
-export const getNodeClient = () => {
-	const url = getNodeApiUrl();
-	if (!url) throw new Error("Invalid network config.");
-	return new Client({ url, exchanges: [cacheExchange, fetchExchange] });
 };

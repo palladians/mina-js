@@ -14,4 +14,4 @@ jobs:
       - run: bun i --no-save
       - run: bun run build
       - run: bun run test
-      - run: bunx pkg-pr-new publish './packages/klesia-sdk' './packages/accounts' './packages/connect' './packages/providers' './packages/utils'
+      - run: bunx pkg-pr-new publish './packages/klesia-sdk' './packages/klesia-utils' './packages/accounts' './packages/connect' './packages/providers' './packages/utils'

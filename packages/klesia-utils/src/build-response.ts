@@ -1,4 +1,4 @@
-import type { RpcErrorType } from "../schema";
+import type { RpcErrorType } from "./types";
 
 export const buildResponse = ({
 	result,
