@@ -1,8 +1,5 @@
 import type { z } from "zod";
 import type {
-	KlesiaRpcMethod,
-	KlesiaRpcMethodSchema,
-	KlesiaRpcResponseSchema,
 	LiteralSchema,
 	NullifierSchema,
 	PartialTransactionSchema,
@@ -45,13 +42,6 @@ export type SignedFields = z.infer<typeof SignedFieldsSchema>;
 export type Nullifier = z.infer<typeof NullifierSchema>;
 export type SignedTransaction = z.infer<typeof SignedTransactionSchema>;
 export type TransactionReceipt = z.infer<typeof TransactionReceiptSchema>;
-
-/**
- * Klesia RPC types
- */
-export type KlesiaRpcMethodType = z.infer<typeof KlesiaRpcMethod>;
-export type KlesiaRpcRequestType = z.infer<typeof KlesiaRpcMethodSchema>;
-export type KlesiaRpcResponseType = z.infer<typeof KlesiaRpcResponseSchema>;
 
 /**
  * Private Credential types

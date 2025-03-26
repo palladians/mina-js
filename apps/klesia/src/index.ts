@@ -1,19 +1,15 @@
 import { getConnInfo } from "@hono/node-server/conninfo";
 import { OpenAPIHono, createRoute } from "@hono/zod-openapi";
 import {
-	KlesiaRpcMethod,
 	KlesiaRpcMethodSchema,
 	KlesiaRpcResponseSchema,
-	PublicKeySchema,
-} from "@mina-js/utils";
+} from "@mina-js/klesia-utils";
+import { handleJsonRpcRequest } from "@mina-js/klesia-utils";
 import { rateLimiter } from "hono-rate-limiter";
 import { cors } from "hono/cors";
 import { logger } from "hono/logger";
 import { nanoid } from "nanoid";
-import { match } from "ts-pattern";
-import { mina } from "./methods/mina";
-import { buildResponse } from "./utils/build-response";
-import { z } from "zod";
+import { getNodeApiUrl } from "./utils/node";
 
 export const api = new OpenAPIHono();
 
@@ -62,78 +58,10 @@ const rpcRoute = createRoute({
 });
 
 export const klesiaRpcRoute = api.openapi(rpcRoute, async ({ req, json }) => {
-	const body = KlesiaRpcMethodSchema.parse(await req.json());
-	return match(body)
-		.with(
-			{ method: KlesiaRpcMethod.enum.mina_getTransactionCount },
-			async ({ params }) => {
-				const [publicKey] = params;
-				const result = await mina.getTransactionCount({
-					publicKey: PublicKeySchema.parse(publicKey),
-				});
-				return json(
-					buildResponse({
-						result,
-					}),
-					200,
-				);
-			},
-		)
-		.with(
-			{ method: KlesiaRpcMethod.enum.mina_getBalance },
-			async ({ params }) => {
-				const [publicKey, tokenId] = params;
-				const result = await mina.getBalance({
-					publicKey: PublicKeySchema.parse(publicKey),
-					tokenId: tokenId !== undefined ? z.string().parse(tokenId) : "1",
-				});
-				return json(buildResponse({ result }), 200);
-			},
-		)
-		.with({ method: KlesiaRpcMethod.enum.mina_blockHash }, async () => {
-			if (process.env.MINA_NETWORK === "zeko_devnet") {
-				return json(
-					buildResponse({
-						error: {
-							code: -32600,
-							message: "Network not supported.",
-						},
-					}),
-					200,
-				);
-			}
-			const result = await mina.blockHash();
-			return json(buildResponse({ result }), 200);
-		})
-		.with({ method: KlesiaRpcMethod.enum.mina_networkId }, async () => {
-			const result = await mina.networkId();
-			return json(buildResponse({ result }), 200);
-		})
-		.with(
-			{ method: KlesiaRpcMethod.enum.mina_sendTransaction },
-			async ({ params }) => {
-				const [signedTransaction, type] = params;
-				const result = await mina.sendTransaction({ signedTransaction, type });
-				return json(
-					buildResponse({
-						result,
-					}),
-					200,
-				);
-			},
-		)
-		.with(
-			{ method: KlesiaRpcMethod.enum.mina_getAccount },
-			async ({ params }) => {
-				const [publicKey, tokenId] = params;
-				const result = await mina.getAccount({
-					publicKey: PublicKeySchema.parse(publicKey),
-					tokenId: tokenId !== undefined ? z.string().parse(tokenId) : "1",
-				});
-				return json(buildResponse({ result }), 200);
-			},
-		)
-		.exhaustive();
+	return json(
+		await handleJsonRpcRequest(getNodeApiUrl(), await req.json()),
+		200,
+	);
 });
 
 export type KlesiaRpc = typeof klesiaRpcRoute;

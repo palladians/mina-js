@@ -2,7 +2,7 @@ import {
 	KlesiaNetwork,
 	type KlesiaRpcRequestType,
 	type KlesiaRpcResponseType,
-} from "@mina-js/utils";
+} from "@mina-js/klesia-utils";
 import { ftch, jsonrpc } from "micro-ftch";
 import { match } from "ts-pattern";
 
