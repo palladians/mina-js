@@ -40,24 +40,21 @@
       "dependencies": {
         "@hono/node-server": "1.13.8",
         "@hono/zod-openapi": "0.19.2",
-        "@urql/core": "5.1.1",
-        "bigint-quantile": "0.0.2",
-        "dayjs": "1.11.13",
         "dotenv": "16.4.7",
         "hono": "4.7.4",
         "hono-rate-limiter": "0.4.2",
         "nanoid": "5.1.3",
-        "ofetch": "1.4.1",
         "ts-pattern": "5.6.2",
         "zod": "3.24.2",
       },
       "devDependencies": {
-        "@mina-js/utils": "workspace:*",
+        "@mina-js/klesia-utils": "0.1.1",
+        "@mina-js/utils": "0.1.1",
       },
     },
     "packages/accounts": {
       "name": "@mina-js/accounts",
-      "version": "0.1.0",
+      "version": "0.1.1",
       "dependencies": {
         "@mina-js/providers": "workspace:*",
         "@noble/ciphers": "1.2.1",
@@ -75,7 +72,7 @@
     },
     "packages/connect": {
       "name": "@mina-js/connect",
-      "version": "0.1.0",
+      "version": "0.1.1",
       "dependencies": {
         "@mina-js/accounts": "workspace:*",
         "@mina-js/klesia-sdk": "workspace:*",
@@ -93,13 +90,31 @@
     },
     "packages/klesia-sdk": {
       "name": "@mina-js/klesia-sdk",
-      "version": "0.1.0",
+      "version": "0.1.1",
       "dependencies": {
         "micro-ftch": "0.4.2",
         "ts-pattern": "5.6.2",
       },
       "devDependencies": {
+        "@mina-js/klesia-utils": "0.1.1",
+        "@mina-js/utils": "0.1.1",
+      },
+      "peerDependencies": {
+        "typescript": "^5.0.0",
+      },
+    },
+    "packages/klesia-utils": {
+      "name": "@mina-js/klesia-utils",
+      "version": "0.1.1",
+      "dependencies": {
+        "@urql/core": "5.1.1",
+        "mina-signer": "3.0.7",
+        "serialize-error": "12.0.0",
+        "superjson": "2.2.2",
+      },
+      "devDependencies": {
         "@mina-js/utils": "workspace:*",
+        "zod": "3.24.2",
       },
       "peerDependencies": {
         "typescript": "^5.0.0",
@@ -107,7 +122,7 @@
     },
     "packages/providers": {
       "name": "@mina-js/providers",
-      "version": "0.1.0",
+      "version": "0.1.1",
       "dependencies": {
         "mina-credentials": "0.2.6",
       },
@@ -120,7 +135,7 @@
     },
     "packages/utils": {
       "name": "@mina-js/utils",
-      "version": "0.1.0",
+      "version": "0.1.1",
       "dependencies": {
         "mina-signer": "3.0.7",
         "serialize-error": "12.0.0",
@@ -360,6 +375,8 @@
     "@mina-js/klesia": ["@mina-js/klesia@workspace:apps/klesia"],
 
     "@mina-js/klesia-sdk": ["@mina-js/klesia-sdk@workspace:packages/klesia-sdk"],
+
+    "@mina-js/klesia-utils": ["@mina-js/klesia-utils@workspace:packages/klesia-utils"],
 
     "@mina-js/providers": ["@mina-js/providers@workspace:packages/providers"],
 
@@ -705,8 +722,6 @@
 
     "better-path-resolve": ["better-path-resolve@1.0.0", "", { "dependencies": { "is-windows": "^1.0.0" } }, "sha512-pbnl5XzGBdrFU/wT4jqmJVPn2B6UHPBOhzMQkY/SPUPB6QtUXtmBHBIwCbXJol93mOpGMnQyP/+BB19q04xj7g=="],
 
-    "bigint-quantile": ["bigint-quantile@0.0.2", "", { "peerDependencies": { "typescript": "^5.0.0" } }, "sha512-TjiXVf0XQHwhOwXPR87hIpkDYdG9nSXgVN0Yc7VQmGOoRWSM5I1GnoGUkzGWHQ6tNd+BOw5IiN0T5wbvcw5rRw=="],
-
     "bl": ["bl@5.1.0", "", { "dependencies": { "buffer": "^6.0.3", "inherits": "^2.0.4", "readable-stream": "^3.4.0" } }, "sha512-tv1ZJHLfTDnXE6tMHv73YgSJaWR2AFuPwMntBe7XL/GBFHnT0CLnsHMogfk5+GzCDC5ZWarSCYaIGATZt9dNsQ=="],
 
     "blakejs": ["blakejs@1.2.1", "", {}, "sha512-QXUSXI3QVc/gJME0dBpXrag1kbzOqCjCX8/b54ntNyW6sjtoqxqRk3LTmXzaJoh71zMsDCjM+47jS7XiwN/+fQ=="],
@@ -892,8 +907,6 @@
     "depd": ["depd@2.0.0", "", {}, "sha512-g7nH6P6dyDioJogAAGprGpCtVImJhpPk/roCzdb3fIh61/s/nPsfR6onyMwkCAR/OlC3yBC0lESvUoQEAssIrw=="],
 
     "dequal": ["dequal@2.0.3", "", {}, "sha512-0je+qPKHEMohvfRTCEo3CrPG6cAzAYgmzKyxRiYSSDkS6eGJdyVJm7WaYA5ECaAD9wLB2T4EEeymA5aFVcYXCA=="],
-
-    "destr": ["destr@2.0.3", "", {}, "sha512-2N3BOUU4gYMpTP24s5rF5iP7BDr7uNTCs4ozw3kf/eKfvWSIu93GEBi5m427YoyJoeOzQ5smuu4nNAPGb8idSQ=="],
 
     "destroy": ["destroy@1.2.0", "", {}, "sha512-2sJGJTaXIIaR1w4iJSNoN0hnMY7Gpc/n8D4qSCJw8QqFWXf7cuAgnEHxBpweaVcPevC2l3KpjYCx3NypQQgaJg=="],
 
@@ -1347,8 +1360,6 @@
 
     "node-fetch": ["node-fetch@2.7.0", "", { "dependencies": { "whatwg-url": "^5.0.0" }, "peerDependencies": { "encoding": "^0.1.0" }, "optionalPeers": ["encoding"] }, "sha512-c4FRfUm/dbcWZ7U+1Wq0AwCyFL+3nt2bEw05wfxSz+DWpWsitgmSgYmy2dQdWyKC1694ELPqMs/YzUSNozLt8A=="],
 
-    "node-fetch-native": ["node-fetch-native@1.6.6", "", {}, "sha512-8Mc2HhqPdlIfedsuZoc3yioPuzp6b+L5jRCRY1QzuWZh2EGJVQrGppC6V6cF0bLdbW0+O2YpqCA25aF/1lvipQ=="],
-
     "node-releases": ["node-releases@2.0.19", "", {}, "sha512-xxOWJsBKtzAq7DY0J+DTzuz58K8e7sJbdgwkbMWQe8UYB6ekmsQ45q0M/tJDsGaZmbC+l7n57UV8Hl5tHxO9uw=="],
 
     "normalize-range": ["normalize-range@0.1.2", "", {}, "sha512-bdok/XvKII3nUpklnV6P2hxtMNrCboOjAcyBuQnWEhO665FwrSNRxU+AqpsyvO6LgGYPspN+lu5CLtw4jPRKNA=="],
@@ -1360,8 +1371,6 @@
     "o1js": ["o1js@https://pkg.pr.new/o1-labs/o1js@996ebb3", { "dependencies": { "blakejs": "1.2.1", "cachedir": "^2.4.0", "isomorphic-fetch": "^3.0.0", "js-sha256": "^0.9.0", "reflect-metadata": "^0.1.13", "tslib": "^2.3.0" }, "bin": { "snarky-run": "src/build/run.js" } }],
 
     "object-assign": ["object-assign@4.1.1", "", {}, "sha512-rJgTQnkUnH1sFw8yT6VSU3zD3sWmu6sZhIseY8VX+GRu3P6F7Fu+JNDoXfklElbLJSnc3FUQHVe4cU5hj+BcUg=="],
-
-    "ofetch": ["ofetch@1.4.1", "", { "dependencies": { "destr": "^2.0.3", "node-fetch-native": "^1.6.4", "ufo": "^1.5.4" } }, "sha512-QZj2DfGplQAr2oj9KzceK9Hwz6Whxazmn85yYeVuS3u9XTMOGMRx0kO95MQ+vLsj/S/NwBDMMLU5hpxvI6Tklw=="],
 
     "on-finished": ["on-finished@2.4.1", "", { "dependencies": { "ee-first": "1.1.1" } }, "sha512-oVlzkg3ENAhCk2zdv7IJwd/QUD4z2RxRwpkcGY8psCVcCYZNq4wYnVWALHM+brtuJjePWiYF/ClmuDr8Ch5+kg=="],
 

@@ -20,7 +20,8 @@
 		"typescript": "^5.0.0"
 	},
 	"devDependencies": {
-		"@mina-js/utils": "0.1.1"
+		"@mina-js/utils": "0.1.1",
+		"@mina-js/klesia-utils": "0.1.1"
 	},
 	"dependencies": {
 		"micro-ftch": "0.4.2",
