@@ -18,7 +18,7 @@
 		"cleanup": "rimraf dist .turbo node_modules"
 	},
 	"devDependencies": {
-		"@mina-js/utils": "workspace:*"
+		"@mina-js/utils": "0.1.1"
 	},
 	"dependencies": {
 		"@hono/node-server": "1.13.8",
