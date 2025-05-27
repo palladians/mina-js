@@ -13,7 +13,7 @@ import type {
 	TransactionOrZkAppCommandSchema,
 	TransactionPayloadSchema,
 	TransactionReceiptSchema,
-	ZkAppCommandBodySchema,
+	ZkAppCommandTransactionInputSchema,
 	ZkAppCommandPayload,
 } from "./validation";
 
@@ -27,7 +27,7 @@ export type PrivateKey = z.infer<typeof PrivateKeySchema>;
 export type TransactionBody = z.infer<typeof TransactionBodySchema>;
 export type TransactionPayload = z.infer<typeof TransactionPayloadSchema>;
 export type PartialTransaction = z.infer<typeof PartialTransactionSchema>;
-export type ZkAppCommandBody = z.infer<typeof ZkAppCommandBodySchema>;
+export type ZkAppCommandTransactionInput = z.infer<typeof ZkAppCommandTransactionInputSchema>;
 export type ZkAppCommandProperties = z.infer<typeof ZkAppCommandPayload>;
 export type TransactionOrZkAppCommandProperties = z.infer<
 	typeof TransactionOrZkAppCommandSchema
