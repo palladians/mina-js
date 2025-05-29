@@ -61,7 +61,7 @@ exports[`signs a zkapp command 1`] = `
       "fee": "100000000",
       "nonce": "0",
       "publicKey": "B62qmWKtvNQTtUqo1LxfEEDLyWMg59cp6U7c4uDC7aqgaCEijSc3Hx5",
-      "validUntil": "null",
+      "validUntil": null,
     },
     "zkappCommand": {
       "accountUpdates": [],
@@ -71,7 +71,7 @@ exports[`signs a zkapp command 1`] = `
           "fee": "100000000",
           "nonce": "0",
           "publicKey": "B62qmWKtvNQTtUqo1LxfEEDLyWMg59cp6U7c4uDC7aqgaCEijSc3Hx5",
-          "validUntil": "null",
+          "validUntil": null,
         },
       },
       "memo": "E4YM2vTHhWEg66xpj52JErHUBU4pZ1yageL4TVDDpTTSsv8mK6YaH",

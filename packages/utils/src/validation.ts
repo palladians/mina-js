@@ -77,7 +77,7 @@ export const FeePayerBodySchema = z
 		publicKey: PublicKeySchema,
 		fee: UInt64Schema,
 		nonce: UInt32Schema,
-		validUntil: UInt32Schema.optional(),
+		validUntil: UInt32Schema.nullable().optional(),
 	})
 	.strict();
 
@@ -272,8 +272,8 @@ export const AccountUpdateSchema = z
 			.strict(),
 		authorization: z
 			.object({
-				proof: z.string().optional(),
-				signature: z.string().optional(),
+				proof: z.string().nullable().optional(),
+				signature: z.string().nullable().optional(),
 			})
 			.strict(),
 	})

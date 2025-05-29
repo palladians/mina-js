@@ -4,8 +4,8 @@ import {
 	SignedMessageSchema,
 	SignedTransactionSchema,
 } from "@mina-js/utils";
+import { toMinaSignerFormat, toNodeApiFormat } from "@mina-js/utils";
 import MinaSigner from "mina-signer";
-import type { ZkappCommand } from "mina-signer/dist/node/mina-signer/src/types";
 import type { PrivateKeyAccount } from "../types";
 import { toAccount } from "./to-account";
 
@@ -36,46 +36,11 @@ export function privateKeyToAccount({
 					client.signTransaction(signable.transaction, privateKey),
 				);
 			}
-			const signablePayload: ZkappCommand = {
-				...signable.command,
-				zkappCommand: {
-					...signable.command.zkappCommand,
-					feePayer: {
-						...signable.command.zkappCommand.feePayer,
-						body: {
-							...signable.command.zkappCommand.feePayer.body,
-							validUntil:
-								signable.command.zkappCommand.feePayer.body.validUntil ?? null,
-						},
-					},
-					accountUpdates: signable.command.zkappCommand.accountUpdates.map(
-						(au) => ({
-							...au,
-							authorization: {
-								...au.authorization,
-								proof: au.authorization.proof ?? null,
-								signature: au.authorization.signature ?? null,
-							},
-						}),
-					),
-				},
-				feePayer: {
-					...signable.command.feePayer,
-					feePayer: signable.command.feePayer.publicKey,
-				},
-			};
+			const signablePayload = toMinaSignerFormat(signable.command);
 			const signed = client.signTransaction(signablePayload, privateKey);
 			return SignedTransactionSchema.parse({
 				...signed,
-				data: {
-					...signed.data,
-					feePayer: {
-						publicKey: signed.data.feePayer.feePayer,
-						fee: signed.data.feePayer.fee,
-						validUntil: signed.data.feePayer.validUntil,
-						nonce: signed.data.feePayer.nonce,
-					},
-				},
+				data: toNodeApiFormat(signed.data),
 			});
 		},
 		async createNullifier({ message }) {

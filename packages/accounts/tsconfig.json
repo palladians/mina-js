@@ -1,7 +1,3 @@
 {
-	"extends": "@tsconfig/bun/tsconfig.json",
-	"compilerOptions": {
-		// to import from mina-signer/dist
-		"moduleResolution": "node"
-	}
+	"extends": "@tsconfig/bun/tsconfig.json"
 }
