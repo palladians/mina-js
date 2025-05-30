@@ -1,32 +1,35 @@
 import { createStore } from "@mina-js/connect";
 import { useLocalStorage, useObjectState } from "@uidotdev/usehooks";
+import bs58 from "bs58";
 import { clsx } from "clsx";
 import { useState, useSyncExternalStore } from "react";
 import {
 	sampleCredentialRecursiveUpdated,
 	samplePresentationRequestHttpsFromExampleUpdated,
 } from "./sample-data";
-import bs58 from 'bs58';
 
 enum TransactionType {
 	PAYMENT = "payment",
 	DELEGATION = "delegation",
-	ZKAPP = "zkapp"
+	ZKAPP = "zkapp",
 }
 
 function bytesToHex(bytes: Uint8Array): string {
 	return Array.from(bytes)
-		.map((byte) => byte.toString(16).padStart(2, '0'))
-		.join('');
+		.map((byte) => byte.toString(16).padStart(2, "0"))
+		.join("");
 }
 
-function convertSignature(signature: string): { field: string; scalar: string } {
+function convertSignature(signature: string): {
+	field: string;
+	scalar: string;
+} {
 	// Decode the base58-encoded signature into bytes
 	const bytes = bs58.decode(signature);
 
 	// Ensure the byte array can be split into two equal parts
 	if (bytes.length % 2 !== 0) {
-		throw new Error('Invalid signature length.');
+		throw new Error("Invalid signature length.");
 	}
 
 	const half = bytes.length / 2;
@@ -38,8 +41,8 @@ function convertSignature(signature: string): { field: string; scalar: string } 
 	const scalarHex = bytesToHex(scalarBytes);
 
 	// Convert hexadecimal strings to decimal strings
-	const field = BigInt('0x' + fieldHex).toString(10);
-	const scalar = BigInt('0x' + scalarHex).toString(10);
+	const field = BigInt(`0x${fieldHex}`).toString(10);
+	const scalar = BigInt(`0x${scalarHex}`).toString(10);
 
 	// Return the signature object
 	return { field, scalar };
@@ -67,7 +70,9 @@ export const TestZkApp = () => {
 	const [presentationRequest, setPresentationRequest] = useState(
 		JSON.stringify(samplePresentationRequestHttpsFromExampleUpdated, null, 2),
 	);
-	const [transactionType, setTransactionType] = useState(TransactionType.PAYMENT)
+	const [transactionType, setTransactionType] = useState(
+		TransactionType.PAYMENT,
+	);
 	const [transactionBody, setTransactionBody] = useObjectState({
 		to: "B62qnVUL6A53E4ZaGd3qbTr6RCtEZYTu3kTijVrrquNpPo4d3MuJ3nb",
 		amount: "3000000000",
@@ -86,7 +91,7 @@ export const TestZkApp = () => {
 		mina_switchChain: "",
 		mina_storePrivateCredential: "",
 		mina_requestPresentation: "",
-		mina_sendTransaction: ""
+		mina_sendTransaction: "",
 	});
 	const providers = useSyncExternalStore(store.subscribe, store.getProviders);
 	const provider = providers.find(
@@ -234,9 +239,8 @@ export const TestZkApp = () => {
 				feePayer: {
 					body: {
 						publicKey: accounts[0],
-						fee: "100000000",
-						validUntil: "100000",
-						nonce: "1",
+						fee: transactionBody.fee,
+						nonce: transactionBody.nonce,
 					},
 					authorization: "",
 				},
@@ -259,19 +263,24 @@ export const TestZkApp = () => {
 	const sendTransaction = async () => {
 		if (!provider) return;
 		if (!results.mina_signTransaction) return;
-		const signedTransaction = JSON.parse(results.mina_signTransaction)
-		if (transactionType === TransactionType.PAYMENT) {
-			const { result } = await provider.request({
-				method: "mina_sendTransaction",
-				params: [{
-					input: signedTransaction.data,
-					signature: signedTransaction.signature
-				}, "payment"],
-			});
-			setResults(() => ({
-				mina_sendTransaction: JSON.stringify(result, undefined, "\t"),
-			}));
-		}
+		const signedTransaction = JSON.parse(results.mina_signTransaction);
+		const { result } = await provider.request({
+			method: "mina_sendTransaction",
+			params: [
+				transactionType === TransactionType.ZKAPP
+					? {
+							input: signedTransaction.data,
+						}
+					: {
+							input: signedTransaction.data,
+							signature: signedTransaction.signature,
+						},
+				"zkapp",
+			],
+		});
+		setResults(() => ({
+			mina_sendTransaction: JSON.stringify(result, undefined, "\t"),
+		}));
 	};
 	const switchChain = async (networkId: string) => {
 		if (!provider) return;
