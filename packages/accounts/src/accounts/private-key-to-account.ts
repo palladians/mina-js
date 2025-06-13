@@ -4,6 +4,7 @@ import {
 	SignedMessageSchema,
 	SignedTransactionSchema,
 } from "@mina-js/utils";
+import { toMinaSignerFormat, toNodeApiFormat } from "@mina-js/utils";
 import MinaSigner from "mina-signer";
 import type { PrivateKeyAccount } from "../types";
 import { toAccount } from "./to-account";
@@ -35,9 +36,12 @@ export function privateKeyToAccount({
 					client.signTransaction(signable.transaction, privateKey),
 				);
 			}
-			return SignedTransactionSchema.parse(
-				client.signTransaction(signable.command as never, privateKey),
-			);
+			const signablePayload = toMinaSignerFormat(signable.command);
+			const signed = client.signTransaction(signablePayload, privateKey);
+			return SignedTransactionSchema.parse({
+				...signed,
+				data: toNodeApiFormat(signed.data),
+			});
 		},
 		async createNullifier({ message }) {
 			return NullifierSchema.parse(

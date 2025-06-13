@@ -37,28 +37,28 @@ it("signs a zkapp command", async () => {
 	const account = privateKeyToAccount({
 		privateKey: Test.accounts[0].privateKey,
 	});
-	const command = {
-		zkappCommand: {
-			accountUpdates: [],
-			memo: "E4YM2vTHhWEg66xpj52JErHUBU4pZ1yageL4TVDDpTTSsv8mK6YaH",
-			feePayer: {
-				body: {
-					publicKey: "B62qmWKtvNQTtUqo1LxfEEDLyWMg59cp6U7c4uDC7aqgaCEijSc3Hx5",
-					fee: "100000000",
-					validUntil: "100000",
-					nonce: "1",
+	const signedTransaction = await account.signTransaction({
+		command: {
+			zkappCommand: {
+				accountUpdates: [],
+				memo: "E4YM2vTHhWEg66xpj52JErHUBU4pZ1yageL4TVDDpTTSsv8mK6YaH",
+				feePayer: {
+					body: {
+						publicKey:
+							"B62qmWKtvNQTtUqo1LxfEEDLyWMg59cp6U7c4uDC7aqgaCEijSc3Hx5",
+						fee: "100000000",
+						nonce: "0",
+					},
+					authorization: "",
 				},
-				authorization: "",
+			},
+			feePayer: {
+				publicKey: "B62qmWKtvNQTtUqo1LxfEEDLyWMg59cp6U7c4uDC7aqgaCEijSc3Hx5",
+				fee: "100000000",
+				nonce: "0",
 			},
 		},
-		feePayer: {
-			feePayer: "B62qmWKtvNQTtUqo1LxfEEDLyWMg59cp6U7c4uDC7aqgaCEijSc3Hx5",
-			fee: "100000000",
-			nonce: "0",
-			memo: "Test",
-		},
-	};
-	const signedTransaction = await account.signTransaction({ command });
+	});
 	expect(signedTransaction).toMatchSnapshot();
 });
 

@@ -1,6 +1,5 @@
-import { PublicKeySchema } from "@mina-js/utils";
+import { PublicKeySchema, TokenIdSchema } from "@mina-js/utils";
 import { match } from "ts-pattern";
-import { z } from "zod";
 import { buildResponse } from "./build-response";
 import { mina } from "./methods/mina";
 import { getNodeClient } from "./node";
@@ -32,7 +31,7 @@ export async function handleJsonRpcRequest(
 				const [publicKey, tokenId] = params;
 				const result = await mina(client).getBalance({
 					publicKey: PublicKeySchema.parse(publicKey),
-					tokenId: tokenId !== undefined ? z.string().parse(tokenId) : "1",
+					tokenId: tokenId !== undefined ? TokenIdSchema.parse(tokenId) : "1",
 				});
 				return buildResponse({ result });
 			},
@@ -64,7 +63,7 @@ export async function handleJsonRpcRequest(
 				const [publicKey, tokenId] = params;
 				const result = await mina(client).getAccount({
 					publicKey: PublicKeySchema.parse(publicKey),
-					tokenId: tokenId !== undefined ? z.string().parse(tokenId) : "1",
+					tokenId: tokenId !== undefined ? TokenIdSchema.parse(tokenId) : "1",
 				});
 				return buildResponse({ result });
 			},

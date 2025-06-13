@@ -126,12 +126,24 @@ const { result } = await provider.request<'mina_signTransaction'>({
   method: 'mina_signTransaction',
   params: [{
     command: {
-      zkappCommand: {},
+      zkappCommand: {
+        accountUpdates: [],
+        memo: 'E4YM2vTHhWEg66xpj52JErHUBU4pZ1yageL4TVDDpTTSsv8mK6YaH',
+        feePayer: {
+          body: {
+            publicKey: 'B62qmWKtvNQTtUqo1LxfEEDLyWMg59cp6U7c4uDC7aqgaCEijSc3Hx5',
+            fee: '100000000',
+            validUntil: '100000',
+            nonce: '1',
+          },
+          authorization: '',
+        },
+      },
       feePayer: {
-        feePayer: 'B62qmWKtvNQTtUqo1LxfEEDLyWMg59cp6U7c4uDC7aqgaCEijSc3Hx5',
+        publicKey: 'B62qmWKtvNQTtUqo1LxfEEDLyWMg59cp6U7c4uDC7aqgaCEijSc3Hx5',
         fee: '100000000',
+        validUntil: '100000',
         nonce: '1',
-        memo: 'Hello, Mina!',
       }
     }
   }]
@@ -175,7 +187,23 @@ const store = createStore()
 const { provider } = store.getProviders()[0]
 const { result } = await provider.request<'mina_sendTransaction'>({
   method: 'mina_sendTransaction',
-  params: [{ input: {}, signature: { field: 'xyz', scalar: 'xyz' } }, 'payment']
+  params: [
+    {
+      input: {
+        from: "B62qmWKtvNQTtUqo1LxfEEDLyWMg59cp6U7c4uDC7aqgaCEijSc3Hx5",
+        to: "B62qnVUL6A53E4ZaGd3qbTr6RCtEZYTu3kTijVrrquNpPo4d3MuJ3nb",
+		amount: "3000000000",
+		fee: "100000000",
+		memo: "Hello from MinaJS!",
+		nonce: "0",
+	  },
+      signature: {
+        field: 'xyz',
+        scalar: 'xyz'
+      }
+    },
+    'payment'
+  ]
 })
 ```
 

@@ -201,10 +201,9 @@ export const TestZkApp = () => {
 				},
 			},
 			feePayer: {
-				feePayer: accounts[0],
+				publicKey: accounts[0],
 				fee: transactionBody.fee,
 				nonce: transactionBody.nonce,
-				memo: transactionBody.memo,
 			},
 		};
 		const { result } = await provider.request({
