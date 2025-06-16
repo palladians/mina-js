@@ -19,8 +19,8 @@
 		"vocs": "1.0.5"
 	},
 	"devDependencies": {
-		"@mina-js/klesia-sdk": "0.1.1",
-		"@mina-js/connect": "0.1.1",
+		"@mina-js/klesia-sdk": "0.1.2",
+		"@mina-js/connect": "0.1.2",
 		"daisyui": "5.0.4"
 	}
 }

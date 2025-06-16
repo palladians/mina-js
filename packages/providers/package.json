@@ -1,6 +1,6 @@
 {
 	"name": "@mina-js/providers",
-	"version": "0.1.1",
+	"version": "0.1.2",
 	"type": "module",
 	"module": "dist/index.js",
 	"types": "dist/index.d.ts",
@@ -20,7 +20,7 @@
 		"mina-credentials": "0.2.6"
 	},
 	"devDependencies": {
-		"@mina-js/utils": "0.1.1"
+		"@mina-js/utils": "0.1.2"
 	},
 	"peerDependencies": {
 		"typescript": "^5.0.0"

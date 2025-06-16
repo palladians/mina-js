@@ -1,7 +1,7 @@
 {
 	"name": "@mina-js/klesia-sdk",
 	"type": "module",
-	"version": "0.1.1",
+	"version": "0.1.2",
 	"module": "dist/index.js",
 	"types": "dist/index.d.ts",
 	"exports": {
@@ -20,8 +20,8 @@
 		"typescript": "^5.0.0"
 	},
 	"devDependencies": {
-		"@mina-js/utils": "0.1.1",
-		"@mina-js/klesia-utils": "0.1.1"
+		"@mina-js/utils": "0.1.2",
+		"@mina-js/klesia-utils": "0.1.2"
 	},
 	"dependencies": {
 		"micro-ftch": "0.4.2",

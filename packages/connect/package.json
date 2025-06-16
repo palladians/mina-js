@@ -1,6 +1,6 @@
 {
 	"name": "@mina-js/connect",
-	"version": "0.1.1",
+	"version": "0.1.2",
 	"type": "module",
 	"module": "dist/index.js",
 	"types": "dist/index.d.ts",
@@ -21,10 +21,10 @@
 		"cleanup": "rimraf dist .turbo"
 	},
 	"dependencies": {
-		"@mina-js/utils": "0.1.1",
-		"@mina-js/accounts": "0.1.1",
-		"@mina-js/klesia-sdk": "0.1.1",
-		"@mina-js/providers": "0.1.1",
+		"@mina-js/utils": "0.1.2",
+		"@mina-js/accounts": "0.1.2",
+		"@mina-js/klesia-sdk": "0.1.2",
+		"@mina-js/providers": "0.1.2",
 		"ts-pattern": "5.6.2",
 		"zod": "3.24.2"
 	},

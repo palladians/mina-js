@@ -1,34 +1,32 @@
 {
-  "name": "@mina-js/klesia-utils",
-  "version": "0.1.1",
-  "type": "module",
-  "module": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "default": "./dist/index.js"
-    }
-  },
-  "files": [
-    "dist"
-  ],
-  "scripts": {
-    "build": "tsc --noEmit && tsup",
-    "test": "bun test",
-    "cleanup": "rimraf dist .turbo"
-  },
-  "dependencies": {
-    "@urql/core": "5.1.1",
-    "mina-signer": "3.0.7",
-    "serialize-error": "12.0.0",
-    "superjson": "2.2.2"
-  },
-  "devDependencies": {
-    "@mina-js/utils": "workspace:*",
-    "zod": "3.24.2"
-  },
-  "peerDependencies": {
-    "typescript": "^5.0.0"
-  }
+	"name": "@mina-js/klesia-utils",
+	"version": "0.1.2",
+	"type": "module",
+	"module": "dist/index.js",
+	"types": "dist/index.d.ts",
+	"exports": {
+		".": {
+			"types": "./dist/index.d.ts",
+			"default": "./dist/index.js"
+		}
+	},
+	"files": ["dist"],
+	"scripts": {
+		"build": "tsc --noEmit && tsup",
+		"test": "bun test",
+		"cleanup": "rimraf dist .turbo"
+	},
+	"dependencies": {
+		"@urql/core": "5.1.1",
+		"mina-signer": "3.0.7",
+		"serialize-error": "12.0.0",
+		"superjson": "2.2.2"
+	},
+	"devDependencies": {
+		"@mina-js/utils": "workspace:*",
+		"zod": "3.24.2"
+	},
+	"peerDependencies": {
+		"typescript": "^5.0.0"
+	}
 }
