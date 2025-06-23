@@ -1,4 +1,9 @@
 import { createStore } from "@mina-js/connect";
+import type {
+	Sendable,
+	TransactionPayload,
+	ZkAppCommandTransactionInput,
+} from "@mina-js/utils";
 import { useLocalStorage, useObjectState } from "@uidotdev/usehooks";
 import { clsx } from "clsx";
 import { useState, useSyncExternalStore } from "react";
@@ -6,6 +11,12 @@ import {
 	sampleCredentialRecursiveUpdated,
 	samplePresentationRequestHttpsFromExampleUpdated,
 } from "./sample-data";
+
+enum TransactionType {
+	PAYMENT = "payment",
+	DELEGATION = "delegation",
+	ZKAPP = "zkapp",
+}
 
 const store = createStore();
 
@@ -29,6 +40,9 @@ export const TestZkApp = () => {
 	const [presentationRequest, setPresentationRequest] = useState(
 		JSON.stringify(samplePresentationRequestHttpsFromExampleUpdated, null, 2),
 	);
+	const [transactionType, setTransactionType] = useState(
+		TransactionType.PAYMENT,
+	);
 	const [transactionBody, setTransactionBody] = useObjectState({
 		to: "B62qnVUL6A53E4ZaGd3qbTr6RCtEZYTu3kTijVrrquNpPo4d3MuJ3nb",
 		amount: "3000000000",
@@ -47,6 +61,7 @@ export const TestZkApp = () => {
 		mina_switchChain: "",
 		mina_storePrivateCredential: "",
 		mina_requestPresentation: "",
+		mina_sendTransaction: "",
 	});
 	const providers = useSyncExternalStore(store.subscribe, store.getProviders);
 	const provider = providers.find(
@@ -164,38 +179,61 @@ export const TestZkApp = () => {
 			mina_signFields: JSON.stringify(result, undefined, "\t"),
 		}));
 	};
-	const signTransaction = async () => {
+	const signPayment = async () => {
 		if (!provider) return;
 		const { result: accounts } = await provider.request({
 			method: "mina_accounts",
 		});
-		const transaction = {
-			...transactionBody,
-			from: accounts[0],
+		const transactionPayload = {
+			transaction: {
+				...transactionBody,
+				from: accounts[0],
+			},
 		};
 		const { result } = await provider.request({
 			method: "mina_signTransaction",
-			params: [{ transaction }],
+			params: [transactionPayload],
 		});
 		setResults(() => ({
 			mina_signTransaction: JSON.stringify(result, undefined, "\t"),
 		}));
+		setTransactionType(TransactionType.PAYMENT);
+	};
+	const signDelegation = async () => {
+		if (!provider) return;
+		const { result: accounts } = await provider.request({
+			method: "mina_accounts",
+		});
+		const { amount, ...rest } = transactionBody;
+		const transactionPayload: TransactionPayload = {
+			transaction: {
+				...rest,
+				from: accounts[0],
+			},
+		};
+		const { result } = await provider.request({
+			method: "mina_signTransaction",
+			params: [transactionPayload],
+		});
+		setResults(() => ({
+			mina_signTransaction: JSON.stringify(result, undefined, "\t"),
+		}));
+		setTransactionType(TransactionType.DELEGATION);
 	};
 	const signZkAppCommand = async () => {
 		if (!provider) return;
 		const { result: accounts } = await provider.request({
 			method: "mina_accounts",
 		});
-		const command = {
+		const command: ZkAppCommandTransactionInput = {
 			zkappCommand: {
 				accountUpdates: [],
 				memo: "E4YM2vTHhWEg66xpj52JErHUBU4pZ1yageL4TVDDpTTSsv8mK6YaH",
 				feePayer: {
 					body: {
 						publicKey: accounts[0],
-						fee: "100000000",
-						validUntil: "100000",
-						nonce: "1",
+						fee: transactionBody.fee,
+						nonce: transactionBody.nonce,
 					},
 					authorization: "",
 				},
@@ -212,6 +250,28 @@ export const TestZkApp = () => {
 		});
 		setResults(() => ({
 			mina_signTransaction: JSON.stringify(result, undefined, "\t"),
+		}));
+		setTransactionType(TransactionType.ZKAPP);
+	};
+	const sendTransaction = async () => {
+		if (!provider) return;
+		if (!results.mina_signTransaction) return;
+		const signedTransaction = JSON.parse(results.mina_signTransaction);
+		const transaction: Sendable =
+			transactionType === TransactionType.ZKAPP
+				? {
+						input: signedTransaction.data,
+					}
+				: {
+						input: signedTransaction.data,
+						signature: signedTransaction.signature,
+					};
+		const { result } = await provider.request({
+			method: "mina_sendTransaction",
+			params: [transaction, transactionType],
+		});
+		setResults(() => ({
+			mina_sendTransaction: JSON.stringify(result, undefined, "\t"),
 		}));
 	};
 	const switchChain = async (networkId: string) => {
@@ -449,9 +509,16 @@ export const TestZkApp = () => {
 						<button
 							type="button"
 							className="btn btn-primary flex-1"
-							onClick={signTransaction}
+							onClick={signPayment}
 						>
-							Sign Transaction
+							Sign Payment
+						</button>
+						<button
+							type="button"
+							className="btn btn-primary flex-1"
+							onClick={signDelegation}
+						>
+							Sign Delegation
 						</button>
 						<button
 							type="button"
@@ -465,6 +532,23 @@ export const TestZkApp = () => {
 						<label>Result</label>
 						<textarea
 							value={results.mina_signTransaction}
+							className="textarea textarea-bordered h-48 resize-none"
+						/>
+					</div>
+					<div className="flex gap-4">
+						<button
+							type="button"
+							className="btn btn-primary flex-1"
+							disabled={!results.mina_signTransaction}
+							onClick={sendTransaction}
+						>
+							Send Transaction
+						</button>
+					</div>
+					<div className="flex flex-col gap-2">
+						<label>Result</label>
+						<textarea
+							value={results.mina_sendTransaction}
 							className="textarea textarea-bordered h-48 resize-none"
 						/>
 					</div>
